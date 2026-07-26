@@ -1,0 +1,24 @@
+{
+    "name": "ShoulderDelivery.Infrastructure",
+    "rootNamespace": "ShoulderDelivery.Infrastructure",
+    "references": [
+        "GUID:e3802eefac48af54aaa5c2c945238f83",
+        "GUID:08edf54bdb136254598740fbc823a794",
+        "GUID:35059acfb7611e942ad5ba0fc9241294",
+        "GUID:61af797609a61e1469e7f6eade3cc3f8",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:f13c9a136531cde4283fd503500a6e55",
+        "GUID:94094294b5a8da141a7886c2c231e2f0",
+        "GUID:805532ffc3a14df4baa34f81be7a9dc2",
+        "GUID:429aebfaac0b31848ab711e1c2b09b36"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

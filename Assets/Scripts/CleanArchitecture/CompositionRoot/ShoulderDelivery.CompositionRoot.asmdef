@@ -1,0 +1,17 @@
+{
+    "name": "ShoulderDelivery.CompositionRoot",
+    "rootNamespace": "ShoulderDelivery.CompositionRoot",
+    "references": [
+        "GUID:429aebfaac0b31848ab711e1c2b09b36",
+        "GUID:e3802eefac48af54aaa5c2c945238f83"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
