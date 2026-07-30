@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace ShoulderDelivery.Entity
 {
@@ -7,40 +8,52 @@ namespace ShoulderDelivery.Entity
     {
         readonly int _deliverySuccessScore;
         readonly int[] _deliveryComboBonus;
-        readonly int _maxSpeedBonus;
-        readonly int _maxDistanceBonus;
-        readonly int _secondsRemainingBonus;
+        readonly SpeedBonusRule _speedBonus;
+        readonly int[] _distanceBonus;
+        readonly int[] _secondsRemainingBonus;
 
         /// <summary>配達成功時の基礎スコア</summary>
         public int DeliverySuccessScore => _deliverySuccessScore;
-        /// <summary>連続配達成功によるボーナススコア</summary>
-        public int[] DeliveryComboBonus => _deliveryComboBonus;
-        /// <summary>速度に応じたボーナススコアの最大値</summary>
-        public int MaxSpeedBonus => _maxSpeedBonus;
-        /// <summary>距離に応じたボーナススコアの最大値 </summary>
-        public int MaxDistanceBonus => _maxDistanceBonus;
-        /// <summary>残り時間に応じたボーナススコアの最大値</summary>
-        public int SecondsRemainingBonus => _secondsRemainingBonus;
+        public SpeedBonusRule SpeedBonusBonus => _speedBonus;
 
         public ScoreRules(int deliverySuccessScore
             , int[] deliveryComboBonus
-            , int maxSpeedBonus
-            , int maxDistanceBonus
-            , int secondsRemainingBonus)
+            , SpeedBonusRule speedBonus
+            , int[] distanceBonus
+            , int[] secondsRemainingBonus)
         {
-            if (deliverySuccessScore <= 0
-                || maxSpeedBonus <= 0
-                || MaxDistanceBonus <= 0
-                || secondsRemainingBonus <= 0)
-            {
+            if (deliverySuccessScore <= 0)
                 throw new ArgumentOutOfRangeException();
-            }
+
+            if (deliveryComboBonus == null)
+                throw new ArgumentNullException(nameof(deliveryComboBonus));
+
+            if (speedBonus == null)
+                throw new ArgumentNullException(nameof(speedBonus));
+
+            if (distanceBonus == null)
+                throw new ArgumentNullException(nameof(distanceBonus));
+
+            if (secondsRemainingBonus == null)
+                throw new ArgumentNullException(nameof(secondsRemainingBonus));
 
             _deliverySuccessScore = deliverySuccessScore;
             _deliveryComboBonus = deliveryComboBonus;
-            _maxSpeedBonus = maxSpeedBonus;
-            _maxDistanceBonus = maxDistanceBonus;
+            _speedBonus = speedBonus;
+            _distanceBonus = distanceBonus;
             _secondsRemainingBonus = secondsRemainingBonus;
+        }
+
+        /// <summary>
+        /// 連続配達成功回数に応じたボーナススコアを取得するメソッド
+        /// </summary>
+        /// <param name="combo">連続配達成功回数</param>
+        /// <returns>ボーナススコア</returns>
+        public int DeliveryComboBonus(int combo)
+        {
+            return combo < _deliveryComboBonus.Length - 1
+                ? _deliveryComboBonus[combo]
+                : _deliveryComboBonus.Last();
         }
     }
 }

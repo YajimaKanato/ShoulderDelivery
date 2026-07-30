@@ -20,5 +20,20 @@ namespace ShoulderDelivery.Entity
         public override bool Equals(object obj) => obj is Vector3 other && Equals(other);
         public override int GetHashCode() => X.GetHashCode() + Y.GetHashCode() + Z.GetHashCode();
         public override string ToString() => $"({X}, {Y}, {Z})";
+        public static Vector3 operator -(Vector3 lhs, Vector3 rhs)
+        {
+            return new Vector3(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
+        }
+
+
+        public static float SqrMagnitude(Vector3 vector)
+        {
+            return (vector.X * vector.X) + (vector.Y * vector.Y) + (vector.Z * vector.Z);
+        }
+
+        public static float Magnitude(Vector3 vector)
+        {
+            return MathF.Sqrt(SqrMagnitude(vector));
+        }
     }
 }
