@@ -10,8 +10,9 @@ namespace ShoulderDelivery.Entity
         readonly HashSet<TargetId> _deliveredTargetIds = new();
         /// <summary>配達待ちのターゲットのIDを持つコレクション</summary>
         readonly Queue<TargetId> _waitingDeliveryTargetIds = new();
-        readonly int _requiredDeliveryCount;
         TargetId _currentTargetId;
+        readonly int _requiredDeliveryCount;
+        int _deliverCombo;
 
         /// <summary>現在のターゲット</summary>
         public TargetId CurrentTargetId => _currentTargetId;
@@ -21,6 +22,8 @@ namespace ShoulderDelivery.Entity
         public int DeliveredCount => _deliveredTargetIds.Count;
         /// <summary>残りの配達数</summary>
         public int RemainigDeliveryCount => Math.Max(0, RequiredDeliveryCount - DeliveredCount);
+        /// <summary>連続配達成功回数</summary>
+        public int DeliveryCombo => _deliverCombo;
         /// <summary>ノルマ達成フラグ</summary>
         public bool IsQuataMet => DeliveredCount >= RequiredDeliveryCount;
 
@@ -42,11 +45,17 @@ namespace ShoulderDelivery.Entity
         /// </summary>
         /// <param name="id">配達先のID</param>
         /// <returns>配達できたか</returns>
-        public bool TryDelivery(TargetId id)
+        public bool TryDelivery(TargetId? id = null)
         {
-            var delivered = _deliveredTargetIds.Add(id);
-            if (delivered) NextTarget();
-            return delivered;
+            if (id != null && _deliveredTargetIds.Add(id.Value))
+            {
+                _deliverCombo++;
+                NextTarget();
+                return true;
+            }
+
+            _deliverCombo = 0;
+            return false;
         }
 
         /// <summary>

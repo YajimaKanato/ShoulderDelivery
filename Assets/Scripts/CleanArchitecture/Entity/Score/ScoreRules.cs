@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 
 namespace ShoulderDelivery.Entity
 {
@@ -7,20 +6,27 @@ namespace ShoulderDelivery.Entity
     public sealed class ScoreRules
     {
         readonly int _deliverySuccessScore;
-        readonly int[] _deliveryComboBonus;
+        readonly DeliveryComboBonusRule _deliveryComboBonus;
         readonly SpeedBonusRule _speedBonus;
-        readonly int[] _distanceBonus;
-        readonly int[] _secondsRemainingBonus;
+        readonly DistanceBonusRule _distanceBonus;
+        readonly SecondsRemainingBonusRule _secondsRemainingBonus;
 
         /// <summary>配達成功時の基礎スコア</summary>
         public int DeliverySuccessScore => _deliverySuccessScore;
+        /// <summary>連続配達成功回数に応じたボーナススコア</summary>
+        public DeliveryComboBonusRule DeliveryComboBonus => _deliveryComboBonus;
+        /// <summary>移動速度に応じたボーナススコア</summary>
         public SpeedBonusRule SpeedBonusBonus => _speedBonus;
+        /// <summary>距離に応じたボーナススコア</summary>
+        public DistanceBonusRule DistanceBonus => _distanceBonus;
+        /// <summary>残り時間に応じたボーナススコア</summary>
+        public SecondsRemainingBonusRule SecondsRemainingBonus => _secondsRemainingBonus;
 
         public ScoreRules(int deliverySuccessScore
-            , int[] deliveryComboBonus
+            , DeliveryComboBonusRule deliveryComboBonus
             , SpeedBonusRule speedBonus
-            , int[] distanceBonus
-            , int[] secondsRemainingBonus)
+            , DistanceBonusRule distanceBonus
+            , SecondsRemainingBonusRule secondsRemainingBonus)
         {
             if (deliverySuccessScore <= 0)
                 throw new ArgumentOutOfRangeException();
@@ -42,18 +48,6 @@ namespace ShoulderDelivery.Entity
             _speedBonus = speedBonus;
             _distanceBonus = distanceBonus;
             _secondsRemainingBonus = secondsRemainingBonus;
-        }
-
-        /// <summary>
-        /// 連続配達成功回数に応じたボーナススコアを取得するメソッド
-        /// </summary>
-        /// <param name="combo">連続配達成功回数</param>
-        /// <returns>ボーナススコア</returns>
-        public int DeliveryComboBonus(int combo)
-        {
-            return combo < _deliveryComboBonus.Length - 1
-                ? _deliveryComboBonus[combo]
-                : _deliveryComboBonus.Last();
         }
     }
 }
