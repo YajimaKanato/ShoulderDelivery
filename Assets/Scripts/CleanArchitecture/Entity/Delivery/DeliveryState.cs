@@ -47,7 +47,7 @@ namespace ShoulderDelivery.Entity
         /// <returns>配達できたか</returns>
         public bool TryDelivery(TargetId? id = null)
         {
-            if (id != null && _deliveredTargetIds.Add(id.Value))
+            if (id != null && _currentTargetId == id.Value && _deliveredTargetIds.Add(id.Value))
             {
                 _deliverCombo++;
                 NextTarget();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ShoulderDelivery.Entity
@@ -14,7 +15,26 @@ namespace ShoulderDelivery.Entity
         public StageId Id => _id;
         public int CountDownSeconds => _countDownSeconds;
         public int TimeLimitSeconds => _timeLimitSeconds;
-        public int RequiredDeliveryCount=> _requiredDeliveryCount;
+        public int RequiredDeliveryCount => _requiredDeliveryCount;
         public IReadOnlyList<TargetId> TargetIds => _targetIds;
+
+        public StageDefinition(StageId? id
+            , int countDownSeconds
+            , int timeLimitSeconds
+            , int requiredDeliveryCount
+            , List<TargetId> targetIds)
+        {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            if (targetIds == null)
+                throw new ArgumentNullException(nameof(targetIds));
+
+            _id = id.Value;
+            _countDownSeconds = countDownSeconds;
+            _timeLimitSeconds = timeLimitSeconds;
+            _requiredDeliveryCount = requiredDeliveryCount;
+            _targetIds = targetIds;
+        }
     }
 }

@@ -21,5 +21,7 @@ namespace ShoulderDelivery.Entity
         public override bool Equals(object obj) => obj is TargetId other && Equals(other);
         public override int GetHashCode() => Id.GetHashCode();
         public override string ToString() => Id;
+        public static bool operator ==(TargetId left, TargetId right) => left.Equals(right);
+        public static bool operator !=(TargetId left, TargetId right) => !left.Equals(right);
     }
 }

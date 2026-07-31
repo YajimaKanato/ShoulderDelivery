@@ -25,7 +25,7 @@ namespace ShoulderDelivery.Entity
             var result = 0;
             foreach (var bonus in _bonusTable)
             {
-                if (bonus.distance <= distance)
+                if (bonus.distance * bonus.distance <= distance)
                 {
                     // ボーナスラインを超えている場合はスコア更新
                     result = bonus.bonus;

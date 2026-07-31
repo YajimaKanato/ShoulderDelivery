@@ -47,7 +47,10 @@ namespace ShoulderDelivery.Entity
                 // ゲームが進行中の場合はカウントダウン
                 _remainingCountDownSeconds = Math.Max(0, _remainingCountDownSeconds - delta);
                 if (RemainingCountDownSeconds <= 0)
+                {
+                    _currentPhase = StagePhase.IsPlaying;
                     return StageTickResult.CountDownFinished;
+                }
             }
 
             return StageTickResult.None;
@@ -71,7 +74,7 @@ namespace ShoulderDelivery.Entity
                 if (RemainingTime <= 0)
                 {
                     _currentPhase = StagePhase.Finished;
-                    return StageTickResult.CountDownFinished;
+                    return StageTickResult.TimeUp;
                 }
             }
 
