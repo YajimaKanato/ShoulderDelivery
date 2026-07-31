@@ -62,9 +62,9 @@ namespace ShoulderDelivery.Entity
                 throw new ArgumentNullException(nameof(rules));
 
             // 残り時間に応じたボーナススコアを計算
-            var remainigSecondsBonus = rules.SecondsRemainingBonus.ResolveSecondsRemainigBonus(stageState.RemainingTime);
+            var remainigTimeBonus = rules.RemainingTimeBonus.ResolveRemainigTimeBonus(stageState.RemainingTime);
 
-            return new ScoreBreakdown(0, 0, 0, 0, remainigSecondsBonus);
+            return new ScoreBreakdown(0, 0, 0, 0, remainigTimeBonus);
         }
     }
 }

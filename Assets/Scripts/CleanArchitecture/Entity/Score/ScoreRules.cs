@@ -9,7 +9,7 @@ namespace ShoulderDelivery.Entity
         readonly DeliveryComboBonusRule _deliveryComboBonus;
         readonly SpeedBonusRule _speedBonus;
         readonly DistanceBonusRule _distanceBonus;
-        readonly SecondsRemainingBonusRule _secondsRemainingBonus;
+        readonly RemainingTimeBonusRule _remainingTimeBonus;
 
         /// <summary>配達成功時の基礎スコア</summary>
         public int DeliverySuccessScore => _deliverySuccessScore;
@@ -20,13 +20,13 @@ namespace ShoulderDelivery.Entity
         /// <summary>距離に応じたボーナススコア</summary>
         public DistanceBonusRule DistanceBonus => _distanceBonus;
         /// <summary>残り時間に応じたボーナススコア</summary>
-        public SecondsRemainingBonusRule SecondsRemainingBonus => _secondsRemainingBonus;
+        public RemainingTimeBonusRule RemainingTimeBonus => _remainingTimeBonus;
 
         public ScoreRules(int deliverySuccessScore
             , DeliveryComboBonusRule deliveryComboBonus
             , SpeedBonusRule speedBonus
             , DistanceBonusRule distanceBonus
-            , SecondsRemainingBonusRule secondsRemainingBonus)
+            , RemainingTimeBonusRule remainingTimeBonus)
         {
             if (deliverySuccessScore <= 0)
                 throw new ArgumentOutOfRangeException();
@@ -40,14 +40,14 @@ namespace ShoulderDelivery.Entity
             if (distanceBonus == null)
                 throw new ArgumentNullException(nameof(distanceBonus));
 
-            if (secondsRemainingBonus == null)
-                throw new ArgumentNullException(nameof(secondsRemainingBonus));
+            if (remainingTimeBonus == null)
+                throw new ArgumentNullException(nameof(remainingTimeBonus));
 
             _deliverySuccessScore = deliverySuccessScore;
             _deliveryComboBonus = deliveryComboBonus;
             _speedBonus = speedBonus;
             _distanceBonus = distanceBonus;
-            _secondsRemainingBonus = secondsRemainingBonus;
+            _remainingTimeBonus = remainingTimeBonus;
         }
     }
 }

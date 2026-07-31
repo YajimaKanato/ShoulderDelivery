@@ -27,6 +27,15 @@ namespace ShoulderDelivery.Entity
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
+            if (countDownSeconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(countDownSeconds));
+
+            if (timeLimitSeconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(timeLimitSeconds));
+
+            if (requiredDeliveryCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(requiredDeliveryCount));
+
             if (targetIds == null)
                 throw new ArgumentNullException(nameof(targetIds));
 
@@ -34,7 +43,7 @@ namespace ShoulderDelivery.Entity
             _countDownSeconds = countDownSeconds;
             _timeLimitSeconds = timeLimitSeconds;
             _requiredDeliveryCount = requiredDeliveryCount;
-            _targetIds = targetIds;
+            _targetIds = new List<TargetId>(targetIds);
         }
     }
 }

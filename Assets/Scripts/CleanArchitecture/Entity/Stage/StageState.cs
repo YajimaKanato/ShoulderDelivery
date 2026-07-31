@@ -9,6 +9,8 @@ namespace ShoulderDelivery.Entity
         float _remainingCountDownSeconds;
         float _remainingTime;
 
+        /// <summary>現在のステージの進行状況</summary>
+        public StagePhase CurrentPhase => _currentPhase;
         /// <summary>カウントダウンの残り時間</summary>
         public float RemainingCountDownSeconds => _remainingCountDownSeconds;
         /// <summary>ゲームの残り時間</summary>
@@ -73,7 +75,7 @@ namespace ShoulderDelivery.Entity
                 _remainingTime = Math.Max(0, _remainingTime - delta);
                 if (RemainingTime <= 0)
                 {
-                    _currentPhase = StagePhase.Finished;
+                    Finish();
                     return StageTickResult.TimeUp;
                 }
             }
