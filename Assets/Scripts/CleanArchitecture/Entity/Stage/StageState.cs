@@ -42,9 +42,9 @@ namespace ShoulderDelivery.Entity
             if (delta <= 0)
                 throw new ArgumentOutOfRangeException();
 
-            if (_currentPhase != StagePhase.Finished)
+            if (_currentPhase == StagePhase.CountDown)
             {
-                // ゲームが進行中の場合はカウントダウン
+                // カウントダウンフェーズの場合はカウントダウン
                 _remainingCountDownSeconds = Math.Max(0, _remainingCountDownSeconds - delta);
                 if (RemainingCountDownSeconds <= 0)
                 {
@@ -67,7 +67,7 @@ namespace ShoulderDelivery.Entity
             if (delta <= 0)
                 throw new ArgumentOutOfRangeException();
 
-            if (_currentPhase != StagePhase.Finished)
+            if (_currentPhase == StagePhase.IsPlaying)
             {
                 // ゲームが進行中の場合は制限時間を減らす
                 _remainingTime = Math.Max(0, _remainingTime - delta);
