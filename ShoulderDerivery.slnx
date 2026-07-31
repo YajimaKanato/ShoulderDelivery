@@ -1,4 +1,8 @@
 ﻿<Solution>
+  <Project Path="ShoulderDelivery.Entity.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="ShoulderDelivery.Common.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="ShoulderDelivery.Infrastructure.csproj" />
 </Solution>

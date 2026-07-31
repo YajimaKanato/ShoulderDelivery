@@ -2,7 +2,6 @@
     "name": "ShoulderDelivery.Entity",
     "rootNamespace": "ShoulderDelivery.Entity",
     "references": [
-        "GUID:94094294b5a8da141a7886c2c231e2f0",
         "GUID:61af797609a61e1469e7f6eade3cc3f8"
     ],
     "includePlatforms": [],
