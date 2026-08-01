@@ -110,7 +110,8 @@ namespace ShoulderDelivery.UseCase
             _outputPort.ShowResult(
                         new GameResultOutput(
                         total: session.Score.Total,
-                        deliveryCount: session.DeliveryState.DeliveredCount
+                        deliveryCount: session.DeliveryState.DeliveredCount,
+                        isQuataMet: session.DeliveryState.IsQuataMet
                         ));
 
             // 現在進行中のゲーム情報を削除する

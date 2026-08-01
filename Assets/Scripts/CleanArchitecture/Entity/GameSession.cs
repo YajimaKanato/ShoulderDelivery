@@ -24,8 +24,8 @@ namespace ShoulderDelivery.Entity
 
         public GameSession(StageDefinition stageDefinition)
         {
-            if (StageDefinition == null)
-                throw new ArgumentNullException(nameof(StageDefinition));
+            if (stageDefinition == null)
+                throw new ArgumentNullException(nameof(stageDefinition));
 
             _stageDefinition = stageDefinition;
             _stageState = new StageState(stageDefinition);

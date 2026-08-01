@@ -7,8 +7,9 @@ namespace ShoulderDelivery.UseCase
     {
         public readonly int Total;
         public readonly int DeliveryCount;
+        public readonly bool IsQuataMet;
 
-        public GameResultOutput(int total, int deliveryCount)
+        public GameResultOutput(int total, int deliveryCount, bool isQuataMet)
         {
             if (total < 0)
                 throw new ArgumentOutOfRangeException(nameof(total));
@@ -18,6 +19,7 @@ namespace ShoulderDelivery.UseCase
 
             Total = total;
             DeliveryCount = deliveryCount;
+            IsQuataMet = isQuataMet;
         }
     }
 }

@@ -11,18 +11,21 @@ namespace ShoulderDelivery.Entity
         readonly int _timeLimitSeconds;
         readonly int _requiredDeliveryCount;
         readonly List<TargetId> _targetIds;
+        readonly ScoreRules _scoreRules;
 
         public StageId Id => _id;
         public int CountDownSeconds => _countDownSeconds;
         public int TimeLimitSeconds => _timeLimitSeconds;
         public int RequiredDeliveryCount => _requiredDeliveryCount;
         public IReadOnlyList<TargetId> TargetIds => _targetIds;
+        public ScoreRules ScoreRules => _scoreRules;
 
         public StageDefinition(StageId id
             , int countDownSeconds
             , int timeLimitSeconds
             , int requiredDeliveryCount
-            , List<TargetId> targetIds)
+            , List<TargetId> targetIds
+            , ScoreRules scoreRules)
         {
             if (countDownSeconds < 0)
                 throw new ArgumentOutOfRangeException(nameof(countDownSeconds));
@@ -36,11 +39,15 @@ namespace ShoulderDelivery.Entity
             if (targetIds == null)
                 throw new ArgumentNullException(nameof(targetIds));
 
+            if (scoreRules == null)
+                throw new ArgumentNullException(nameof(scoreRules));
+
             _id = id;
             _countDownSeconds = countDownSeconds;
             _timeLimitSeconds = timeLimitSeconds;
             _requiredDeliveryCount = requiredDeliveryCount;
             _targetIds = new List<TargetId>(targetIds);
+            _scoreRules = scoreRules;
         }
     }
 }

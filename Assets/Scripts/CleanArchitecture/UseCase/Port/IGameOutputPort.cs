@@ -1,3 +1,5 @@
+using ShoulderDelivery.Entity;
+
 namespace ShoulderDelivery.UseCase
 {
     /// <summary>ゲームの状態を出力する機能を持つインターフェース</summary>
@@ -15,8 +17,12 @@ namespace ShoulderDelivery.UseCase
         /// <param name="enable"></param>
         void ChangeControllerEnable(bool enable);
 
-        /// <summary>段ボールをした情報を出力するメソッド</summary>
+        /// <summary>段ボールを投擲した情報を出力するメソッド</summary>
         /// <param name="output">投擲結果</param>
-        void ThrowCardboard(ThrowCardboardOutput output);
+        void ShowThrowCardboardOutcome(ThrowCardboardOutput output);
+
+        /// <summary>配達結果を出力するメソッド</summary>
+        /// <param name="deliveryResult">配達結果</param>
+        void ShowDeliveryResult(DeliveryResultOutput deliveryResult);
     }
 }

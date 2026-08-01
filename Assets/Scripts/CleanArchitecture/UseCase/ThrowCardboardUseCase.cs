@@ -2,6 +2,7 @@ using System;
 
 namespace ShoulderDelivery.UseCase
 {
+    /// <summary>段ボールの投擲を管理するUseCaseクラス</summary>
     public sealed class ThrowCardboardUseCase
     {
         readonly IGameSessionStore _gameSessionStore;
@@ -48,10 +49,10 @@ namespace ShoulderDelivery.UseCase
                 throw new InvalidOperationException(nameof(stageState));
 
             // ゲームをプレイ中でなければ無視
-            if (!session.StageState.IsPlaying)
+            if (!stageState.IsPlaying)
             {
                 // 投擲失敗を通知
-                _outputPort.ThrowCardboard(ThrowCardboardOutputService.Rejected());
+                _outputPort.ShowThrowCardboardOutcome(ThrowCardboardOutputService.Rejected());
                 return;
             }
 
@@ -71,7 +72,7 @@ namespace ShoulderDelivery.UseCase
             _launcher.LaunchCardboard(cardboardId, input.Context);
 
             // 結果を通知
-            _outputPort.ThrowCardboard(ThrowCardboardOutputService.Accepted(cardboardId));
+            _outputPort.ShowThrowCardboardOutcome(ThrowCardboardOutputService.Accepted(cardboardId));
         }
     }
 }

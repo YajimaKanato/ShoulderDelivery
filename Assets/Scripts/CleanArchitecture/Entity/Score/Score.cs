@@ -3,7 +3,7 @@ using System;
 namespace ShoulderDelivery.Entity
 {
     /// <summary>合計スコアの構造体</summary>
-    public class Score
+    public sealed class Score
     {
         int _score;
 
