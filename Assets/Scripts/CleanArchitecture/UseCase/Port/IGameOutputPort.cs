@@ -10,5 +10,13 @@ namespace ShoulderDelivery.UseCase
         /// <summary>ゲームの結果を出力するメソッド</summary>
         /// <param name="output">ゲームの結果</param>
         void ShowResult(GameResultOutput output);
+
+        /// <summary>コントローラーの有効無効を切り替えるメソッド</summary>
+        /// <param name="enable"></param>
+        void ChangeControllerEnable(bool enable);
+
+        /// <summary>段ボールをした情報を出力するメソッド</summary>
+        /// <param name="output">投擲結果</param>
+        void ThrowCardboard(ThrowCardboardOutput output);
     }
 }

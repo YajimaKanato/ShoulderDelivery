@@ -18,15 +18,12 @@ namespace ShoulderDelivery.Entity
         public int RequiredDeliveryCount => _requiredDeliveryCount;
         public IReadOnlyList<TargetId> TargetIds => _targetIds;
 
-        public StageDefinition(StageId? id
+        public StageDefinition(StageId id
             , int countDownSeconds
             , int timeLimitSeconds
             , int requiredDeliveryCount
             , List<TargetId> targetIds)
         {
-            if (id == null)
-                throw new ArgumentNullException(nameof(id));
-
             if (countDownSeconds < 0)
                 throw new ArgumentOutOfRangeException(nameof(countDownSeconds));
 
@@ -39,7 +36,7 @@ namespace ShoulderDelivery.Entity
             if (targetIds == null)
                 throw new ArgumentNullException(nameof(targetIds));
 
-            _id = id.Value;
+            _id = id;
             _countDownSeconds = countDownSeconds;
             _timeLimitSeconds = timeLimitSeconds;
             _requiredDeliveryCount = requiredDeliveryCount;

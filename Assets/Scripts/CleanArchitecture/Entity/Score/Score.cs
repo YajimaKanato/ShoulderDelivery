@@ -14,12 +14,9 @@ namespace ShoulderDelivery.Entity
         /// スコアを加算するメソッド
         /// </summary>
         /// <param name="score">計算タイミングごとのスコアのまとまり</param>
-        public void AddScore(ScoreBreakdown? score)
+        public void AddScore(ScoreBreakdown score)
         {
-            if (score == null)
-                throw new ArgumentNullException(nameof(score));
-
-            _score += score.Value.Total;
+            _score += score.Total;
         }
     }
 }
