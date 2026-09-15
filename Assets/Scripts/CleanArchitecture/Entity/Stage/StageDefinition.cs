@@ -4,13 +4,13 @@ using System.Collections.Generic;
 namespace ShoulderDelivery.Entity
 {
     /// <summary>ステージの定義を持つクラス</summary>
-    public sealed class StageDefinition
+    public sealed class StageDefinition : IEntity
     {
         readonly StageId _id;
         readonly int _countDownSeconds;
         readonly int _timeLimitSeconds;
         readonly int _requiredDeliveryCount;
-        readonly List<TargetId> _targetIds;
+        readonly TargetId[] _targetIds;
         readonly ScoreRules _scoreRules;
 
         public StageId Id => _id;
@@ -24,7 +24,7 @@ namespace ShoulderDelivery.Entity
             , int countDownSeconds
             , int timeLimitSeconds
             , int requiredDeliveryCount
-            , List<TargetId> targetIds
+            , TargetId[] targetIds
             , ScoreRules scoreRules)
         {
             if (countDownSeconds < 0)
@@ -46,7 +46,7 @@ namespace ShoulderDelivery.Entity
             _countDownSeconds = countDownSeconds;
             _timeLimitSeconds = timeLimitSeconds;
             _requiredDeliveryCount = requiredDeliveryCount;
-            _targetIds = new List<TargetId>(targetIds);
+            _targetIds = (TargetId[])targetIds.Clone();
             _scoreRules = scoreRules;
         }
     }
