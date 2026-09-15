@@ -3,11 +3,11 @@ using System;
 namespace ShoulderDelivery.Entity
 {
     /// <summary>移動速度に応じたボーナススコアの管理をするクラス</summary>
-    public class SpeedBonusRule
+    public class SpeedBonusRule : IEntity
     {
-        readonly (float speed, int bonus)[] _bonusTable;
+        readonly SpeedBonus[] _bonusTable;
 
-        public SpeedBonusRule(params (float, int)[] bonusTable)
+        public SpeedBonusRule(SpeedBonus[] bonusTable)
         {
             if (bonusTable == null)
                 throw new ArgumentNullException(nameof(bonusTable));
@@ -25,10 +25,10 @@ namespace ShoulderDelivery.Entity
             var result = 0;
             foreach (var bonus in _bonusTable)
             {
-                if (bonus.speed <= speed)
+                if (bonus.Speed <= speed)
                 {
                     // ボーナスラインを超えている場合はスコア更新
-                    result = bonus.bonus;
+                    result = bonus.Bonus;
                 }
                 else
                 {

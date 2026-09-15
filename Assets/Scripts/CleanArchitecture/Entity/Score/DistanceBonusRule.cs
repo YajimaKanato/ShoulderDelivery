@@ -3,11 +3,11 @@ using System;
 namespace ShoulderDelivery.Entity
 {
     /// <summary>距離に応じたボーナススコアを管理するクラス</summary>
-    public class DistanceBonusRule
+    public class DistanceBonusRule : IEntity
     {
-        readonly (float distance, int bonus)[] _bonusTable;
+        readonly DistanceBonus[] _bonusTable;
 
-        public DistanceBonusRule(params (float, int)[] bonusTable)
+        public DistanceBonusRule(DistanceBonus[] bonusTable)
         {
             if (bonusTable == null)
                 throw new ArgumentNullException(nameof(bonusTable));
@@ -25,10 +25,10 @@ namespace ShoulderDelivery.Entity
             var result = 0;
             foreach (var bonus in _bonusTable)
             {
-                if (bonus.distance * bonus.distance <= distance)
+                if (bonus.Distance * bonus.Distance <= distance)
                 {
                     // ボーナスラインを超えている場合はスコア更新
-                    result = bonus.bonus;
+                    result = bonus.Bonus;
                 }
                 else
                 {

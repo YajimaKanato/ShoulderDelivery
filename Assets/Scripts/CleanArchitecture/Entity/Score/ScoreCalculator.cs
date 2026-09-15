@@ -40,7 +40,7 @@ namespace ShoulderDelivery.Entity
                 throw new InvalidOperationException(nameof(targetDefinition));
 
             // 距離に応じたボーナススコアを計算
-            var distance = Vector3.SqrMagnitude(throwContextValue.Position - targetDefinition.Value.Position);
+            var distance = Coordinates.SqrMagnitude(throwContextValue.Position - targetDefinition.Value.Position);
             var distanceBonus = rules.DistanceBonus.ResolveDistanceBonus(distance);
 
             // 連続配達成功回数に応じたボーナススコアを計算

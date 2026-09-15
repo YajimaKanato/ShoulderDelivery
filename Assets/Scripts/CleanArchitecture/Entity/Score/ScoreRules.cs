@@ -3,7 +3,7 @@ using System;
 namespace ShoulderDelivery.Entity
 {
     /// <summary>スコア計算に必要な基本データを持つクラス</summary>
-    public sealed class ScoreRules
+    public sealed class ScoreRules : IEntity
     {
         readonly int _deliverySuccessScore;
         readonly DeliveryComboBonusRule _deliveryComboBonus;

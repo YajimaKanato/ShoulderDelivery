@@ -3,11 +3,11 @@ using System;
 namespace ShoulderDelivery.Entity
 {
     /// <summary>連続配達成功回数に応じたボーナススコアの管理をするクラス</summary>
-    public class DeliveryComboBonusRule
+    public class DeliveryComboBonusRule : IEntity
     {
-        readonly (int combo, int bonus)[] _bonusTable;
+        readonly DeliveryComboBonus[] _bonusTable;
 
-        public DeliveryComboBonusRule(params (int, int)[] bonusTable)
+        public DeliveryComboBonusRule(DeliveryComboBonus[] bonusTable)
         {
             if (bonusTable == null)
                 throw new ArgumentNullException(nameof(bonusTable));
@@ -25,9 +25,9 @@ namespace ShoulderDelivery.Entity
             var result = 0;
             foreach (var bonus in _bonusTable)
             {
-                if (bonus.combo <= combo)
+                if (bonus.Combo <= combo)
                 {
-                    result = bonus.bonus;
+                    result = bonus.Bonus;
                 }
                 else
                 {

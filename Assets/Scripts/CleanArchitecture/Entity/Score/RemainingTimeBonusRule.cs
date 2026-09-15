@@ -2,11 +2,11 @@ using System;
 
 namespace ShoulderDelivery.Entity
 {
-    public class RemainingTimeBonusRule
+    public class RemainingTimeBonusRule : IEntity
     {
-        readonly (int remainigTime, int bonus)[] _bonusTable;
+        readonly RemainingTimeBonus[] _bonusTable;
 
-        public RemainingTimeBonusRule(params (int, int)[] bonusTable)
+        public RemainingTimeBonusRule(RemainingTimeBonus[] bonusTable)
         {
             if (bonusTable == null)
                 throw new ArgumentNullException(nameof(bonusTable));
@@ -24,9 +24,9 @@ namespace ShoulderDelivery.Entity
             var result = 0;
             foreach (var bonus in _bonusTable)
             {
-                if (bonus.remainigTime <= remainingTime)
+                if (bonus.RemainingTime <= remainingTime)
                 {
-                    result = bonus.bonus;
+                    result = bonus.Bonus;
                 }
                 else
                 {
