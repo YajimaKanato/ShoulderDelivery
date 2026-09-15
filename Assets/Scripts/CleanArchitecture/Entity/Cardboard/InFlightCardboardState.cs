@@ -30,5 +30,15 @@ namespace ShoulderDelivery.Entity
             _contexts.Remove(id);
             return true;
         }
+
+        /// <summary>
+        /// 段ボールの紐づく情報を消すメソッド
+        /// </summary>
+        /// <param name="id">段ボールの情報</param>
+        /// <returns>正常に処理できたか</returns>
+        public bool Discard(CardboardId id)
+        {
+            return _contexts.Remove(id);
+        }
     }
 }
