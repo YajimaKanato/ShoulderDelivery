@@ -6,11 +6,11 @@ namespace ShoulderDelivery.Entity
         /// <summary>投擲した時の移動速度</summary>
         public readonly float Speed;
         /// <summary>投擲場所</summary>
-        public readonly Vector3 Position;
+        public readonly Coordinates Position;
         /// <summary>投擲した時の回転（バイクアクション）</summary>
-        public readonly Vector3 Rotation;
+        public readonly Coordinates Rotation;
 
-        public ThrowContext(float speed, Vector3 position, Vector3 rotation)
+        public ThrowContext(float speed, Coordinates position, Coordinates rotation)
         {
             Speed = speed;
             Position = position;
