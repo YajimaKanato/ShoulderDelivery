@@ -4,7 +4,7 @@ using System;
 namespace ShoulderDelivery.UseCase
 {
     /// <summary>ゲームの進行を管理するUseCaseクラス</summary>
-    public sealed class GameUseCase
+    public sealed class GameUseCase : IGameFinishable
     {
         readonly IStageRepository _stageRepository;
         readonly IGameSessionStore _gameSessionStore;
@@ -82,7 +82,11 @@ namespace ShoulderDelivery.UseCase
                     break;
                 case StageTickResult.TimeUp:
                     // ゲームを終了する
-                    Finish();
+                    FinishGame();
+                    break;
+                case StageTickResult.None:
+                    // 毎フレーム情報を更新
+                    Tick(session, stageState);
                     break;
                 default:
                     break;
@@ -90,32 +94,66 @@ namespace ShoulderDelivery.UseCase
         }
 
         /// <summary>
+        /// 毎フレーム情報を更新するメソッド
+        /// </summary>
+        /// <param name="session">ゲームのセッション情報</param>
+        /// <param name="stageState">ステージの情報</param>
+        /// <exception cref="InvalidOperationException">必要な参照がない</exception>
+        void Tick(GameSession session, StageState stageState)
+        {
+            var deliveryState = session.DeliveryState;
+            if (deliveryState == null)
+                throw new InvalidOperationException(nameof(deliveryState));
+
+            var score = session.Score;
+            if (score == null)
+                throw new InvalidOperationException(nameof(score));
+
+            // 情報更新
+            _outputPort.ShowHud(new GameHudOutput(stageState.RemainingTime
+                , deliveryState.RemainigDeliveryCount
+                , score.Total));
+        }
+
+        /// <summary>
         /// ゲームを終了するメソッド
         /// </summary>
         /// <exception cref="InvalidOperationException">必要な参照がない</exception>
-        public void Finish()
+        public void FinishGame()
         {
-            var session = _gameSessionStore.CurrentGameSession;
-            if (session == null)
-                throw new InvalidOperationException(nameof(session));
+            var gameSession = _gameSessionStore.CurrentGameSession;
+            if (gameSession == null)
+                throw new InvalidOperationException(nameof(gameSession));
 
-            var stageState = session.StageState;
+            var stageState = gameSession.StageState;
             if (stageState == null)
                 throw new InvalidOperationException(nameof(stageState));
 
             // ゲームを終了状態にする
-            stageState.Finish();
+            if (!stageState.Finish()) return;
 
-            // ゲームの結果を送信する
-            _outputPort.ShowResult(
-                        new GameResultOutput(
-                        total: session.Score.Total,
-                        deliveryCount: session.DeliveryState.DeliveredCount,
-                        isQuataMet: session.DeliveryState.IsQuataMet
-                        ));
+            var scoreRules = gameSession.StageDefinition?.ScoreRules;
+            if (scoreRules == null)
+                throw new InvalidOperationException(nameof(scoreRules));
 
-            // 現在進行中のゲーム情報を削除する
-            _gameSessionStore.Clear();
+            // 残り時間ボーナスを計算
+            var timeBonus = ScoreCalculator.CalculateRemainingSecondsScore(stageState, scoreRules);
+
+            var score = gameSession.Score;
+            if (score == null)
+                throw new InvalidOperationException(nameof(score));
+
+            // スコアを更新
+            score.AddScore(timeBonus);
+
+            var deliveryState = gameSession.DeliveryState;
+            if (deliveryState == null)
+                throw new InvalidOperationException(nameof(deliveryState));
+
+            // 結果を表示
+            _outputPort.ShowResult(new GameResultOutput(score.Total
+                , deliveryState.DeliveredCount
+                , deliveryState.IsQuataMet));
         }
     }
 }

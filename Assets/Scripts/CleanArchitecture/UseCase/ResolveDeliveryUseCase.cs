@@ -9,10 +9,12 @@ namespace ShoulderDelivery.UseCase
         readonly IGameSessionStore _sessionStore;
         readonly IGameOutputPort _outputPort;
         readonly ITargetRepository _targetRepository;
+        readonly IGameFinishable _gameUseCase;
 
         public ResolveDeliveryUseCase(IGameSessionStore sessionStore
             , IGameOutputPort outputPort
-            , ITargetRepository targetRepository)
+            , ITargetRepository targetRepository
+            , IGameFinishable gameUseCase)
         {
             if (sessionStore == null)
                 throw new ArgumentNullException(nameof(sessionStore));
@@ -23,9 +25,13 @@ namespace ShoulderDelivery.UseCase
             if (targetRepository == null)
                 throw new ArgumentNullException(nameof(targetRepository));
 
+            if (gameUseCase == null)
+                throw new ArgumentNullException(nameof(gameUseCase));
+
             _sessionStore = sessionStore;
             _outputPort = outputPort;
             _targetRepository = targetRepository;
+            _gameUseCase = gameUseCase;
         }
 
         /// <summary>
@@ -97,47 +103,9 @@ namespace ShoulderDelivery.UseCase
             if (deliveryState.IsQuataMet)
             {
                 // ノルマ達成でゲーム終了
-                FinishGame(session);
+                _gameUseCase.FinishGame();
                 return;
             }
-        }
-
-        /// <summary>
-        /// ゲームを終了するメソッド
-        /// </summary>
-        /// <param name="gameSession">ゲームの情報</param>
-        /// <exception cref="InvalidOperationException">必要な参照がない</exception>
-        void FinishGame(GameSession gameSession)
-        {
-            var stageState = gameSession.StageState;
-            if (stageState == null)
-                throw new InvalidOperationException(nameof(stageState));
-
-            // ゲームを終了状態にする
-            stageState.Finish();
-
-            var scoreRules = gameSession.StageDefinition?.ScoreRules;
-            if (scoreRules == null)
-                throw new InvalidOperationException(nameof(scoreRules));
-
-            // 残り時間ボーナスを計算
-            var timeBonus = ScoreCalculator.CalculateRemainingSecondsScore(stageState, scoreRules);
-
-            var score = gameSession.Score;
-            if (score == null)
-                throw new InvalidOperationException(nameof(score));
-
-            // スコアを更新
-            score.AddScore(timeBonus);
-
-            var deliveryState = gameSession.DeliveryState;
-            if (deliveryState == null)
-                throw new InvalidOperationException(nameof(deliveryState));
-
-            // 結果を表示
-            _outputPort.ShowResult(new GameResultOutput(score.Total
-                , deliveryState.DeliveredCount
-                , deliveryState.IsQuataMet));
         }
     }
 }
