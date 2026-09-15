@@ -86,9 +86,14 @@ namespace ShoulderDelivery.Entity
         /// <summary>
         /// ゲームを終了するメソッド
         /// </summary>
-        public void Finish()
+        /// <returns>正常に終了できたかどうか</returns>
+        public bool Finish()
         {
+            // 初めてゲームが終了した時のみ実行
+            if (_currentPhase == StagePhase.Finished) return false;
+
             _currentPhase = StagePhase.Finished;
+            return true;
         }
     }
 }
