@@ -43,9 +43,9 @@ public class StageDefinitionAssetEditor : Editor
 
         // アセットを取得
         var assets = AssetDatabase.FindAssets("t:TargetDefinitionAsset", new[] { folder })      // 指定のフォルダから対象のアセットを取得
-            .Select(path => AssetDatabase.GUIDToAssetPath(path))                                // GUIDからアセットのパスを取得
+            .Select(guid => AssetDatabase.GUIDToAssetPath(guid))                                // GUIDからアセットのパスを取得
             .Select(path => AssetDatabase.LoadAssetAtPath<TargetDefinitionAsset>(path))         // パスからアセットをロード
-            .OrderBy(asset => int.Parse(asset.name.Split('-').Last()))                                     // 配達目的地の番号で昇順ソート
+            .OrderBy(asset => int.Parse(asset.name.Split('-').Last()))                          // 配達目的地の番号で昇順ソート
             .Where(asset => asset != null)
             .ToArray();
 
