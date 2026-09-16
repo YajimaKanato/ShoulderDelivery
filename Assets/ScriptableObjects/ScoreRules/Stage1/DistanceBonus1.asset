@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad3e041a6e361440a2509a3e947e0b1, type: 3}
   m_Name: DistanceBonus1
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.DistanceBonusRuleAsset
-  _bonusTable: []
+  _bonusTable:
+  - Distance: 0
+    Bonus: 0

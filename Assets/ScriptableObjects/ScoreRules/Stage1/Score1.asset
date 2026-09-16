@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ed8db016a206c49b520879dd1bec76, type: 3}
   m_Name: Score1
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.ScoreRulesAsset
-  _deliverySuccessScore: 0
-  _deliveryComboBonusRuleAsset: {fileID: 0}
-  _speedBonusRuleAsset: {fileID: 0}
-  _distanceBonusRuleAsset: {fileID: 0}
-  _remainingTimeBonusRuleAsset: {fileID: 0}
+  _deliverySuccessScore: 100
+  _deliveryComboBonusRuleAsset: {fileID: 11400000, guid: 898e6dd20785cff4f92bd2dd456e688e, type: 2}
+  _speedBonusRuleAsset: {fileID: 11400000, guid: 3c42b9badb8370644bbac287d4e27829, type: 2}
+  _distanceBonusRuleAsset: {fileID: 11400000, guid: c3e35d71385e9944d98625106bdf9f5e, type: 2}
+  _remainingTimeBonusRuleAsset: {fileID: 11400000, guid: b27d546ba8956f34390bb06a9d3b75c3, type: 2}

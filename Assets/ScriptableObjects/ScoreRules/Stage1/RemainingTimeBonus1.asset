@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0124813f6551a8643b6dcffb1c681cd9, type: 3}
   m_Name: RemainingTimeBonus1
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.RemainingTimeBonusRuleAsset
-  _bonusTable: []
+  _bonusTable:
+  - RemainingTime: 0
+    Bonus: 0

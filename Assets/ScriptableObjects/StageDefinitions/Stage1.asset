@@ -22,4 +22,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92bd49bdce125be4fad9116e531eedaf, type: 2}
   - {fileID: 11400000, guid: 26d397916dd94b54fb83f45dc31d1802, type: 2}
   - {fileID: 11400000, guid: c43cd0ce9c61f4c44a0911e59e74b314, type: 2}
-  _scoreRulesAsset: {fileID: 0}
+  - {fileID: 11400000, guid: a060b33f13cfc3a4bb6fa172e91e2a21, type: 2}
+  - {fileID: 11400000, guid: 4021a298f2ba44645b07ffbd6458a234, type: 2}
+  - {fileID: 11400000, guid: 587f09e82b0f5bb47acc8ce1eee0178a, type: 2}
+  - {fileID: 11400000, guid: 0c739cdb25b75e9459f64413044cc8af, type: 2}
+  - {fileID: 11400000, guid: 27363df4133b09e4c891181f23131bdc, type: 2}
+  _scoreRulesAsset: {fileID: 11400000, guid: 9bea76fc53d37b84b8df3e95dc698b2d, type: 2}
