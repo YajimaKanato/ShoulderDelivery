@@ -1,12 +1,15 @@
-using System;
-
 namespace ShoulderDelivery.Entity
 {
     /// <summary>投擲時の移動速度に応じたボーナススコアの要素構造体</summary>
-    [Serializable]
-    public struct SpeedBonus
+    public readonly struct SpeedBonus
     {
-        public float Speed;
-        public int Bonus;
+        public readonly float Speed;
+        public readonly int Bonus;
+
+        public SpeedBonus(float speed, int bonus)
+        {
+            Speed = speed;
+            Bonus = bonus;
+        }
     }
 }
