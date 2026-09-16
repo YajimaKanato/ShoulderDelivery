@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
-    [CreateAssetMenu(fileName = "ScoreRulesAsset", menuName = "Master/ScoreRulesAsset")]
+    [CreateAssetMenu(fileName = "Score", menuName = "Master/ScoreRulesAsset")]
     public class ScoreRulesAsset : MasterAssetBase<ScoreRules>
     {
         [SerializeField, Tooltip("配達成功時の基礎スコア")] int _deliverySuccessScore;
@@ -33,5 +33,27 @@ namespace ShoulderDelivery.Infrastructure
                 , distanceBonusRule
                 , remainingTimeBonusRule);
         }
+
+#if UNITY_EDITOR
+        public void SetDeliveryComboBonusRuleAsset(DeliveryComboBonusRuleAsset asset)
+        {
+            _deliveryComboBonusRuleAsset = asset;
+        }
+
+        public void SetSpeedBonusRuleAsset(SpeedBonusRuleAsset asset)
+        {
+            _speedBonusRuleAsset = asset;
+        }
+
+        public void SetDistanceBonusRuleAsset(DistanceBonusRuleAsset asset)
+        {
+            _distanceBonusRuleAsset = asset;
+        }
+
+        public void SetRemainingTimeBonusRuleAsset(RemainingTimeBonusRuleAsset asset)
+        {
+            _remainingTimeBonusRuleAsset = asset;
+        }
+#endif
     }
 }

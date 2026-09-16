@@ -33,6 +33,7 @@ namespace ShoulderDelivery.Infrastructure
                 , scoreRule);
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// 配達目的地の情報アセットを設定するメソッド
         /// </summary>
@@ -41,5 +42,6 @@ namespace ShoulderDelivery.Infrastructure
         {
             _targetDefinitionAssets = targetDefinitionAssets;
         }
+#endif
     }
 }

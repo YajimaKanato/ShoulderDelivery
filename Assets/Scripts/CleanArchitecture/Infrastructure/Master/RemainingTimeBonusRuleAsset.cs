@@ -1,16 +1,33 @@
 using ShoulderDelivery.Entity;
+using System;
+using System.Linq;
 using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
-    [CreateAssetMenu(fileName = "RemainingTimeBonusRuleAsset", menuName = "Master/RemainingTimeBonusRuleAsset")]
+    /// <summary>残り時間ボーナスのアセットクラス</summary>
+    [CreateAssetMenu(fileName = "RemainingTimeBonus", menuName = "Master/RemainingTimeBonusRuleAsset")]
     public class RemainingTimeBonusRuleAsset : MasterAssetBase<RemainingTimeBonusRule>
     {
-        [SerializeField, Tooltip("残り時間に応じたボーナスのテーブル")] RemainingTimeBonus[] _bonusTable;
+        [SerializeField, Tooltip("残り時間に応じたボーナスのテーブル")] RemainingTimeBonusMaster[] _bonusTable;
 
         public override RemainingTimeBonusRule ToEntity()
         {
-            return new RemainingTimeBonusRule(_bonusTable);
+            var array = _bonusTable.Select(bonus => bonus.GenerateBonus()).ToArray();
+            return new RemainingTimeBonusRule(array);
+        }
+
+        /// <summary>アセット用の残り時間ボーナスクラス</summary>
+        [Serializable]
+        class RemainingTimeBonusMaster
+        {
+            [SerializeField] int _remainingTime;
+            [SerializeField] int _bonus;
+
+            public RemainingTimeBonus GenerateBonus()
+            {
+                return new RemainingTimeBonus(_remainingTime, _bonus);
+            }
         }
     }
 }
