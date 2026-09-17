@@ -153,6 +153,7 @@ namespace ShoulderDelivery.UseCase
             // 結果を表示
             _outputPort.ShowResult(new GameResultOutput(score.Total
                 , deliveryState.DeliveredCount
+                , stageState.RemainingTime
                 , deliveryState.IsQuataMet));
         }
     }
