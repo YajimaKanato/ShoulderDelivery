@@ -94,12 +94,6 @@ namespace ShoulderDelivery.UseCase
             // 配達成功を通知
             _outputPort.ShowDeliveryResult(DeliveryResultOutputService.Delivered(scoreBreakdown, score.Total));
 
-            // 現在の状況を通知
-            _outputPort.ShowHud(new GameHudOutput(
-                stageState.RemainingTime
-                , deliveryState.RemainigDeliveryCount
-                , score.Total));
-
             if (deliveryState.IsQuataMet)
             {
                 // ノルマ達成でゲーム終了
