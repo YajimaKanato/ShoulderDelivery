@@ -1,5 +1,3 @@
-using ShoulderDelivery.Entity;
-
 namespace ShoulderDelivery.UseCase
 {
     /// <summary>ゲームの状態を出力する機能を持つインターフェース</summary>
@@ -14,7 +12,7 @@ namespace ShoulderDelivery.UseCase
         void ShowResult(GameResultOutput output);
 
         /// <summary>コントローラーの有効無効を切り替えるメソッド</summary>
-        /// <param name="enable"></param>
+        /// <param name="enable">コントローラーの有効無効</param>
         void ChangeControllerEnable(bool enable);
 
         /// <summary>段ボールを投擲した情報を出力するメソッド</summary>
