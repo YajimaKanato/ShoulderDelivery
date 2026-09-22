@@ -9,9 +9,9 @@ namespace ShoulderDelivery.UseCase
         /// 投擲失敗を生成する
         /// </summary>
         /// <returns>投擲失敗DTO</returns>
-        public static ThrowCardboardOutput Rejected()
+        public static ThrowCardboardRejectedOutput Rejected()
         {
-            return new ThrowCardboardOutput(false, null);
+            return new ThrowCardboardRejectedOutput();
         }
 
         /// <summary>
@@ -19,9 +19,9 @@ namespace ShoulderDelivery.UseCase
         /// </summary>
         /// <param name="id">投擲した段ボールのID</param>
         /// <returns>投擲成功DTO</returns>
-        public static ThrowCardboardOutput Accepted(CardboardId id)
+        public static ThrowCardboardAcceptOutput Accepted(CardboardId id)
         {
-            return new ThrowCardboardOutput(true, id);
+            return new ThrowCardboardAcceptOutput(id);
         }
     }
 }

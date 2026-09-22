@@ -52,7 +52,7 @@ namespace ShoulderDelivery.UseCase
             if (!stageState.IsPlaying)
             {
                 // 投擲失敗を通知
-                _outputPort.ShowThrowCardboardOutcome(ThrowCardboardOutputService.Rejected());
+                _outputPort.ShowThrowCardboardRejected(ThrowCardboardOutputService.Rejected());
                 return;
             }
 
@@ -72,7 +72,7 @@ namespace ShoulderDelivery.UseCase
             _launcher.LaunchCardboard(cardboardId, input.Context);
 
             // 結果を通知
-            _outputPort.ShowThrowCardboardOutcome(ThrowCardboardOutputService.Accepted(cardboardId));
+            _outputPort.ShowThrowCardboardAccepted(ThrowCardboardOutputService.Accepted(cardboardId));
         }
     }
 }

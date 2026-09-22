@@ -25,7 +25,7 @@ namespace ShoulderDelivery.Entity
         /// <summary>連続配達成功回数</summary>
         public int DeliveryCombo => _deliverCombo;
         /// <summary>ノルマ達成フラグ</summary>
-        public bool IsQuataMet => DeliveredCount >= RequiredDeliveryCount;
+        public bool IsQuotaMet => DeliveredCount >= RequiredDeliveryCount;
 
         public DeliveryState(StageDefinition definition)
         {

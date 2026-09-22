@@ -151,10 +151,18 @@ namespace ShoulderDelivery.UseCase
                 throw new InvalidOperationException(nameof(deliveryState));
 
             // 結果を表示
-            _outputPort.ShowResult(new GameResultOutput(score.Total
-                , deliveryState.DeliveredCount
-                , stageState.RemainingTime
-                , deliveryState.IsQuataMet));
+            if (deliveryState.IsQuotaMet)
+            {
+                _outputPort.ShowGameClear(new GameClearOutput(score.Total
+                    , deliveryState.DeliveredCount
+                    , stageState.RemainingTime));
+            }
+            else
+            {
+                _outputPort.ShowGameFailed(new GameFailedOutput(score.Total
+                    , deliveryState.DeliveredCount
+                    , stageState.RemainingTime));
+            }
         }
     }
 }

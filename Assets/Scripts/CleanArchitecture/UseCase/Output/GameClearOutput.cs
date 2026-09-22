@@ -2,15 +2,14 @@ using System;
 
 namespace ShoulderDelivery.UseCase
 {
-    /// <summary>ゲームの結果を保持するDTO</summary>
-    public readonly struct GameResultOutput
+    /// <summary>ゲームの成功結果を保持するDTO</summary>
+    public readonly struct GameClearOutput
     {
         public readonly int Total;
         public readonly int DeliveryCount;
         public readonly float RemainingTime;
-        public readonly bool IsQuataMet;
 
-        public GameResultOutput(int total, int deliveryCount, float remainingTime, bool isQuataMet)
+        public GameClearOutput(int total, int deliveryCount, float remainingTime)
         {
             if (total < 0)
                 throw new ArgumentOutOfRangeException(nameof(total));
@@ -24,7 +23,6 @@ namespace ShoulderDelivery.UseCase
             Total = total;
             DeliveryCount = deliveryCount;
             RemainingTime = remainingTime;
-            IsQuataMet = isQuataMet;
         }
     }
 }

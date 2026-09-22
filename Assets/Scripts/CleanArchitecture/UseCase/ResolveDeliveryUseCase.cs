@@ -67,7 +67,7 @@ namespace ShoulderDelivery.UseCase
             if (!deliveryState.TryDelivery(input.TargetId))
             {
                 // 配達失敗
-                _outputPort.ShowDeliveryResult(DeliveryResultOutputService.Missed());
+                _outputPort.ShowDeliveryFailed(DeliveryResultOutputService.Missed());
                 return;
             }
 
@@ -92,9 +92,9 @@ namespace ShoulderDelivery.UseCase
             score.AddScore(scoreBreakdown);
 
             // 配達成功を通知
-            _outputPort.ShowDeliveryResult(DeliveryResultOutputService.Delivered(scoreBreakdown, score.Total));
+            _outputPort.ShowDeliverySucceeded(DeliveryResultOutputService.Delivered(scoreBreakdown, score.Total));
 
-            if (deliveryState.IsQuataMet)
+            if (deliveryState.IsQuotaMet)
             {
                 // ノルマ達成でゲーム終了
                 _gameUseCase.FinishGame();
