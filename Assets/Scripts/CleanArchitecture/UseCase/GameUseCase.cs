@@ -32,22 +32,22 @@ namespace ShoulderDelivery.UseCase
         /// ゲームを開始するメソッド
         /// </summary>
         /// <param name="input">開始に必要なデータ</param>
-        public void Start(StartGameInput input)
+        public void Start(GameStartInput input)
         {
             // ステージの情報を取得
             var stageDefinition = _stageRepository.Get(input.StageId);
+
+            if (stageDefinition == null)
+                throw new InvalidOperationException(nameof(stageDefinition));
 
             // ゲームの情報を生成して登録
             var gameSession = new GameSession(stageDefinition);
             _gameSessionStore.Set(gameSession);
 
             // ゲーム開始を通知
-            _outputPort.ShowHud(
-                new GameHudOutput(
-                     remainingTime: gameSession.StageState.RemainingTime,
-                     remainingDeliveryCount: gameSession.DeliveryState.RemainigDeliveryCount,
-                     score: gameSession.Score.Total
-                ));
+            _outputPort.ShowStageInfo(
+                new GameStartOutput(stageDefinition.TimeLimitSeconds
+                , stageDefinition.RequiredDeliveryCount));
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace ShoulderDelivery.UseCase
             // 現在の時間の進行状況によって処理を変える
             var result = stageState.CurrentPhase switch
             {
-                StagePhase.CountDown => stageState.CountDown(input.Delta),
-                StagePhase.IsPlaying => stageState.Tick(input.Delta),
+                StagePhase.CountDown => CountDown(input, stageState),
+                StagePhase.IsPlaying => Tick(input, session, stageState),
                 _ => StageTickResult.None
             };
 
@@ -84,13 +84,26 @@ namespace ShoulderDelivery.UseCase
                     // ゲームを終了する
                     FinishGame();
                     break;
-                case StageTickResult.None:
-                    // 毎フレーム情報を更新
-                    Tick(session, stageState);
-                    break;
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// カウントダウン情報を更新するメソッド
+        /// </summary>
+        /// <param name="input">チック情報</param>
+        /// <param name="stageState">ステージ情報</param>
+        /// <returns>ステージのチック結果</returns>
+        StageTickResult CountDown(TickInput input, StageState stageState)
+        {
+            // カウントダウンを進める
+            var result = stageState.CountDown(input.Delta);
+
+            // カウントダウンを表示
+            _outputPort.ShowCountDown(new CountDownOutput(stageState.RemainingCountDownSeconds));
+
+            return result;
         }
 
         /// <summary>
@@ -99,7 +112,8 @@ namespace ShoulderDelivery.UseCase
         /// <param name="session">ゲームのセッション情報</param>
         /// <param name="stageState">ステージの情報</param>
         /// <exception cref="InvalidOperationException">必要な参照がない</exception>
-        void Tick(GameSession session, StageState stageState)
+        /// <returns>ステージのチック結果</returns>
+        StageTickResult Tick(TickInput input, GameSession session, StageState stageState)
         {
             var deliveryState = session.DeliveryState;
             if (deliveryState == null)
@@ -109,10 +123,14 @@ namespace ShoulderDelivery.UseCase
             if (score == null)
                 throw new InvalidOperationException(nameof(score));
 
+            var result = stageState.Tick(input.Delta);
+
             // 情報更新
             _outputPort.ShowHud(new GameHudOutput(stageState.RemainingTime
                 , deliveryState.RemainigDeliveryCount
                 , score.Total));
+
+            return result;
         }
 
         /// <summary>

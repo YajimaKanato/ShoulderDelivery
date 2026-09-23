@@ -3,9 +3,13 @@ namespace ShoulderDelivery.UseCase
     /// <summary>ゲームの状態を出力する機能を持つインターフェース</summary>
     public interface IGameOutputPort
     {
+        /// <summary>カウントダウンを出力するメソッド</summary>
+        /// <param name="output">カウントダウンの情報</param>
+        void ShowCountDown(CountDownOutput output);
+
         /// <summary>ゲームの現在の状況を出力するメソッド</summary>
         /// <param name="output">ゲームの現在の状況</param>
-        void ShowHud(StartGameOutput output);
+        void ShowStageInfo(GameStartOutput output);
 
         /// <summary>ゲームの現在の状況を出力するメソッド</summary>
         /// <param name="output">ゲームの現在の状況</param>
