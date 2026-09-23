@@ -15,6 +15,6 @@ namespace ShoulderDelivery.Entity
         public bool Equals(CardboardId other) => Id == other.Id;
         public override bool Equals(object obj) => obj is CardboardId other && Equals(other);
         public override int GetHashCode() => Id;
-        public override string ToString() => Id.ToString();
+        public override string ToString() => $"段ボールのID : {Id}";
     }
 }

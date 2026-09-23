@@ -2,7 +2,7 @@ using System;
 
 namespace ShoulderDelivery.Entity
 {
-    /// <summary>合計スコアの構造体</summary>
+    /// <summary>合計スコアのクラス</summary>
     public sealed class Score
     {
         int _score;
