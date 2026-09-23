@@ -3,7 +3,8 @@
     "rootNamespace": "ShoulderDelivery.Adapter",
     "references": [
         "GUID:429aebfaac0b31848ab711e1c2b09b36",
-        "GUID:61af797609a61e1469e7f6eade3cc3f8"
+        "GUID:61af797609a61e1469e7f6eade3cc3f8",
+        "GUID:f13c9a136531cde4283fd503500a6e55"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
