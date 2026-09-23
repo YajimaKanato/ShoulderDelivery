@@ -1,36 +1,86 @@
 using ShoulderDelivery.UseCase;
-using UnityEngine;
+using System;
 
 namespace ShoulderDelivery.Adapter
 {
-    public class GamePresenter : MonoBehaviour, IGameOutputPort
+    public class GamePresenter : IGameOutputPort
     {
-        [SerializeField] GameHudView _hudView;
-        [SerializeField] GameResultView _resultView;
-        [SerializeField] DeliveriedView _deliveryView;
-        [SerializeField] CardboardContextView _cardboardContextView;
+        IStageInfoView _stageInfoView;
+        IGameCountDownView _gameCountDownView;
+        IGameHudView _hudView;
+        IGameResultView _resultView;
+        IDeliveriedView _deliveryView;
+        ICardboardContextView _cardboardContextView;
+
+        public GamePresenter(IStageInfoView stageInfoView
+            , IGameCountDownView gameCountDownView
+            , IGameHudView hudView
+            , IGameResultView resultView
+            , IDeliveriedView deliveryView
+            , ICardboardContextView cardboardContextView)
+        {
+            if (stageInfoView == null)
+                throw new ArgumentNullException(nameof(stageInfoView));
+
+            if (gameCountDownView == null)
+                throw new ArgumentNullException(nameof(gameCountDownView));
+
+            if (hudView == null)
+                throw new ArgumentNullException(nameof(hudView));
+
+            if (resultView == null)
+                throw new ArgumentNullException(nameof(resultView));
+
+            if (deliveryView == null)
+                throw new ArgumentNullException(nameof(deliveryView));
+
+            if (cardboardContextView == null)
+                throw new ArgumentNullException(nameof(cardboardContextView));
+
+            _stageInfoView = stageInfoView;
+            _gameCountDownView = gameCountDownView;
+            _hudView = hudView;
+            _resultView = resultView;
+            _deliveryView = deliveryView;
+            _cardboardContextView = cardboardContextView;
+        }
 
         public void ChangeControllerEnable(bool enable)
         {
-            throw new System.NotImplementedException();
+            // 操作権限を変更する
+        }
+
+        public void ShowCountDown(CountDownOutput output)
+        {
+            var remainingSeconds = output.Seconds;
+
+            // ViewModel作成
+            var viewModel = new CountDownViewModel(remainingSeconds);
+
+            _gameCountDownView.ShowCountDown(viewModel);
         }
 
         public void ShowHud(GameHudOutput output)
         {
-            if (_hudView == null)
-            {
-                Debug.LogWarning("GameHudViewが設定されていません", _hudView);
-                return;
-            }
-
-            var remainingTime = output.RemainingTime.ToString("0.0");
+            var remainingTime = output.RemainingTime;
             var remainingDeliveryCount = output.RemainingDeliveryCount;
-            var score = output.Score;
+            var score = output.Score.ToString("0");
+
+            // ViewModel作成
+            var viewModel = new HudViewModel(remainingTime, remainingDeliveryCount, score);
+
+            _hudView.ShowHud(viewModel);
         }
 
-        public void ShowHud(StartGameOutput output)
+        public void ShowStageInfo(GameStartOutput output)
         {
-            throw new System.NotImplementedException();
+            var timeLimitSeconds = output.TimeLimitSeconds;
+            var requiredDeliveryCount = output.RequiredDeliveryCount;
+
+            // ViewModel作成
+            var viewModel = new StageInfoViewModel(timeLimitSeconds, requiredDeliveryCount);
+
+            _stageInfoView.ShowStageInfo(viewModel);
         }
 
         public void ShowGameClear(GameClearOutput output)
@@ -45,22 +95,39 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowDeliverySucceeded(DeliverySuccessOutput deliveryResult)
         {
-            throw new System.NotImplementedException();
+            var scoreBreakDown = deliveryResult.ScoreBreakdown;
+            var score = deliveryResult.Score.ToString("0");
+
+            // ViewModel作成
+            var viewModel = new DeliveriedViewModel(score);
+
+            _deliveryView.ShowDeliverySucceededResult(viewModel);
         }
 
         public void ShowDeliveryFailed(DeliveryFailedOutput deliveryResult)
         {
-            throw new System.NotImplementedException();
+            var score = deliveryResult.Score.ToString("0");
+
+            // ViewModel作成
+            var viewModel = new DeliveriedViewModel(score);
+
+            _deliveryView.ShowDeliveryFailedResult(viewModel);
         }
 
         public void ShowThrowCardboardRejected(ThrowCardboardRejectedOutput output)
         {
-            throw new System.NotImplementedException();
+            var viewModel = new CardboardContextViewModel("段ボールを投げることができませんでした");
+
+            _cardboardContextView.ShowCardboardRejected(viewModel);
         }
 
         public void ShowThrowCardboardAccepted(ThrowCardboardAcceptOutput output)
         {
-            throw new System.NotImplementedException();
+            var cardboardId = output.CardboardId;
+
+            var viewModel = new CardboardContextViewModel($"段ボールを投げることができました\n{cardboardId}");
+
+            _cardboardContextView.ShowCardboardAccepted(viewModel);
         }
     }
 }
