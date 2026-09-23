@@ -3,6 +3,7 @@
   <Project Path="ShoulderDelivery.Entity.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
+  <Project Path="ShoulderDelivery.Adapter.csproj" />
   <Project Path="ShoulderDelivery.Common.csproj" />
   <Project Path="ShoulderDelivery.Infrastructure.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
