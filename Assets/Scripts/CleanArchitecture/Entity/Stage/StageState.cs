@@ -48,7 +48,7 @@ namespace ShoulderDelivery.Entity
             {
                 // カウントダウンフェーズの場合はカウントダウン
                 _remainingCountDownSeconds = Math.Max(0, _remainingCountDownSeconds - delta);
-                if (RemainingCountDownSeconds <= 0)
+                if (_remainingCountDownSeconds <= 0)
                 {
                     _currentPhase = StagePhase.IsPlaying;
                     return StageTickResult.CountDownFinished;
