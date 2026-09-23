@@ -85,7 +85,11 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowGameClear(GameClearOutput output)
         {
-            throw new System.NotImplementedException();
+            var total = output.Total;
+            var deliveryCount = output.DeliveryCount;
+            var remainingTime = output.RemainingTime;
+
+            //var viewModel
         }
 
         public void ShowGameFailed(GameFailedOutput output)
