@@ -63,8 +63,11 @@ namespace ShoulderDelivery.UseCase
             if (deliveryState == null)
                 throw new InvalidOperationException(nameof(deliveryState));
 
+            // 配達先のIDを取得
+            var targetId = input.TargetId;
+
             // 配達をする
-            if (!deliveryState.TryDelivery(input.TargetId))
+            if (targetId == null || !deliveryState.TryDelivery(targetId.Value))
             {
                 // 配達失敗
                 _outputPort.ShowDeliveryFailed(DeliveryResultOutputService.Missed());
@@ -72,7 +75,7 @@ namespace ShoulderDelivery.UseCase
             }
 
             // ターゲットの情報を取得
-            var targetDefinition = _targetRepository.Get(input.TargetId);
+            var targetDefinition = _targetRepository.Get(targetId.Value);
 
             // 配達成功情報を取得
             var deliveryResult = DeliveryResultService.Delivered(targetDefinition, deliveryState.DeliveryCombo);
@@ -92,7 +95,9 @@ namespace ShoulderDelivery.UseCase
             score.AddScore(scoreBreakdown);
 
             // 配達成功を通知
-            _outputPort.ShowDeliverySucceeded(DeliveryResultOutputService.Delivered(scoreBreakdown, score.Total));
+            _outputPort.ShowDeliverySucceeded(DeliveryResultOutputService.Delivered(scoreBreakdown
+                , score.Total
+                , DeliveryBreakdownService.Deliveried(deliveryState)));
 
             if (deliveryState.IsQuotaMet)
             {

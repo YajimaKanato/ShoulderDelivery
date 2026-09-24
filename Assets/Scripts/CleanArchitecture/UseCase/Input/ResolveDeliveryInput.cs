@@ -6,9 +6,9 @@ namespace ShoulderDelivery.UseCase
     public readonly struct ResolveDeliveryInput
     {
         public readonly CardboardId CardboardId;
-        public readonly TargetId TargetId;
+        public readonly TargetId? TargetId;
 
-        public ResolveDeliveryInput(CardboardId cardboardId, TargetId targetId)
+        public ResolveDeliveryInput(CardboardId cardboardId, TargetId? targetId)
         {
             CardboardId = cardboardId;
             TargetId = targetId;

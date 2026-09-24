@@ -11,10 +11,13 @@ namespace ShoulderDelivery.UseCase
         /// <summary>現在のスコア</summary>
         public readonly int Score;
 
-        public DeliverySuccessOutput(ScoreBreakdown scoreBreakdown, int score)
+        public readonly DeliveryBreakdown DeliveryBreakdown;
+
+        public DeliverySuccessOutput(ScoreBreakdown scoreBreakdown, int score, DeliveryBreakdown deliveryBreakdown)
         {
             ScoreBreakdown = scoreBreakdown;
             Score = score;
+            DeliveryBreakdown = deliveryBreakdown;
         }
     }
 }
