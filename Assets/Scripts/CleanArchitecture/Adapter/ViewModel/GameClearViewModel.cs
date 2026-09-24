@@ -4,7 +4,16 @@ namespace ShoulderDelivery.Adapter
     public readonly struct GameClearViewModel
     {
         public readonly int Total;
+        public readonly int RequiredDeliveryCount;
         public readonly int DeliveryCount;
         public readonly float RemainingTime;
+
+        public GameClearViewModel(int total, int requiredDeliveryCount, int deliveryCount, float remainingTime)
+        {
+            Total = total;
+            RequiredDeliveryCount = requiredDeliveryCount;
+            DeliveryCount = deliveryCount;
+            RemainingTime = remainingTime;
+        }
     }
 }
