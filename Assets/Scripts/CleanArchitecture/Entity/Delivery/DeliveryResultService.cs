@@ -11,16 +11,7 @@ namespace ShoulderDelivery.Entity
         /// <returns>配達成功の投擲結果</returns>
         public static DeliveryResult Delivered(TargetDefinition targetDefinition, int combo)
         {
-            return new DeliveryResult(ThrowOutcome.Delivered, targetDefinition, combo);
-        }
-
-        /// <summary>
-        /// 配達失敗の投擲結果を生成するメソッド
-        /// </summary>
-        /// <returns>配達失敗の投擲結果</returns>
-        public static DeliveryResult Missed()
-        {
-            return new DeliveryResult(ThrowOutcome.Missed, null, 0);
+            return new DeliveryResult(targetDefinition, combo);
         }
     }
 }

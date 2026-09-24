@@ -29,18 +29,11 @@ namespace ShoulderDelivery.Entity
             var throwContextValue = throwContext.Value;
             var deliveryResultValue = deliveryResult.Value;
 
-            // 配達失敗時は影響のないスコアを返す
-            if (deliveryResultValue.Outcome == ThrowOutcome.Missed)
-                return new ScoreBreakdown(0, 0, 0, 0, 0);
-
             // ターゲットの情報を取得
             var targetDefinition = deliveryResultValue.TargetDefinition;
 
-            if (targetDefinition == null)
-                throw new InvalidOperationException(nameof(targetDefinition));
-
             // 距離に応じたボーナススコアを計算
-            var distance = Coordinates.SqrMagnitude(throwContextValue.Position - targetDefinition.Value.Position);
+            var distance = Coordinates.SqrMagnitude(throwContextValue.Position - targetDefinition.Position);
             var distanceBonus = rules.DistanceBonus.ResolveDistanceBonus(distance);
 
             // 連続配達成功回数に応じたボーナススコアを計算
