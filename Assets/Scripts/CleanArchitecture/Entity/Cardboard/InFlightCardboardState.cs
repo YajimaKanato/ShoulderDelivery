@@ -27,7 +27,7 @@ namespace ShoulderDelivery.Entity
         {
             if (!_contexts.TryGetValue(id, out context)) return false;
 
-            _contexts.Remove(id);
+            Discard(id);
             return true;
         }
 
