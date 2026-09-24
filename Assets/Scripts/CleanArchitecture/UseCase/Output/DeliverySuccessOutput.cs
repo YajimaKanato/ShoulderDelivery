@@ -7,10 +7,9 @@ namespace ShoulderDelivery.UseCase
     {
         /// <summary>今回獲得したスコアの内訳</summary>
         public readonly ScoreBreakdown ScoreBreakdown;
-
         /// <summary>現在のスコア</summary>
         public readonly int Score;
-
+        /// <summary>配達の内訳</summary>
         public readonly DeliveryBreakdown DeliveryBreakdown;
 
         public DeliverySuccessOutput(ScoreBreakdown scoreBreakdown, int score, DeliveryBreakdown deliveryBreakdown)
