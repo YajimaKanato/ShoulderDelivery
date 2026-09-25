@@ -1,5 +1,3 @@
-using System;
-
 namespace ShoulderDelivery.Entity
 {
     /// <summary>合計スコアのクラス</summary>
