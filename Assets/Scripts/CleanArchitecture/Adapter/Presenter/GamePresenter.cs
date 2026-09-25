@@ -100,20 +100,18 @@ namespace ShoulderDelivery.Adapter
         public void ShowDeliverySucceeded(DeliverySuccessOutput deliveryResult)
         {
             var scoreBreakDown = deliveryResult.ScoreBreakdown;
-            var score = deliveryResult.Score.ToString("0");
+            var score = deliveryResult.Score;
 
             // ViewModel作成
-            var viewModel = new DeliveriedViewModel(score);
+            var viewModel = new DeliveriedViewModel(score, scoreBreakDown.Total);
 
             _deliveryView.ShowDeliverySucceededResult(viewModel);
         }
 
         public void ShowDeliveryFailed(DeliveryFailedOutput deliveryResult)
         {
-            var score = deliveryResult.Score.ToString("0");
-
             // ViewModel作成
-            var viewModel = new DeliveriedViewModel(score);
+            var viewModel = new DeliveriedViewModel();
 
             _deliveryView.ShowDeliveryFailedResult(viewModel);
         }
