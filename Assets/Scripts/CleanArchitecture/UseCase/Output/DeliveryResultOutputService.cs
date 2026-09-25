@@ -20,11 +20,10 @@ namespace ShoulderDelivery.UseCase
         /// <summary>
         /// 配達失敗のDTOを生成するメソッド
         /// </summary>
-        /// <param name="score">スコア</param>
         /// <returns>配達失敗のDTO</returns>
-        public static DeliveryFailedOutput Missed(int score)
+        public static DeliveryFailedOutput Missed()
         {
-            return new DeliveryFailedOutput(score);
+            return new DeliveryFailedOutput();
         }
     }
 }
