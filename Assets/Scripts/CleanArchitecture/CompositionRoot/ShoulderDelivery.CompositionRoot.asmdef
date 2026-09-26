@@ -3,7 +3,8 @@
     "rootNamespace": "ShoulderDelivery.CompositionRoot",
     "references": [
         "GUID:429aebfaac0b31848ab711e1c2b09b36",
-        "GUID:e3802eefac48af54aaa5c2c945238f83"
+        "GUID:e3802eefac48af54aaa5c2c945238f83",
+        "GUID:eb3d01520f73a9b489596600b62a8760"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
