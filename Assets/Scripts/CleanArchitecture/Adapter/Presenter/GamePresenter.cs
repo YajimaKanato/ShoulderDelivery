@@ -63,11 +63,10 @@ namespace ShoulderDelivery.Adapter
         public void ShowHud(GameHudOutput output)
         {
             var remainingTime = output.RemainingTime;
-            var remainingDeliveryCount = output.RemainingDeliveryCount;
-            var score = output.Score.ToString("0");
+            var score = output.Score;
 
             // ViewModel作成
-            var viewModel = new HudViewModel(remainingTime, remainingDeliveryCount, score);
+            var viewModel = new HudViewModel(remainingTime, score);
 
             _hudView.ShowHud(viewModel);
         }
@@ -85,16 +84,28 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowGameClear(GameClearOutput output)
         {
-            var total = output.Total;
+            var total = output.TotalScore;
+            var requiredDeliveryCount = output.RequiredDeliveryCount;
             var deliveryCount = output.DeliveryCount;
-            var remainingTime = output.RemainingTime;
+            var clearTime = output.TimeLimitSeconds - output.RemainingTime;
 
-            //var viewModel
+            // ViewModel作成
+            var viewModel = new GameClearViewModel(total, requiredDeliveryCount, deliveryCount, clearTime);
+
+            _resultView.ShowClear(viewModel);
         }
 
         public void ShowGameFailed(GameFailedOutput output)
         {
-            throw new System.NotImplementedException();
+            var total = output.TotalScore;
+            var requiredDeliveryCount = output.RequiredDeliveryCount;
+            var deliveryCount = output.DeliveryCount;
+            var clearTime = output.TimeLimitSeconds - output.RemainingTime;
+
+            // ViewModel作成
+            var viewModel = new GameFailedViewModel(total, requiredDeliveryCount, deliveryCount, clearTime);
+
+            _resultView.ShowFailed(viewModel);
         }
 
         public void ShowDeliverySucceeded(DeliverySuccessOutput deliveryResult)
@@ -118,6 +129,7 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowThrowCardboardRejected(ThrowCardboardRejectedOutput output)
         {
+            // ViewModel作成
             var viewModel = new CardboardContextViewModel("段ボールを投げることができませんでした");
 
             _cardboardContextView.ShowCardboardRejected(viewModel);
@@ -127,6 +139,7 @@ namespace ShoulderDelivery.Adapter
         {
             var cardboardId = output.CardboardId;
 
+            // ViewModel作成
             var viewModel = new CardboardContextViewModel($"段ボールを投げることができました\n{cardboardId}");
 
             _cardboardContextView.ShowCardboardAccepted(viewModel);

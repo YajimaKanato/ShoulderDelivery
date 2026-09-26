@@ -115,10 +115,6 @@ namespace ShoulderDelivery.UseCase
         /// <returns>ステージのチック結果</returns>
         StageTickResult Tick(TickInput input, GameSession session, StageState stageState)
         {
-            var deliveryState = session.DeliveryState;
-            if (deliveryState == null)
-                throw new InvalidOperationException(nameof(deliveryState));
-
             var score = session.Score;
             if (score == null)
                 throw new InvalidOperationException(nameof(score));
@@ -126,9 +122,7 @@ namespace ShoulderDelivery.UseCase
             var result = stageState.Tick(input.Delta);
 
             // 情報更新
-            _outputPort.ShowHud(new GameHudOutput(stageState.RemainingTime
-                , deliveryState.RemainigDeliveryCount
-                , score.Total));
+            _outputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, score.Total));
 
             return result;
         }
@@ -150,7 +144,11 @@ namespace ShoulderDelivery.UseCase
             // ゲームを終了状態にする
             if (!stageState.Finish()) return;
 
-            var scoreRules = gameSession.StageDefinition?.ScoreRules;
+            var stageDefinition = gameSession.StageDefinition;
+            if (stageDefinition == null)
+                throw new InvalidOperationException(nameof(stageDefinition));
+
+            var scoreRules = stageDefinition.ScoreRules;
             if (scoreRules == null)
                 throw new InvalidOperationException(nameof(scoreRules));
 
@@ -172,13 +170,17 @@ namespace ShoulderDelivery.UseCase
             if (deliveryState.IsQuotaMet)
             {
                 _outputPort.ShowGameClear(new GameClearOutput(score.Total
+                    , deliveryState.RequiredDeliveryCount
                     , deliveryState.DeliveredCount
+                    , stageDefinition.TimeLimitSeconds
                     , stageState.RemainingTime));
             }
             else
             {
                 _outputPort.ShowGameFailed(new GameFailedOutput(score.Total
+                    , deliveryState.RequiredDeliveryCount
                     , deliveryState.DeliveredCount
+                    , stageDefinition.TimeLimitSeconds
                     , stageState.RemainingTime));
             }
         }

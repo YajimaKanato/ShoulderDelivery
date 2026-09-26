@@ -5,23 +5,37 @@ namespace ShoulderDelivery.UseCase
     /// <summary>ゲームの失敗結果を持つDTO</summary>
     public readonly struct GameFailedOutput
     {
-        public readonly int Total;
+        public readonly int TotalScore;
+        public readonly int RequiredDeliveryCount;
         public readonly int DeliveryCount;
+        public readonly int TimeLimitSeconds;
         public readonly float RemainingTime;
 
-        public GameFailedOutput(int total, int deliveryCount, float remainingTime)
+        public GameFailedOutput(int totalScore
+            , int requiredDeliveryCount
+            , int deliveryCount
+            , int timeLimitSeconds
+            , float remainingTime)
         {
-            if (total < 0)
-                throw new ArgumentOutOfRangeException(nameof(total));
+            if (totalScore < 0)
+                throw new ArgumentOutOfRangeException(nameof(totalScore));
+
+            if (requiredDeliveryCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(requiredDeliveryCount));
 
             if (deliveryCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(deliveryCount));
 
+            if (timeLimitSeconds < 0)
+                throw new ArgumentOutOfRangeException(nameof(timeLimitSeconds));
+
             if (remainingTime < 0)
                 throw new ArgumentOutOfRangeException(nameof(remainingTime));
 
-            Total = total;
+            TotalScore = totalScore;
+            RequiredDeliveryCount = requiredDeliveryCount;
             DeliveryCount = deliveryCount;
+            TimeLimitSeconds = timeLimitSeconds;
             RemainingTime = remainingTime;
         }
     }

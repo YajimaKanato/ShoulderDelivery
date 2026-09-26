@@ -6,24 +6,17 @@ namespace ShoulderDelivery.UseCase
     public readonly struct GameHudOutput
     {
         public readonly float RemainingTime;
-        public readonly int RemainingDeliveryCount;
         public readonly int Score;
 
-        public GameHudOutput(float remainingTime
-            , int remainingDeliveryCount
-            , int score)
+        public GameHudOutput(float remainingTime, int score)
         {
             if (remainingTime < 0)
                 throw new ArgumentOutOfRangeException(nameof(remainingTime));
-
-            if (remainingDeliveryCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(remainingDeliveryCount));
 
             if (score < 0)
                 throw new ArgumentOutOfRangeException(nameof(score));
 
             RemainingTime = remainingTime;
-            RemainingDeliveryCount = remainingDeliveryCount;
             Score = score;
         }
     }
