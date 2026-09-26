@@ -4,13 +4,11 @@ namespace ShoulderDelivery.Adapter
     public readonly struct HudViewModel
     {
         public readonly float RemainingTime;
-        public readonly int RemainingDeliveryCount;
-        public readonly string Score;
+        public readonly int Score;
 
-        public HudViewModel(float remainingTime, int remainingDeliveryCount, string score)
+        public HudViewModel(float remainingTime, int score)
         {
             RemainingTime = remainingTime;
-            RemainingDeliveryCount = remainingDeliveryCount;
             Score = score;
         }
     }

@@ -4,15 +4,11 @@ namespace ShoulderDelivery.Adapter
     public interface IGameResultView
     {
         /// <summary>ゲームの失敗を表示するメソッド</summary>
-        /// <param name="totalScore">合計スコア</param>
-        /// <param name="deliveryCount">合計配達数</param>
-        /// <param name="remainingTime">残り時間</param>
-        void ShowFailed(string totalScore, string deliveryCount, string remainingTime);
+        /// <param name="viewModel">ViewModel</param>
+        void ShowFailed(GameFailedViewModel viewModel);
 
         /// <summary>ゲームの成功を表示するメソッド</summary>
-        /// <param name="totalScore">合計スコア</param>
-        /// <param name="deliveryCount">合計配達数</param>
-        /// <param name="remainingTime">残り時間</param>
-        void ShowClear(string totalScore, string deliveryCount, string remainingTime);
+        /// <param name="viewModel">ViewModel</param>
+        void ShowClear(GameClearViewModel viewModel);
     }
 }
