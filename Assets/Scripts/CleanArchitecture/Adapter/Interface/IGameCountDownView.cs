@@ -6,5 +6,11 @@ namespace ShoulderDelivery.Adapter
         /// <summary>カウントダウンを表示するメソッド</summary>
         /// <param name="viewModel">ViewModel</param>
         void ShowCountDown(CountDownViewModel viewModel);
+
+        /// <summary>
+        /// ゲームスタートを表示するメソッド
+        /// </summary>
+        /// <param name="viewModel">ViewModel</param>
+        void ShowGameStart(GameStartViewModel viewModel);
     }
 }

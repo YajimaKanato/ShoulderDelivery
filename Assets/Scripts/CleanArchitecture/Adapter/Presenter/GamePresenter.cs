@@ -71,7 +71,7 @@ namespace ShoulderDelivery.Adapter
             _hudView.ShowHud(viewModel);
         }
 
-        public void ShowStageInfo(GameStartOutput output)
+        public void ShowStageInfo(StageInfoOutput output)
         {
             var timeLimitSeconds = output.TimeLimitSeconds;
             var requiredDeliveryCount = output.RequiredDeliveryCount;
@@ -143,6 +143,13 @@ namespace ShoulderDelivery.Adapter
             var viewModel = new CardboardContextViewModel($"段ボールを投げることができました\n{cardboardId}");
 
             _cardboardContextView.ShowCardboardAccepted(viewModel);
+        }
+
+        public void ShowGameStart(GameStartOutput output)
+        {
+            var viewModel = new GameStartViewModel();
+
+            _gameCountDownView.ShowGameStart(viewModel);
         }
     }
 }

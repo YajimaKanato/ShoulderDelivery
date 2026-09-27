@@ -9,7 +9,11 @@ namespace ShoulderDelivery.UseCase
 
         /// <summary>ゲームの現在の状況を出力するメソッド</summary>
         /// <param name="output">ゲームの現在の状況</param>
-        void ShowStageInfo(GameStartOutput output);
+        void ShowStageInfo(StageInfoOutput output);
+
+        /// <summary>カウントダウン後のゲーム開始を出力するメソッド</summary>
+        /// <param name="output">ゲーム開始アナウンス</param>
+        void ShowGameStart(GameStartOutput output);
 
         /// <summary>ゲームの現在の状況を出力するメソッド</summary>
         /// <param name="output">ゲームの現在の状況</param>

@@ -46,7 +46,7 @@ namespace ShoulderDelivery.UseCase
 
             // ゲーム開始を通知
             _outputPort.ShowStageInfo(
-                new GameStartOutput(stageDefinition.TimeLimitSeconds
+                new StageInfoOutput(stageDefinition.TimeLimitSeconds
                 , stageDefinition.RequiredDeliveryCount));
         }
 
@@ -77,8 +77,7 @@ namespace ShoulderDelivery.UseCase
             switch (result)
             {
                 case StageTickResult.CountDownFinished:
-                    // コントローラーを有効にする
-                    _outputPort.ChangeControllerEnable(true);
+                    CountDownFinished();
                     break;
                 case StageTickResult.TimeUp:
                     // ゲームを終了する
@@ -125,6 +124,15 @@ namespace ShoulderDelivery.UseCase
             _outputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, score.Total));
 
             return result;
+        }
+
+        /// <summary>
+        /// カウントダウン終了時のイベントメソッド
+        /// </summary>
+        void CountDownFinished()
+        {
+            _outputPort.ShowGameStart(new GameStartOutput());
+            _outputPort.ChangeControllerEnable(true);
         }
 
         /// <summary>
