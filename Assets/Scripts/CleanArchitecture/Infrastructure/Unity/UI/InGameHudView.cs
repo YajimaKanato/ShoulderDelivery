@@ -11,7 +11,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _requiredDeliveryCountText;
 
         /// <summary>参照がそろっているかを確認するためのプロパティ</summary>
-        bool IsAssignedUI => _timerText != null
+        bool IsAssigned => _timerText != null
             && _scoreText != null
             && _requiredDeliveryCountText != null;
 
@@ -29,7 +29,7 @@ namespace ShoulderDelivery.Infrastructure
 
         public void ShowHud(HudViewModel viewModel)
         {
-            if (!IsAssignedUI) return;
+            if (!IsAssigned) return;
 
             var score = viewModel.Score;
             var remainingTime = viewModel.RemainingTime;
@@ -42,7 +42,7 @@ namespace ShoulderDelivery.Infrastructure
 
         public void ShowStageInfo(StageInfoViewModel viewModel)
         {
-            if (!IsAssignedUI) return;
+            if (!IsAssigned) return;
 
             var requiredDeliveryCount = viewModel.RequiredDeliveryCount;
             var timeLimitSeconds = viewModel.TimeLimitSeconds;

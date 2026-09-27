@@ -8,11 +8,12 @@ namespace ShoulderDelivery.Infrastructure
     public class InGameCountDownView : MonoBehaviour, IGameCountDownView
     {
         [SerializeField] TextMeshProUGUI _countDownText;
+        [SerializeField] float _startAnnouncementLifeTime = 2f;
 
         Tween _countDownTween = null;
 
         /// <summary>参照がそろっているかを確認するためのプロパティ</summary>
-        bool IsAssignedUI => _countDownText != null;
+        bool IsAssigned => _countDownText != null;
 
         private void Awake()
         {
@@ -22,7 +23,7 @@ namespace ShoulderDelivery.Infrastructure
 
         public void ShowCountDown(CountDownViewModel viewModel)
         {
-            if (!IsAssignedUI) return;
+            if (!IsAssigned) return;
             if (_countDownTween == null || _countDownTween.IsActive()) return;
 
             var seconds = viewModel.RemainingSeconds.ToString("0");
@@ -36,14 +37,19 @@ namespace ShoulderDelivery.Infrastructure
 
         public void ShowGameStart(GameStartViewModel viewModel)
         {
-            if (!IsAssignedUI) return;
-            if (_countDownTween == null || _countDownTween.IsActive()) return;
+            if (!IsAssigned) return;
+
+            if (_countDownTween != null && _countDownTween.IsActive())
+            {
+                _countDownTween.Kill();
+                _countDownTween = null;
+            }
 
             var text = "Let's Delivery!!";
             _countDownText.text = text;
 
             var sequence = DOTween.Sequence();
-            sequence.Append(_countDownText.transform.DOScale(0, 2).SetEase(Ease.InQuad));
+            sequence.Append(_countDownText.transform.DOScale(0, _startAnnouncementLifeTime).SetEase(Ease.InQuad));
 
             _countDownTween = sequence;
         }
