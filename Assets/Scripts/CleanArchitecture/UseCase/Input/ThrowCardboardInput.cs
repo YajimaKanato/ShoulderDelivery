@@ -6,10 +6,12 @@ namespace ShoulderDelivery.UseCase
     public readonly struct ThrowCardboardInput
     {
         public readonly ThrowContext Context;
+        public readonly CardboardLaunchInput Launch;
 
-        public ThrowCardboardInput(ThrowContext context)
+        public ThrowCardboardInput(ThrowContext context, CardboardLaunchInput launch)
         {
             Context = context;
+            Launch = launch;
         }
     }
 }

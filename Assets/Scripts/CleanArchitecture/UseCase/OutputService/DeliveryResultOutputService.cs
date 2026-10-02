@@ -3,7 +3,7 @@ using ShoulderDelivery.Entity;
 namespace ShoulderDelivery.UseCase
 {
     /// <summary>配達結果のDTOを生成する処理を持つクラス</summary>
-    public static class DeliveryResultOutputService
+    internal static class DeliveryResultOutputService
     {
         /// <summary>
         /// 配達成功のDTOを生成するメソッド
@@ -12,7 +12,7 @@ namespace ShoulderDelivery.UseCase
         /// <param name="score">スコア</param>
         /// <param name="deliveryBreakdown">配達内訳</param>
         /// <returns>配達成功のDTO</returns>
-        public static DeliverySuccessOutput Delivered(ScoreBreakdown scoreBreakdown, int score, DeliveryBreakdown deliveryBreakdown)
+        internal static DeliverySuccessOutput Delivered(ScoreBreakdown scoreBreakdown, int score, DeliveryBreakdown deliveryBreakdown)
         {
             return new DeliverySuccessOutput(scoreBreakdown, score, deliveryBreakdown);
         }
@@ -21,7 +21,7 @@ namespace ShoulderDelivery.UseCase
         /// 配達失敗のDTOを生成するメソッド
         /// </summary>
         /// <returns>配達失敗のDTO</returns>
-        public static DeliveryFailedOutput Missed()
+        internal static DeliveryFailedOutput Missed()
         {
             return new DeliveryFailedOutput();
         }
