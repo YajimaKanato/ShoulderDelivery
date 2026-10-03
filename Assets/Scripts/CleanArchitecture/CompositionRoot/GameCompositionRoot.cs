@@ -29,6 +29,7 @@ namespace ShoulderDelivery.CompositionRoot
         #endregion
 
         GameSessionStore _gameSessionStore;
+        CardboardIdGenerator _cardboardIdGenerator;
 
         private void Awake()
         {
@@ -41,6 +42,7 @@ namespace ShoulderDelivery.CompositionRoot
 
             _stageRepository = new(_stages);
             _gameSessionStore = new();
+            _cardboardIdGenerator = new();
 
             _gameUseCase = new(_stageRepository
                 , _gameSessionStore
@@ -52,6 +54,10 @@ namespace ShoulderDelivery.CompositionRoot
                 , _presenter
                 , null
                 , _gameUseCase);
+
+            //_throwCardboardUseCase = new(_gameSessionStore
+            //    ,_cardboardIdGenerator
+            //    ,)
         }
     }
 }
