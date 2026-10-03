@@ -13,7 +13,12 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] float _lifeTime = 1f;
         [SerializeField] float _duration = 0.3f;
         Sequence _sequence;
-        public event Action<ContextText> OnExit;
+        event Action<ContextText> _onExit;
+        public Action OnExit(Action<ContextText> act)
+        {
+            _onExit += act;
+            return () => _onExit -= act;
+        }
 
         bool IsAssigned => _text != null;
         public bool IsShowing { get; private set; }
@@ -52,7 +57,7 @@ namespace ShoulderDelivery.Infrastructure
                 .Join(_text.DOFade(1, _duration))
                 .AppendInterval(_lifeTime)
                 .Append(_rectTransform.DOAnchorPosX(exitPosX, _duration))
-                .Join(_text.DOFade(0,_duration))
+                .Join(_text.DOFade(0, _duration))
                 .OnComplete(OnKill);
         }
 
@@ -76,9 +81,9 @@ namespace ShoulderDelivery.Infrastructure
             if (!IsAssigned) return;
             _sequence?.Kill();
 
-            _sequence = DOTween.Sequence() 
+            _sequence = DOTween.Sequence()
                 .Append(_rectTransform.DOAnchorPosX(exitPosX, _duration))
-                .Join(_text.DOFade(0,_duration))
+                .Join(_text.DOFade(0, _duration))
                 .OnComplete(OnKill);
         }
 
@@ -89,7 +94,7 @@ namespace ShoulderDelivery.Infrastructure
         {
             _sequence = null;
             IsShowing = false;
-            OnExit?.Invoke(this);
+            _onExit?.Invoke(this);
         }
     }
 }

@@ -1,3 +1,4 @@
+using ShoulderDerivery.Common;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,23 +13,20 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] float _exitPosX;
         [SerializeField] int _viewCount = 5;
         List<ContextText> _showedTexts = new();
+        ActionDisposer _disposer = new();
 
         private void OnEnable()
         {
             foreach (var context in _cardboardContextTexts)
             {
                 if (context != null)
-                    context.OnExit += ExitEvent;
+                    _disposer.AddActionDisposing(context.OnExit(ExitEvent));
             }
         }
 
         private void OnDisable()
         {
-            foreach (var context in _cardboardContextTexts)
-            {
-                if (context != null)
-                    context.OnExit -= ExitEvent;
-            }
+            _disposer.Dispose();
         }
 
         /// <summary>
