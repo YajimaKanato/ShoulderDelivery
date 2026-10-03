@@ -69,7 +69,7 @@ namespace ShoulderDelivery.UseCase
             inFlightCardboardState.RegisterThrowContext(cardboardId, input.Context);
 
             // 投擲命令
-            _launcher.LaunchCardboard(cardboardId, input.Context);
+            _launcher.LaunchCardboard(cardboardId, ThrowCardboardOutputService.Output(input));
 
             // 結果を通知
             _outputPort.ShowThrowCardboardAccepted(ThrowCardboardOutputService.Accepted(cardboardId));

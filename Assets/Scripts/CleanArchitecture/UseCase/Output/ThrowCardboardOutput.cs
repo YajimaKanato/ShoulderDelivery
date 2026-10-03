@@ -2,13 +2,12 @@ using ShoulderDelivery.Entity;
 
 namespace ShoulderDelivery.UseCase
 {
-    /// <summary>投擲時の情報を持つDTO</summary>
-    public readonly struct ThrowCardboardInput
+    public readonly struct ThrowCardboardOutput
     {
         public readonly ThrowContext Context;
         public readonly CardboardLaunch Launch;
 
-        public ThrowCardboardInput(ThrowContext context, CardboardLaunch launch)
+        public ThrowCardboardOutput(ThrowContext context, CardboardLaunch launch)
         {
             Context = context;
             Launch = launch;

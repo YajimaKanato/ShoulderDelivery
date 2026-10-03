@@ -23,5 +23,15 @@ namespace ShoulderDelivery.UseCase
         {
             return new ThrowCardboardAcceptOutput(id);
         }
+
+        /// <summary>
+        /// 投擲を実行するときに必要な情報を生成するメソッド
+        /// </summary>
+        /// <param name="input">投擲実行に必要な情報</param>
+        /// <returns>投擲実行に必要な情報</returns>
+        internal static ThrowCardboardOutput Output(ThrowCardboardInput input)
+        {
+            return new ThrowCardboardOutput(input.Context, input.Launch);
+        }
     }
 }
