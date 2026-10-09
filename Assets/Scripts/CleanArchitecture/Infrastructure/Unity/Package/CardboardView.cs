@@ -1,4 +1,5 @@
 using ShoulderDelivery.Entity;
+using ShoulderDerivery.Common;
 using System;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace ShoulderDelivery.Infrastructure
 {
     public class CardboardView : MonoBehaviour
     {
+        [SerializeField, Tooltip("段ボールの重さ")] CardboardWeight _cardboardWeight;
+
         TrailRenderer _trailRender;
         Rigidbody _rb;
         CardboardId _cardboardId;
@@ -16,6 +19,8 @@ namespace ShoulderDelivery.Infrastructure
             _onReleaseToPool += act;
             return () => _onReleaseToPool -= act;
         }
+
+        public CardboardWeight CardboardWeight => _cardboardWeight;
 
         /// <summary>
         /// 段ボールを射出するメソッド
@@ -34,16 +39,31 @@ namespace ShoulderDelivery.Infrastructure
             // 位置を調整
             transform.SetPositionAndRotation(pos, rot);
 
-            // 物理を調整
+            SetUpRigidbody(velo);
+
+            SetUpTrail();
+        }
+
+        /// <summary>
+        /// 軌跡を調整するメソッド
+        /// </summary>
+        void SetUpTrail()
+        {
+            _trailRender ??= GetComponent<TrailRenderer>();
+            _trailRender.Clear();
+            _trailRender.emitting = true;
+        }
+
+        /// <summary>
+        /// 物理を調整するメソッド
+        /// </summary>
+        /// <param name="velo">打ち出す速度</param>
+        void SetUpRigidbody(Vector3 velo)
+        {
             _rb ??= GetComponent<Rigidbody>();
             _rb.linearVelocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             _rb.linearVelocity = velo;
-
-            // 軌跡を調整
-            _trailRender ??= GetComponent<TrailRenderer>();
-            _trailRender.Clear();
-            _trailRender.emitting = true;
         }
 
         /// <summary>

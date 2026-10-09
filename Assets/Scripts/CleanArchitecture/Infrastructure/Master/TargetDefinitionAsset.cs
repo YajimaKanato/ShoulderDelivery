@@ -1,4 +1,5 @@
 using ShoulderDelivery.Entity;
+using ShoulderDerivery.Common;
 using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
@@ -7,6 +8,7 @@ namespace ShoulderDelivery.Infrastructure
     public class TargetDefinitionAsset : MasterAssetBase<TargetDefinition>
     {
         [SerializeField, Tooltip("配達目的地のID")] string _targetId = "Target";
+        [SerializeField, Tooltip("求める段ボールの重さ")] CardboardWeight _requestedWeight;
         Vector3 _position;
 
         /// <summary>
@@ -24,7 +26,7 @@ namespace ShoulderDelivery.Infrastructure
             var targetId = new TargetId(_targetId);
             var coordinates = new Coordinates(_position.x, _position.y, _position.z);
 
-            return new TargetDefinition(targetId, coordinates);
+            return new TargetDefinition(targetId, coordinates, _requestedWeight);
         }
     }
 }
