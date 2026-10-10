@@ -1,4 +1,5 @@
 using ShoulderDelivery.Entity;
+using ShoulderDerivery.Common;
 
 namespace ShoulderDelivery.UseCase
 {
@@ -27,11 +28,15 @@ namespace ShoulderDelivery.UseCase
         /// <summary>
         /// 投擲を実行するときに必要な情報を生成するメソッド
         /// </summary>
+        /// <param name="cardboardId">段ボールのID</param>
+        /// M+<param name="cardboardWeight">段ボールの重さ</param>
         /// <param name="input">投擲実行に必要な情報</param>
         /// <returns>投擲実行に必要な情報</returns>
-        internal static ThrowCardboardOutput Output(ThrowCardboardInput input)
+        internal static ThrowCardboardOutput Output(CardboardId cardboardId
+            , CardboardWeight cardboardWeight
+            , ThrowCardboardInput input)
         {
-            return new ThrowCardboardOutput(input.Context, input.Launch);
+            return new ThrowCardboardOutput(cardboardId, cardboardWeight, input.Context, input.Launch);
         }
     }
 }

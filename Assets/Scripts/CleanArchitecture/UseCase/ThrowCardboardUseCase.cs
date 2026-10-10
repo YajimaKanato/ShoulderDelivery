@@ -9,11 +9,13 @@ namespace ShoulderDelivery.UseCase
         readonly ICardboardIdGenerator _cardboardIdGenerator;
         readonly ICardboardLauncher _launcher;
         readonly IGameOutputPort _outputPort;
+        readonly ITargetRepository _targetRepository;
 
         public ThrowCardboardUseCase(IGameSessionStore gameSessionStore
             , ICardboardIdGenerator cardboardIdGenerator
             , ICardboardLauncher launcher
-            , IGameOutputPort outputPort)
+            , IGameOutputPort outputPort
+            , ITargetRepository targetRepository)
         {
             if (gameSessionStore == null)
                 throw new ArgumentNullException(nameof(gameSessionStore));
@@ -27,10 +29,14 @@ namespace ShoulderDelivery.UseCase
             if (outputPort == null)
                 throw new ArgumentNullException(nameof(outputPort));
 
+            if (targetRepository == null)
+                throw new ArgumentNullException(nameof(targetRepository));
+
             _gameSessionStore = gameSessionStore;
             _cardboardIdGenerator = cardboardIdGenerator;
             _launcher = launcher;
             _outputPort = outputPort;
+            _targetRepository = targetRepository;
         }
 
         /// <summary>
@@ -56,8 +62,6 @@ namespace ShoulderDelivery.UseCase
                 return;
             }
 
-            // TODO : 他に投擲失敗を通知する場合は処理を追加
-
             var inFlightCardboardState = session.InFlightCardboardState;
             if (inFlightCardboardState == null)
                 throw new InvalidOperationException(nameof(inFlightCardboardState));
@@ -68,8 +72,17 @@ namespace ShoulderDelivery.UseCase
             // 段ボールのIDと投擲時の情報を保存
             inFlightCardboardState.RegisterThrowContext(cardboardId, input.Context);
 
+            var deliveryState = session.DeliveryState;
+            if (deliveryState == null)
+                throw new InvalidOperationException(nameof(deliveryState));
+
+            var targetId = deliveryState.CurrentTargetId;
+            var target = _targetRepository.Get(targetId);
+
+            var cardboardWeight = target.RequestedWeight;
+
             // 投擲命令
-            _launcher.LaunchCardboard(cardboardId, ThrowCardboardOutputService.Output(input));
+            _launcher.LaunchCardboard(ThrowCardboardOutputService.Output(cardboardId, cardboardWeight, input));
 
             // 結果を通知
             _outputPort.ShowThrowCardboardAccepted(ThrowCardboardOutputService.Accepted(cardboardId));

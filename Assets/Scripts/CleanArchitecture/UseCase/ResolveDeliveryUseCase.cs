@@ -74,6 +74,8 @@ namespace ShoulderDelivery.UseCase
                 return;
             }
 
+            UpdateTarget();
+
             // ターゲットの情報を取得
             var targetDefinition = _targetRepository.Get(targetId.Value);
 
@@ -105,6 +107,24 @@ namespace ShoulderDelivery.UseCase
                 _gameUseCase.FinishGame();
                 return;
             }
+        }
+
+        /// <summary>
+        /// ターゲットを更新するメソッド
+        /// </summary>
+        /// <exception cref="InvalidOperationException">参照がない</exception>
+        public void UpdateTarget()
+        {
+            var session = _sessionStore.CurrentGameSession;
+            if (session == null)
+                throw new InvalidOperationException(nameof(session));
+
+            var deliveryState = session.DeliveryState;
+            if (deliveryState == null)
+                throw new InvalidOperationException(nameof(deliveryState));
+
+            // ターゲットの更新
+            deliveryState.NextTarget();
         }
     }
 }

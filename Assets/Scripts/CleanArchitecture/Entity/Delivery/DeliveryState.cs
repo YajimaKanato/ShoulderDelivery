@@ -36,8 +36,6 @@ namespace ShoulderDelivery.Entity
             {
                 _waitingDeliveryTargetIds.Enqueue(targetId);
             }
-
-            if (_waitingDeliveryTargetIds.Count > 0) _currentTargetId = _waitingDeliveryTargetIds.Dequeue();
         }
 
         /// <summary>
@@ -50,7 +48,6 @@ namespace ShoulderDelivery.Entity
             if (_currentTargetId == id && _deliveredTargetIds.Add(id))
             {
                 _deliverCombo++;
-                NextTarget();
                 return true;
             }
 
@@ -61,7 +58,7 @@ namespace ShoulderDelivery.Entity
         /// <summary>
         /// 次の配達先を指定するメソッド
         /// </summary>
-        void NextTarget()
+        public void NextTarget()
         {
             if (_waitingDeliveryTargetIds.Count > 0)
                 _currentTargetId = _waitingDeliveryTargetIds.Dequeue();
