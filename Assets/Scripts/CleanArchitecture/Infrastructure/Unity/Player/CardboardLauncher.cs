@@ -1,3 +1,4 @@
+using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 using ShoulderDerivery.Common;
 using System.Collections.Generic;
@@ -5,29 +6,21 @@ using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
-    public class CardboardLauncher : MonoBehaviour, ICardboardLauncher
+    public class CardboardLauncher : MonoBehaviour, ICardboardLauncher, IDiscardCardboard
     {
         [SerializeField] CardboardView[] _cardboardViews;
         [SerializeField] int _poolSize = 10;
         Dictionary<CardboardWeight, OriginalObjectPool<CardboardView>> _cardboardViewPools = new();
-        ActionDisposer _disposer;
+        HashSet<CardboardView> _inFlightCardboardHashSet;
 
         public void Init()
         {
-            _disposer = new();
-
             // プールの設定
             foreach (var cardboardView in _cardboardViews)
             {
                 if (cardboardView == null) continue;
                 _cardboardViewPools[cardboardView.CardboardWeight] ??= new(cardboardView, _poolSize);
-                _disposer.AddActionDisposing(cardboardView.OnReleaseToPool(ReleaseToPool));
             }
-        }
-
-        private void OnDestroy()
-        {
-            _disposer?.Dispose();
         }
 
         public void LaunchCardboard(ThrowCardboardOutput output)
@@ -41,6 +34,7 @@ namespace ShoulderDelivery.Infrastructure
 
             if (pool.TryRecycleObject(out var cardboard))
             {
+                if (_inFlightCardboardHashSet.Contains(cardboard)) return;
                 // 再利用
                 cardboard.gameObject.SetActive(true);
             }
@@ -62,6 +56,14 @@ namespace ShoulderDelivery.Infrastructure
                 , position
                 , rotation
                 , launch);
+
+            _inFlightCardboardHashSet ??= new();
+            _inFlightCardboardHashSet.Add(cardboard);
+        }
+
+        public void DiscardCardboard(CardboardId cardboardId)
+        {
+            throw new System.NotImplementedException();
         }
 
         /// <summary>

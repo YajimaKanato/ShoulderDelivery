@@ -1,5 +1,3 @@
-using ShoulderDelivery.Entity;
-
 namespace ShoulderDelivery.UseCase
 {
     /// <summary>段ボールを飛ばす機能を持つインターフェース</summary>

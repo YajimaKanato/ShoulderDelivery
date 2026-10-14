@@ -1,6 +1,5 @@
 using ShoulderDelivery.Entity;
 using ShoulderDerivery.Common;
-using System;
 using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
@@ -12,13 +11,6 @@ namespace ShoulderDelivery.Infrastructure
         TrailRenderer _trailRender;
         Rigidbody _rb;
         CardboardId _cardboardId;
-
-        event Action<CardboardView> _onReleaseToPool;
-        public Action OnReleaseToPool(Action<CardboardView> act)
-        {
-            _onReleaseToPool += act;
-            return () => _onReleaseToPool -= act;
-        }
 
         public CardboardWeight CardboardWeight => _cardboardWeight;
 
@@ -66,17 +58,9 @@ namespace ShoulderDelivery.Infrastructure
             _rb.linearVelocity = velo;
         }
 
-        /// <summary>
-        /// プールに戻すメソッド
-        /// </summary>
-        void ReleaseToPool()
-        {
-            _onReleaseToPool?.Invoke(this);
-        }
-
         private void OnCollisionEnter(Collision collision)
         {
-
+            
         }
     }
 }
