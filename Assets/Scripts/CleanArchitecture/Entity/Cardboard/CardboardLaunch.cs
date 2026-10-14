@@ -4,12 +4,17 @@ namespace ShoulderDelivery.Entity
     public readonly struct CardboardLaunch
     {
         public readonly Coordinates Position;
+        public readonly Coordinates Rotation;
         public readonly Coordinates Direction;
         public readonly float InitialSpeed;
 
-        public CardboardLaunch(Coordinates position, Coordinates direction, float initialSpeed)
+        public CardboardLaunch(Coordinates position
+            , Coordinates rotation
+            , Coordinates direction
+            , float initialSpeed)
         {
             Position = position;
+            Rotation = rotation;
             Direction = direction;
             InitialSpeed = initialSpeed;
         }
