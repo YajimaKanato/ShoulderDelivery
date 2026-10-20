@@ -6,26 +6,11 @@ namespace ShoulderDelivery.UseCase
     /// <summary>ゲームの進行を管理するUseCaseクラス</summary>
     public sealed class GameUseCase : IGameFinishable
     {
-        readonly IStageRepository _stageRepository;
-        readonly IGameSessionStore _gameSessionStore;
-        readonly IGameOutputPort _outputPort;
+        UseCaseReferences _references;
 
-        public GameUseCase(IStageRepository stageRepository
-            , IGameSessionStore gameSessionStore
-            , IGameOutputPort outputPort)
+        public GameUseCase(UseCaseReferences references)
         {
-            if (stageRepository == null)
-                throw new ArgumentNullException(nameof(stageRepository));
-
-            if (gameSessionStore == null)
-                throw new ArgumentNullException(nameof(gameSessionStore));
-
-            if (outputPort == null)
-                throw new ArgumentNullException(nameof(outputPort));
-
-            _stageRepository = stageRepository;
-            _gameSessionStore = gameSessionStore;
-            _outputPort = outputPort;
+            _references = references ?? throw new ArgumentNullException(nameof(references));
         }
 
         /// <summary>
@@ -35,17 +20,17 @@ namespace ShoulderDelivery.UseCase
         public void Start(GameStartInput input)
         {
             // ステージの情報を取得
-            var stageDefinition = _stageRepository.Get(input.StageId);
+            var stageDefinition = _references.StageRepository.Get(input.StageId);
 
             if (stageDefinition == null)
                 throw new InvalidOperationException(nameof(stageDefinition));
 
             // ゲームの情報を生成して登録
             var gameSession = new GameSession(stageDefinition);
-            _gameSessionStore.Set(gameSession);
+            _references.GameSessionStore.Set(gameSession);
 
             // ゲーム開始を通知
-            _outputPort.ShowStageInfo(
+            _references.OutputPort.ShowStageInfo(
                 new StageInfoOutput(stageDefinition.TimeLimitSeconds
                 , stageDefinition.RequiredDeliveryCount));
         }
@@ -57,19 +42,11 @@ namespace ShoulderDelivery.UseCase
         /// <exception cref="InvalidOperationException">必要な参照がない</exception>
         public void Execute(TickInput input)
         {
-            var session = _gameSessionStore.CurrentGameSession;
-            if (session == null)
-                throw new InvalidOperationException(nameof(session));
-
-            var stageState = session.StageState;
-            if (stageState == null)
-                throw new InvalidOperationException(nameof(stageState));
-
             // 現在の時間の進行状況によって処理を変える
-            var result = stageState.CurrentPhase switch
+            var result = _references.StageState.CurrentPhase switch
             {
-                StagePhase.CountDown => CountDown(input, stageState),
-                StagePhase.IsPlaying => Tick(input, session, stageState),
+                StagePhase.CountDown => CountDown(input),
+                StagePhase.IsPlaying => Tick(input),
                 _ => StageTickResult.None
             };
 
@@ -94,13 +71,15 @@ namespace ShoulderDelivery.UseCase
         /// <param name="input">チック情報</param>
         /// <param name="stageState">ステージ情報</param>
         /// <returns>ステージのチック結果</returns>
-        StageTickResult CountDown(TickInput input, StageState stageState)
+        StageTickResult CountDown(TickInput input)
         {
+            var stageState = _references.StageState;
+
             // カウントダウンを進める
             var result = stageState.CountDown(input.Delta);
 
             // カウントダウンを表示
-            _outputPort.ShowCountDown(new CountDownOutput(stageState.RemainingCountDownSeconds));
+            _references.OutputPort.ShowCountDown(new CountDownOutput(stageState.RemainingCountDownSeconds));
 
             return result;
         }
@@ -112,16 +91,21 @@ namespace ShoulderDelivery.UseCase
         /// <param name="stageState">ステージの情報</param>
         /// <exception cref="InvalidOperationException">必要な参照がない</exception>
         /// <returns>ステージのチック結果</returns>
-        StageTickResult Tick(TickInput input, GameSession session, StageState stageState)
+        StageTickResult Tick(TickInput input)
         {
-            var score = session.Score;
-            if (score == null)
-                throw new InvalidOperationException(nameof(score));
+            // ノルマクリアしていたら終了
+            if (_references.DeliveryState.IsQuotaMet)
+            {
+                FinishGame();
+                return StageTickResult.TimeUp;
+            }
+
+            var stageState = _references.StageState;
 
             var result = stageState.Tick(input.Delta);
 
             // 情報更新
-            _outputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, score.Total));
+            _references.OutputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, _references.Score.Total));
 
             return result;
         }
@@ -131,8 +115,8 @@ namespace ShoulderDelivery.UseCase
         /// </summary>
         void CountDownFinished()
         {
-            _outputPort.ShowGameStart(new GameStartOutput());
-            _outputPort.ChangeControllerEnable(true);
+            _references.OutputPort.ShowGameStart(new GameStartOutput());
+            _references.OutputPort.ChangeControllerEnable(true);
         }
 
         /// <summary>
@@ -141,43 +125,25 @@ namespace ShoulderDelivery.UseCase
         /// <exception cref="InvalidOperationException">必要な参照がない</exception>
         public void FinishGame()
         {
-            var gameSession = _gameSessionStore.CurrentGameSession;
-            if (gameSession == null)
-                throw new InvalidOperationException(nameof(gameSession));
-
-            var stageState = gameSession.StageState;
-            if (stageState == null)
-                throw new InvalidOperationException(nameof(stageState));
+            var score = _references.Score;
+            var scoreRules = _references.ScoreRules;
+            var stageState = _references.StageState;
+            var stageDefinition = _references.StageDefinition;
+            var deliveryState = _references.DeliveryState;
 
             // ゲームを終了状態にする
-            if (!stageState.Finish()) return;
-
-            var stageDefinition = gameSession.StageDefinition;
-            if (stageDefinition == null)
-                throw new InvalidOperationException(nameof(stageDefinition));
-
-            var scoreRules = stageDefinition.ScoreRules;
-            if (scoreRules == null)
-                throw new InvalidOperationException(nameof(scoreRules));
+            if (!_references.StageState.Finish()) return;
 
             // 残り時間ボーナスを計算
             var timeBonus = ScoreCalculator.CalculateRemainingSecondsScore(stageState, scoreRules);
 
-            var score = gameSession.Score;
-            if (score == null)
-                throw new InvalidOperationException(nameof(score));
-
             // スコアを更新
-            score.AddScore(timeBonus);
-
-            var deliveryState = gameSession.DeliveryState;
-            if (deliveryState == null)
-                throw new InvalidOperationException(nameof(deliveryState));
+            _references.Score.AddScore(timeBonus);
 
             // 結果を表示
             if (deliveryState.IsQuotaMet)
             {
-                _outputPort.ShowGameClear(new GameClearOutput(score.Total
+                _references.OutputPort.ShowGameClear(new GameClearOutput(score.Total
                     , deliveryState.RequiredDeliveryCount
                     , deliveryState.DeliveredCount
                     , stageDefinition.TimeLimitSeconds
@@ -185,7 +151,7 @@ namespace ShoulderDelivery.UseCase
             }
             else
             {
-                _outputPort.ShowGameFailed(new GameFailedOutput(score.Total
+                _references.OutputPort.ShowGameFailed(new GameFailedOutput(score.Total
                     , deliveryState.RequiredDeliveryCount
                     , deliveryState.DeliveredCount
                     , stageDefinition.TimeLimitSeconds
