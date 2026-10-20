@@ -75,7 +75,6 @@ namespace ShoulderDelivery.Entity
                 _remainingTime = Math.Max(0, _remainingTime - delta);
                 if (RemainingTime <= 0)
                 {
-                    Finish();
                     return StageTickResult.TimeUp;
                 }
             }
