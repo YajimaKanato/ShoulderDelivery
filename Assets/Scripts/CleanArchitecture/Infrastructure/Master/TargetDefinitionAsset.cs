@@ -11,6 +11,8 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("求める段ボールの重さ")] CardboardWeight _requestedWeight;
         Vector3 _position;
 
+        public string TargetId => _targetId;
+
         /// <summary>
         /// <para>シーン上の座標を設定するメソッド</para>
         /// <para>アサインしたタイミングで呼び出される想定</para>
