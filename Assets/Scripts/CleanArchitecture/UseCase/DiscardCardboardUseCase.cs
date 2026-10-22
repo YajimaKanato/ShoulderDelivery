@@ -6,13 +6,19 @@ namespace ShoulderDelivery.UseCase
     public class DiscardCardboardUseCase
     {
         readonly IGameSessionStore _gameSessionStore;
+        readonly IDiscardCardboard _discardCardboard;
 
-        public DiscardCardboardUseCase(IGameSessionStore gameSessionStore)
+        public DiscardCardboardUseCase(IGameSessionStore gameSessionStore
+            , IDiscardCardboard discardCardboard)
         {
             if (gameSessionStore == null)
                 throw new ArgumentNullException(nameof(gameSessionStore));
 
+            if (discardCardboard == null)
+                throw new ArgumentNullException(nameof(discardCardboard));
+
             _gameSessionStore = gameSessionStore;
+            _discardCardboard = discardCardboard;
         }
 
         /// <summary>
@@ -31,7 +37,9 @@ namespace ShoulderDelivery.UseCase
                 throw new InvalidOperationException(nameof(inFlightCardboardState));
 
             // 段ボールを消す
-            inFlightCardboardState.Discard(input.Id);
+            var id = input.Id;
+            inFlightCardboardState.Discard(id);
+            _discardCardboard.DiscardCardboard(id);
         }
     }
 }
