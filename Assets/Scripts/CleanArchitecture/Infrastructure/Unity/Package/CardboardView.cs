@@ -12,6 +12,7 @@ namespace ShoulderDelivery.Infrastructure
         Rigidbody _rb;
         CardboardId _cardboardId;
 
+        public CardboardId CardboardId => _cardboardId;
         public CardboardWeight CardboardWeight => _cardboardWeight;
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace ShoulderDelivery.Infrastructure
 
         private void OnCollisionEnter(Collision collision)
         {
-            
+
         }
     }
 }

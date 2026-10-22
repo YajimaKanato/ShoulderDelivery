@@ -2,6 +2,7 @@ using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 using ShoulderDerivery.Common;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
@@ -63,30 +64,18 @@ namespace ShoulderDelivery.Infrastructure
 
         public void DiscardCardboard(CardboardId cardboardId)
         {
-            throw new System.NotImplementedException();
-        }
+            // 削除する段ボールを取得
+            var cardboard = _inFlightCardboardHashSet.FirstOrDefault(c => c != null && c.CardboardId == cardboardId);
+            _inFlightCardboardHashSet.Remove(cardboard);
 
-        /// <summary>
-        /// プールに戻すメソッド
-        /// </summary>
-        /// <param name="view">戻すオブジェクト</param>
-        void ReleaseToPool(CardboardView view)
-        {
-            if (view == null) return;
-            if (!_cardboardViewPools.TryGetValue(view.CardboardWeight, out var pool) || pool == null)
+            // プールに戻してみる
+            if (_cardboardViewPools[cardboard.CardboardWeight].TryReleaseToPool(cardboard))
             {
-                Debug.LogWarning("オブジェクトプールがありませんでした");
-                return;
-            }
-
-            // プールに戻す
-            if (!pool.TryReleaseToPool(view))
-            {
-                Destroy(view.gameObject);
+                cardboard.gameObject.SetActive(false);
             }
             else
             {
-                view.gameObject.SetActive(false);
+                Destroy(cardboard.gameObject);
             }
         }
     }
