@@ -5,8 +5,10 @@ using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
-    public class LogManager : MonoBehaviour
+    /// <summary>ログ管理クラス</summary>
+    public sealed class LogManager : MonoBehaviour
     {
+        [SerializeField] ShowContextBase[] _showContexts;
         [SerializeField] ContextText[] _cardboardContextTexts;
         [SerializeField] float[] _showPosY;
         [SerializeField] float _entryPosX;
@@ -22,6 +24,12 @@ namespace ShoulderDelivery.Infrastructure
                 if (context != null)
                     _disposer.AddActionDisposing(context.OnExit(ExitEvent));
             }
+
+            foreach (var showContext in _showContexts)
+            {
+                if (showContext != null)
+                    _disposer.AddActionDisposing(showContext.OnShowContext(ShowContext));
+            }
         }
 
         private void OnDisable()
@@ -34,7 +42,7 @@ namespace ShoulderDelivery.Infrastructure
         /// </summary>
         /// <param name="context">ログの内容</param>
         /// <param name="color">ログの色</param>
-        public void ShowContext(string context, Color color)
+        void ShowContext(string context, Color color)
         {
             // ログとして使われていないオブジェクトを取得
             var text = _cardboardContextTexts.Where(t => !t.IsShowing).First();

@@ -3,22 +3,19 @@ using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
-    public class CardboardContextView : MonoBehaviour, ICardboardContextView
+    public class CardboardContextView : ShowContextBase, ICardboardContextView
     {
-        [SerializeField] ContextText[] _cardboardContextTexts;
-        [SerializeField] float[] _coordinatesY;
-        [SerializeField] int _viewCount = 5;
-
-        bool IsAssigned => _cardboardContextTexts != null && _cardboardContextTexts.Length > 0;
+        [SerializeField] Color _acceptColor = Color.yellow;
+        [SerializeField] Color _rejectColor = Color.red;
 
         public void ShowCardboardAccepted(CardboardContextViewModel context)
         {
-            if (!IsAssigned) return;
+            OnInvoke(context.Context, _acceptColor);
         }
 
         public void ShowCardboardRejected(CardboardContextViewModel context)
         {
-
+            OnInvoke(context.Context, _rejectColor);
         }
     }
 }
