@@ -25,7 +25,6 @@ namespace ShoulderDelivery.Entity
             return new Coordinates(lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z);
         }
 
-
         public static float SqrMagnitude(Coordinates vector)
         {
             return (vector.X * vector.X) + (vector.Y * vector.Y) + (vector.Z * vector.Z);
