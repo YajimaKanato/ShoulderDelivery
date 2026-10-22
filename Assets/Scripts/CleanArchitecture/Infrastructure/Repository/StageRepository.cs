@@ -2,6 +2,7 @@ using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 using System;
 using System.Linq;
+using UnityEditor.SceneManagement;
 
 namespace ShoulderDelivery.Infrastructure
 {
@@ -14,9 +15,9 @@ namespace ShoulderDelivery.Infrastructure
             _assets = assets ?? throw new ArgumentNullException(nameof(assets));
         }
 
-        public StageDefinition Get(StageId stageId)
+        public StageDefinition Get(StageId key)
         {
-            var asset = _assets.FirstOrDefault(x => x != null && x.StageId == stageId.Id);
+            var asset = _assets.FirstOrDefault(x => x != null && x.StageId == key.Id);
 
             if (asset == null)
                 throw new InvalidOperationException(nameof(asset));
