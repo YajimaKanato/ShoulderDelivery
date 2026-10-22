@@ -9,23 +9,27 @@ namespace ShoulderDelivery.CompositionRoot
     {
         [Header("Master")]
         [SerializeField] StageDefinitionAsset[] _stages;
+        [SerializeField] TargetDefinitionAsset[] _targets;
 
         [Header("Views")]
         [SerializeField] InGameCountDownView _inGameCountDownView;
         [SerializeField] InGameHudView _inGameHudView;
+        [SerializeField] GameResultView _gameResultView;
         [SerializeField] CardboardContextView _cardboardContextView;
+        [SerializeField] DeliveryView _deliveryView;
+        [SerializeField] CardboardLauncher _cardboardLauncher;
 
         GamePresenter _presenter;
+        UseCaseReferences _references;
 
         #region UseCase
         GameUseCase _gameUseCase;
-        DiscardCardboardUseCase _cardboardUseCase;
-        ResolveDeliveryUseCase _resolveDeliveryUseCase;
-        ThrowCardboardUseCase _throwCardboardUseCase;
+        CardboardUseCase _cardboardUseCase;
         #endregion
 
         #region Repository
         StageRepository _stageRepository;
+        TargetRepository _targetRepository;
         #endregion
 
         GameSessionStore _gameSessionStore;
@@ -33,31 +37,28 @@ namespace ShoulderDelivery.CompositionRoot
 
         private void Awake()
         {
-            _presenter = new(null
+            _presenter = new(_inGameHudView
                 , _inGameCountDownView
                 , _inGameHudView
-                , null
-                , null
+                , _gameResultView
+                , _deliveryView
                 , _cardboardContextView);
 
             _stageRepository = new(_stages);
+            _targetRepository = new(_targets);
             _gameSessionStore = new();
             _cardboardIdGenerator = new();
 
-            _gameUseCase = new(_stageRepository
-                , _gameSessionStore
-                , _presenter);
-
-            _cardboardUseCase = new(_gameSessionStore);
-
-            _resolveDeliveryUseCase = new(_gameSessionStore
+            _references = new(_cardboardIdGenerator
+                , _cardboardLauncher
+                , _cardboardLauncher
                 , _presenter
-                , null
-                , _gameUseCase);
+                , _gameSessionStore
+                , _stageRepository
+                , _targetRepository);
 
-            //_throwCardboardUseCase = new(_gameSessionStore
-            //    ,_cardboardIdGenerator
-            //    ,)
+            _gameUseCase = new(_references);
+            _cardboardUseCase = new(_references);
         }
     }
 }
