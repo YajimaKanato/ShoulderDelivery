@@ -12,20 +12,37 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("入力がないときの減衰率")] float _damping = 0.5f;
         float _delta = 0;
 
+        /// <summary>
+        /// パラメータを計算するメソッド
+        /// </summary>
+        /// <param name="delta">フレーム時間</param>
+        /// <param name="input">入力量</param>
+        /// <returns>現在のパラメータ</returns>
         internal float CalculateParam(float delta, CurveParam input)
         {
             var param = input.Value;
             // 何秒後に最大値を取るかに合わせて
             var deltaTime = delta / _maxParamDuration;
+
             // _maxParamDuration秒かけて最大パラメータになるように数値を加算
             _delta += deltaTime * param;
-            _delta = Mathf.Clamp(_delta, 0, param);
 
-            // 入力がなければパラメータ減衰
-            _delta -= deltaTime * _damping * (input.IsPressed() ? 1 : 0);
+            if (input.IsPressed())
+                _delta = Mathf.Min(_delta, param);
+            else
+                _delta -= deltaTime * _damping;
+
             _delta = Mathf.Max(_delta, 0);
 
             return _speedCurve.Evaluate(_delta);
+        }
+
+        /// <summary>
+        /// パラメータを初期化するメソッド
+        /// </summary>
+        internal void ResetDelta()
+        {
+            _delta = 0;
         }
     }
 }

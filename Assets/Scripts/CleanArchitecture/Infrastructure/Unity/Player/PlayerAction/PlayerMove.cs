@@ -7,26 +7,33 @@ namespace ShoulderDelivery.Infrastructure
     public class PlayerMove : PlayerActionBase
     {
         [Header("移動に関するデータ")]
-        [SerializeField, Tooltip("固定の旋回角度")] float _baseSteerAngle = 5f;
-        [SerializeField, Tooltip("最大の旋回角度")] float _maxSteerAngle = 45f;
-        [SerializeField, Tooltip("移動速度に合わせた旋回角度")] AnimationCurve _steerAnglePerSpeed;
         [SerializeField, Tooltip("アクセルのパラメータカーブ")] ParameterCurve _accelParam;
+        [SerializeField, Tooltip("後輪にかかるモーターの強さ")] float _accelPower = 10;
         [SerializeField, Tooltip("ブレーキのパラメータカーブ")] ParameterCurve _brakeParam;
-        [SerializeField, Tooltip("後輪にかかるモーターの強さ")] float _motorPower = 1000;
+        [SerializeField, Tooltip("ブレーキにかかる力")] float _brakePower = 5;
+        [SerializeField, Tooltip("正面方向のRayの長さ")] float _rayDistance = 2;
+
+        [Header("旋回に関するデータ")]
+        [SerializeField, Tooltip("最大の旋回角度")] float _maxSteerAngle = 45f;
+        [SerializeField, Tooltip("右に旋回するときのパラメータカーブ")] ParameterCurve _rightSteerCurve;
+        [SerializeField, Tooltip("左に旋回するときのパラメータカーブ")] ParameterCurve _leftSteerCurve;
 
         [Header("車体に関するデータ")]
         [SerializeField, Tooltip("車体の傾き角度")] float _maxVehicleAngle = 30;
         [SerializeField, Tooltip("車体のオブジェクト")] Transform _vehicle;
+        [SerializeField, Tooltip("ハンドルの傾き角度")] float _maxHandleAngle = 30;
         [SerializeField, Tooltip("ハンドルオブジェクト")] Transform _handleTransform;
-        [SerializeField, Tooltip("車体の傾きの中心")] Transform _pivot;
+        [SerializeField, Tooltip("カメラの傾き角度")] float _maxCameraAngle = 30;
+        [SerializeField, Tooltip("カメラ角度")] Transform _cameraAngle;
 
         Rigidbody _rb;
         Actions _actions;
         InputAction _accel;
         InputAction _brake;
         InputAction _steer;
-        float _moveParam = 0;
+        float _moveSpeed = 0;
         float _steerParam = 0;
+        bool _entryObstacle = false;
 
         public override void CacheAction(Actions actions = null)
         {
@@ -46,15 +53,27 @@ namespace ShoulderDelivery.Infrastructure
             FixedUpdateMove();
         }
 
+        private void LateUpdate()
+        {
+            UpdateVehicleRotation();
+        }
+
         /// <summary>
         /// 移動に関するパラメータの更新
         /// </summary>
         void UpdateMove()
         {
-            var accel = Accel();
-            var brake = Brake();
-            _moveParam = accel - brake;
-            _steerParam = (Mathf.Max(_steerAnglePerSpeed.Evaluate(Mathf.Abs(_moveParam)), _baseSteerAngle)) * Steer();
+            _moveSpeed = Accel() * _accelPower - Brake() * _brakePower;
+            if (Physics.Raycast(new Ray(transform.position, transform.forward), _rayDistance))
+            {
+                _accelParam.ResetDelta();
+            }
+            else if (Physics.Raycast(new Ray(transform.position, -transform.forward), _rayDistance))
+            {
+                _brakeParam.ResetDelta();
+            }
+
+            _steerParam = _maxSteerAngle * Steer();
         }
 
         void FixedUpdateMove()
@@ -62,10 +81,33 @@ namespace ShoulderDelivery.Infrastructure
             _rb ??= GetComponent<Rigidbody>();
 
             // ステアリング角度に応じて旋回
-            _rb.angularVelocity = Vector3.up * _steerParam;
+            _rb.angularVelocity = Vector3.up * _steerParam * Mathf.Deg2Rad * Mathf.Sign(_moveSpeed);
 
             // 正面方向に前進
-            _rb.linearVelocity = transform.forward * (_moveParam + _steerParam) * _motorPower;
+            var veloY = _rb.linearVelocity.y;
+            var newVelo = transform.forward * _moveSpeed + Vector3.up * veloY;
+            _rb.linearVelocity = newVelo;
+        }
+
+        /// <summary>
+        /// 車体の傾きを調整するメソッド
+        /// </summary>
+        void UpdateVehicleRotation()
+        {
+            // 車体の傾き
+            var vehicleRotation = _vehicle.localEulerAngles;
+            vehicleRotation.z = -_maxVehicleAngle * Steer();
+            _vehicle.localEulerAngles = vehicleRotation;
+
+            // ハンドルの傾き
+            var handleRotation = _handleTransform.localEulerAngles;
+            handleRotation.y = _maxHandleAngle * Steer();
+            _handleTransform.localEulerAngles = handleRotation;
+
+            // カメラの傾き
+            var cameraAngle = _cameraAngle.localEulerAngles;
+            cameraAngle.z = -_maxCameraAngle * Steer();
+            _cameraAngle.localEulerAngles = cameraAngle;
         }
 
         #region Calculate
@@ -96,8 +138,19 @@ namespace ShoulderDelivery.Infrastructure
         float Steer()
         {
             var input = _steer.ReadValue<float>();
-            return input;
+            var right = _rightSteerCurve.CalculateParam(Time.deltaTime, new CurveParam(input));
+            var left = _leftSteerCurve.CalculateParam(Time.deltaTime, new CurveParam(-input));
+            return right - left;
         }
         #endregion
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, transform.position + transform.forward * _rayDistance);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, transform.position - transform.forward * _rayDistance);
+        }
     }
 }
