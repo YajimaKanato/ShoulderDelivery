@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
-    public class DeliveryView : ShowContextBase, IDeliveriedView
+    public class DeliveryContextView : ShowContextBase, IDeliveriedView
     {
         [SerializeField] Color _successColor = Color.yellow;
         [SerializeField] Color _failedColor = Color.red;
