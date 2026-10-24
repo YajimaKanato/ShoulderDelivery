@@ -10,6 +10,8 @@ namespace ShoulderDelivery.Infrastructure
         T _originalObject;
         int _capacity;
 
+        public T OriginalObject => _originalObject;
+
         public OriginalObjectPool(T originalObject, int capacity)
         {
             _originalObject = originalObject;

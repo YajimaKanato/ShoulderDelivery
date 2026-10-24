@@ -14,7 +14,7 @@ namespace ShoulderDelivery.Infrastructure
         Dictionary<CardboardWeight, OriginalObjectPool<CardboardView>> _cardboardViewPools = new();
         HashSet<CardboardView> _inFlightCardboardHashSet;
 
-        public void Init()
+        public void Awake()
         {
             // プールの設定
             foreach (var cardboardView in _cardboardViews)
@@ -50,7 +50,7 @@ namespace ShoulderDelivery.Infrastructure
             var cardboardLaunch = output.Launch;
             var position = LaunchCalculator.CalculatePosition(cardboardLaunch.Position);
             var rotation = LaunchCalculator.CalculateRotation(cardboardLaunch.Rotation);
-            var launch = LaunchCalculator.CalculateSpeed(cardboardLaunch.Direction, cardboardLaunch.InitialSpeed);
+            var launch = LaunchCalculator.CalculateSpeed(cardboardLaunch.Direction, cardboardLaunch.ThrowPower);
 
             // 射出
             cardboard.Launch(cardboardId
@@ -66,7 +66,7 @@ namespace ShoulderDelivery.Infrastructure
         {
             // 削除する段ボールを取得
             var cardboard = _inFlightCardboardHashSet.FirstOrDefault(c => c != null && c.CardboardId == cardboardId);
-            _inFlightCardboardHashSet.Remove(cardboard);
+            if (!_inFlightCardboardHashSet.Remove(cardboard)) return;
 
             // プールに戻してみる
             if (_cardboardViewPools[cardboard.CardboardWeight].TryReleaseToPool(cardboard))
@@ -77,6 +77,18 @@ namespace ShoulderDelivery.Infrastructure
             {
                 Destroy(cardboard.gameObject);
             }
+        }
+
+        /// <summary>
+        /// 投擲する段ボールの重さを取得するメソッド
+        /// </summary>
+        /// <param name="weight">段ボールの重さを表すenum</param>
+        /// <returns>段ボールの重さ</returns>
+        internal float GetCardboardWeight(CardboardWeight weight)
+        {
+            return _cardboardViewPools.TryGetValue(weight, out var cardboard)
+                ? cardboard.OriginalObject.RealCardboardWeight
+                : (int)weight;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("ブレーキのパラメータカーブ")] ParameterCurve _brakeParam;
         [SerializeField, Tooltip("ブレーキにかかる力")] float _brakePower = 5;
         [SerializeField, Tooltip("正面方向のRayの長さ")] float _rayDistance = 2;
+        [SerializeField, Tooltip("Rayのオフセット")] Vector3 _rayOffset = Vector3.zero;
 
         [Header("旋回に関するデータ")]
         [SerializeField, Tooltip("最大の旋回角度")] float _maxSteerAngle = 45f;
@@ -27,17 +28,15 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("カメラ角度")] Transform _cameraAngle;
 
         Rigidbody _rb;
-        Actions _actions;
         InputAction _accel;
         InputAction _brake;
         InputAction _steer;
         float _moveSpeed = 0;
         float _steerParam = 0;
-        bool _entryObstacle = false;
 
         public override void CacheAction(Actions actions = null)
         {
-            _actions = actions ?? new();
+            base.CacheAction(actions);
             _accel = _actions.Ingame.Accel;
             _brake = _actions.Ingame.Brake;
             _steer = _actions.Ingame.Steer;
@@ -64,11 +63,14 @@ namespace ShoulderDelivery.Infrastructure
         void UpdateMove()
         {
             _moveSpeed = Accel() * _accelPower - Brake() * _brakePower;
-            if (Physics.Raycast(new Ray(transform.position, transform.forward), _rayDistance))
+
+            var origin = transform.position + _rayOffset;
+            // 衝突した方向のパラメータをリセットしてすぐに逆方向の動きができるように
+            if (Physics.Raycast(new Ray(origin, _rayOffset + transform.forward), _rayDistance))
             {
                 _accelParam.ResetDelta();
             }
-            else if (Physics.Raycast(new Ray(transform.position, -transform.forward), _rayDistance))
+            else if (Physics.Raycast(new Ray(origin, _rayOffset - transform.forward), _rayDistance))
             {
                 _brakeParam.ResetDelta();
             }
@@ -81,7 +83,7 @@ namespace ShoulderDelivery.Infrastructure
             _rb ??= GetComponent<Rigidbody>();
 
             // ステアリング角度に応じて旋回
-            _rb.angularVelocity = Vector3.up * _steerParam * Mathf.Deg2Rad * Mathf.Sign(_moveSpeed);
+            _rb.angularVelocity = Vector3.up * _steerParam * Mathf.Deg2Rad * Mathf.Clamp(_moveSpeed, -1, 1);
 
             // 正面方向に前進
             var veloY = _rb.linearVelocity.y;
@@ -146,11 +148,13 @@ namespace ShoulderDelivery.Infrastructure
 
         private void OnDrawGizmosSelected()
         {
+            var origin = transform.position + _rayOffset;
+
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(transform.position, transform.position + transform.forward * _rayDistance);
+            Gizmos.DrawLine(origin, origin + transform.forward * _rayDistance);
 
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, transform.position - transform.forward * _rayDistance);
+            Gizmos.DrawLine(origin, origin - transform.forward * _rayDistance);
         }
     }
 }

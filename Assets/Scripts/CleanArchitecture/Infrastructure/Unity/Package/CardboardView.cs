@@ -14,6 +14,7 @@ namespace ShoulderDelivery.Infrastructure
 
         public CardboardId CardboardId => _cardboardId;
         public CardboardWeight CardboardWeight => _cardboardWeight;
+        public float RealCardboardWeight => _rb ? _rb.mass : (int)CardboardWeight;
 
         /// <summary>
         /// 段ボールを射出するメソッド

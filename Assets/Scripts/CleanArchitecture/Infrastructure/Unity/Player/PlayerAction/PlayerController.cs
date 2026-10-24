@@ -4,7 +4,7 @@ namespace ShoulderDelivery.Infrastructure
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] PlayerActionBase[] _playerActionBases;
+        PlayerActionBase[] _playerActionBases;
         Actions _actions;
 
         private void Awake()
@@ -12,6 +12,7 @@ namespace ShoulderDelivery.Infrastructure
             _actions = new();
             _actions.Enable();
 
+            _playerActionBases ??= GetComponents<PlayerActionBase>();
             foreach (var playerActionBase in _playerActionBases)
                 playerActionBase?.CacheAction(_actions);
         }

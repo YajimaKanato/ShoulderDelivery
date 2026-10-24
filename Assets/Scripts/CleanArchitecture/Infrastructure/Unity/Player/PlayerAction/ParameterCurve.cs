@@ -28,11 +28,11 @@ namespace ShoulderDelivery.Infrastructure
             _delta += deltaTime * param;
 
             if (input.IsPressed())
-                _delta = Mathf.Min(_delta, param);
+                _delta = Mathf.Min(_delta, param);  // 入力の強さに合わせて最大値を調整
             else
-                _delta -= deltaTime * _damping;
+                _delta -= deltaTime * _damping; // 入力がなければ徐々にパラメータ減衰
 
-            _delta = Mathf.Max(_delta, 0);
+            _delta = Mathf.Clamp(_delta, 0, 1);
 
             return _speedCurve.Evaluate(_delta);
         }
