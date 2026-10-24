@@ -20,7 +20,7 @@ namespace ShoulderDelivery.Infrastructure
             foreach (var cardboardView in _cardboardViews)
             {
                 if (cardboardView == null) continue;
-                _cardboardViewPools[cardboardView.CardboardWeight] ??= new(cardboardView, _poolSize);
+                _cardboardViewPools[cardboardView.CardboardWeight] = new(cardboardView, _poolSize);
             }
         }
 
