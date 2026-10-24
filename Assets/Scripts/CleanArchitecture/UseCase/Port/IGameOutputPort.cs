@@ -46,5 +46,9 @@ namespace ShoulderDelivery.UseCase
         /// <summary>配達結果を出力するメソッド</summary>
         /// <param name="deliveryResult">配達結果</param>
         void ShowDeliveryFailed(DeliveryFailedOutput deliveryResult);
+
+        /// <summary>次の配達先を表示するメソッド</summary>
+        /// <param name="output">次の配達先の情報</param>
+        void ShowNextDelivery(NextDeliveryTargetOutput output);
     }
 }
