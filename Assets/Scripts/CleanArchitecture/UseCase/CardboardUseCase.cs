@@ -3,6 +3,7 @@ using System;
 
 namespace ShoulderDelivery.UseCase
 {
+    /// <summary>段ボール全般の処理の流れを持つクラス</summary>
     public class CardboardUseCase
     {
         UseCaseReferences _references;
@@ -16,13 +17,13 @@ namespace ShoulderDelivery.UseCase
         /// 段ボールの投擲をするメソッド
         /// </summary>
         /// <param name="input">投擲時の情報</param>
-        public void Execute(ThrowCardboardInput input)
+        public void Throw(ThrowCardboardInput input)
         {
             // ゲームをプレイ中でなければ無視
             if (!_references.StageState.IsPlaying)
             {
                 // 投擲失敗を通知
-                _references.OutputPort.ShowThrowCardboardRejected(ThrowCardboardOutputService.Rejected());
+                _references.OutputPort.ShowThrowCardboardRejected(ThrowCardboardRejectedOutput.Rejected());
                 return;
             }
             // ID生成
@@ -37,10 +38,10 @@ namespace ShoulderDelivery.UseCase
             var cardboardWeight = target.RequestedWeight;
 
             // 投擲命令
-            _references.Launcher.LaunchCardboard(ThrowCardboardOutputService.Output(cardboardId, cardboardWeight, input));
+            _references.Launcher.LaunchCardboard(ThrowCardboardOutput.Output(cardboardId, cardboardWeight, input));
 
             // 結果を通知
-            _references.OutputPort.ShowThrowCardboardAccepted(ThrowCardboardOutputService.Accepted(cardboardId));
+            _references.OutputPort.ShowThrowCardboardAccepted(ThrowCardboardAcceptOutput.Accepted(cardboardId));
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace ShoulderDelivery.UseCase
             if (targetId == null || !_references.DeliveryState.TryDelivery(targetId.Value))
             {
                 // 配達失敗
-                _references.OutputPort.ShowDeliveryFailed(DeliveryResultOutputService.Missed());
+                _references.OutputPort.ShowDeliveryFailed(DeliveryFailedOutput.Missed());
                 return;
             }
             else
@@ -82,13 +83,11 @@ namespace ShoulderDelivery.UseCase
         /// <param name="context">投擲情報</param>
         void Delivery(TargetId? targetId, ThrowContext context)
         {
-            UpdateTarget();
-
             // ターゲットの情報を取得
             var targetDefinition = _references.TargetRepository.Get(targetId.Value);
 
             // 配達成功情報を取得
-            var deliveryResult = DeliveryResultService.Delivered(targetDefinition
+            var deliveryResult = DeliveryResult.Delivered(targetDefinition
                 , _references.DeliveryState.DeliveryCombo);
 
             // スコアを生成
@@ -100,9 +99,12 @@ namespace ShoulderDelivery.UseCase
             _references.Score.AddScore(scoreBreakdown);
 
             // 配達成功を通知
-            _references.OutputPort.ShowDeliverySucceeded(DeliveryResultOutputService.Delivered(scoreBreakdown
+            _references.OutputPort.ShowDeliverySucceeded(DeliverySuccessOutput.Delivered(scoreBreakdown
                 , _references.Score.Total
-                , DeliveryBreakdownService.Deliveried(_references.DeliveryState)));
+                , DeliveryBreakdown.Deliveried(_references.DeliveryState)));
+
+            // ターゲット更新
+            UpdateTarget();
         }
 
         /// <summary>
@@ -113,6 +115,16 @@ namespace ShoulderDelivery.UseCase
         {
             // ターゲットの更新
             _references.DeliveryState.NextTarget();
+
+            var targetId = _references.DeliveryState.CurrentTargetId;
+            var target = _references.TargetRepository.Get(targetId);
+            var targetCardboardWeight = target.RequestedWeight;
+
+            // ガイド情報の更新
+            _references.ThrowingGuidable.UpdateThrowCardboardWeight(targetCardboardWeight);
+
+            // 次の配達先を描画
+            _references.OutputPort.ShowNextDelivery(NextDeliveryTargetOutput.GenerateOutput(targetId));
         }
 
         /// <summary>

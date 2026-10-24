@@ -11,5 +11,15 @@ namespace ShoulderDelivery.UseCase
         {
             CardboardId = cardboardId;
         }
+
+        /// <summary>
+        /// 投擲成功を生成する
+        /// </summary>
+        /// <param name="id">投擲した段ボールのID</param>
+        /// <returns>投擲成功DTO</returns>
+        internal static ThrowCardboardAcceptOutput Accepted(CardboardId id)
+        {
+            return new ThrowCardboardAcceptOutput(id);
+        }
     }
 }

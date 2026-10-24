@@ -11,5 +11,16 @@ namespace ShoulderDelivery.Entity
             TargetDefinition = targetDefinition;
             Combo = combo;
         }
+
+        /// <summary>
+        /// 配達成功の投擲結果を生成するメソッド
+        /// </summary>
+        /// <param name="targetDefinition">当たったターゲットの情報</param>
+        /// <param name="combo">連続配達成功回数</param>
+        /// <returns>配達成功の投擲結果</returns>
+        public static DeliveryResult Delivered(TargetDefinition targetDefinition, int combo)
+        {
+            return new DeliveryResult(targetDefinition, combo);
+        }
     }
 }

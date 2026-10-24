@@ -6,17 +6,17 @@ namespace ShoulderDelivery.Entity
         public readonly Coordinates Position;
         public readonly Coordinates Rotation;
         public readonly Coordinates Direction;
-        public readonly float InitialSpeed;
+        public readonly float ThrowPower;
 
         public CardboardLaunch(Coordinates position
             , Coordinates rotation
             , Coordinates direction
-            , float initialSpeed)
+            , float throwPower)
         {
             Position = position;
             Rotation = rotation;
             Direction = direction;
-            InitialSpeed = initialSpeed;
+            ThrowPower = throwPower;
         }
     }
 }

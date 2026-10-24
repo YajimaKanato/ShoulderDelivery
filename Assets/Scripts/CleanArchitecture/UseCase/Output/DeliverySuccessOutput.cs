@@ -18,5 +18,17 @@ namespace ShoulderDelivery.UseCase
             Score = score;
             DeliveryBreakdown = deliveryBreakdown;
         }
+
+        /// <summary>
+        /// 配達成功のDTOを生成するメソッド
+        /// </summary>
+        /// <param name="scoreBreakdown">スコア内訳</param>
+        /// <param name="score">スコア</param>
+        /// <param name="deliveryBreakdown">配達内訳</param>
+        /// <returns>配達成功のDTO</returns>
+        internal static DeliverySuccessOutput Delivered(ScoreBreakdown scoreBreakdown, int score, DeliveryBreakdown deliveryBreakdown)
+        {
+            return new DeliverySuccessOutput(scoreBreakdown, score, deliveryBreakdown);
+        }
     }
 }

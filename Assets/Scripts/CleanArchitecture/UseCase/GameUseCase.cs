@@ -4,7 +4,7 @@ using System;
 namespace ShoulderDelivery.UseCase
 {
     /// <summary>ゲームの進行を管理するUseCaseクラス</summary>
-    public sealed class GameUseCase : IGameFinishable
+    public sealed class GameUseCase
     {
         UseCaseReferences _references;
 
@@ -123,7 +123,7 @@ namespace ShoulderDelivery.UseCase
         /// ゲームを終了するメソッド
         /// </summary>
         /// <exception cref="InvalidOperationException">必要な参照がない</exception>
-        public void FinishGame()
+        void FinishGame()
         {
             var score = _references.Score;
             var scoreRules = _references.ScoreRules;
