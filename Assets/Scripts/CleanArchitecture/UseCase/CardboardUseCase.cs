@@ -120,8 +120,8 @@ namespace ShoulderDelivery.UseCase
             var target = _references.TargetRepository.Get(targetId);
             var targetCardboardWeight = target.RequestedWeight;
 
-            // ガイド情報の更新
-            _references.ThrowingGuidable.UpdateThrowCardboardWeight(targetCardboardWeight);
+            // 次の投擲する段ボールの重さ
+            _references.Launcher.SetNextThrowingCardboard(targetCardboardWeight);
 
             // 次の配達先を描画
             _references.OutputPort.ShowNextDelivery(NextDeliveryTargetOutput.GenerateOutput(targetId));

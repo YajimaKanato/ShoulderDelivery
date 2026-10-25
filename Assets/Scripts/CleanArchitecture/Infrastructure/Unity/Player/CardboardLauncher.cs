@@ -11,6 +11,7 @@ namespace ShoulderDelivery.Infrastructure
     {
         [SerializeField] CardboardView[] _cardboardViews;
         [SerializeField] int _poolSize = 10;
+        [SerializeField, Tooltip("投げる段ボールの重さ")] CardboardWeight _cardboardWeight;
         Dictionary<CardboardWeight, OriginalObjectPool<CardboardView>> _cardboardViewPools = new();
         HashSet<CardboardView> _inFlightCardboardHashSet;
 
@@ -82,13 +83,17 @@ namespace ShoulderDelivery.Infrastructure
         /// <summary>
         /// 投擲する段ボールの重さを取得するメソッド
         /// </summary>
-        /// <param name="weight">段ボールの重さを表すenum</param>
         /// <returns>段ボールの重さ</returns>
-        internal float GetCardboardWeight(CardboardWeight weight)
+        public float GetCardboardWeight()
         {
-            return _cardboardViewPools.TryGetValue(weight, out var cardboard)
+            return _cardboardViewPools.TryGetValue(_cardboardWeight, out var cardboard)
                 ? cardboard.OriginalObject.RealCardboardWeight
-                : (int)weight;
+                : (int)_cardboardWeight;
+        }
+
+        public void SetNextThrowingCardboard(CardboardWeight weight)
+        {
+            _cardboardWeight = weight;
         }
     }
 }

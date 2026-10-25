@@ -6,15 +6,16 @@ using UnityEngine;
 namespace ShoulderDelivery.Infrastructure
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-    public class GuideLineRenderer : MonoBehaviour, IThrowingGuidable
+    public class GuideLineRenderer : MonoBehaviour
     {
         [SerializeField, Tooltip("ガイドラインの幅のカーブ")] AnimationCurve _widthCurve = AnimationCurve.Linear(0, 1, 1, 1);
         [SerializeField, Tooltip("ガイドラインの最大幅")] float _width = 0.4f;
         [SerializeField, Tooltip("ガイドラインの長さ")] int _guideLineLength = 10;
-        [SerializeField, Tooltip("投げる段ボールの重さ")] CardboardWeight _cardboardWeight;
+        [SerializeField, Tooltip("点の個数")] int _pointCount = 50;
         [SerializeField, Tooltip("重さ補正")] float _weightFixed = 0.5f;
         [SerializeField, Tooltip("段ボール投擲機能の参照")] CardboardLauncher _launcher;
 
+        List<Vector3> _points;
         Mesh _mesh;
         MeshRenderer _meshRenderer;
         Vector3[] _vertices;
@@ -37,6 +38,8 @@ namespace ShoulderDelivery.Infrastructure
         /// <param name="points">頂点の大まかな位置の配列</param>
         void SetPoints(IReadOnlyList<Vector3> points)
         {
+            if (points.Count <= 0) return;
+
             // 一つの頂点につき幅を取るための二つの頂点を生成する
             int vertexCount = points.Count * 2;
 
@@ -98,18 +101,11 @@ namespace ShoulderDelivery.Infrastructure
         public void EnableMesh(Vector3 position, Vector3 velocity)
         {
             // 軌道予測
-            velocity /= _launcher.GetCardboardWeight(_cardboardWeight) * _weightFixed;
-            var dt = Time.fixedDeltaTime;
-            var points = new Vector3[_guideLineLength];
-            for (int i = 0; i < _guideLineLength; i++)
-            {
-                velocity += Physics.gravity * dt;
-                position += velocity * dt;
+            velocity /= _launcher.GetCardboardWeight() * _weightFixed;
 
-                points[i] = position;
-            }
+            CalculateTrajectory(position, velocity);
 
-            SetPoints(points);
+            SetPoints(_points);
 
             _mesh.vertices = _vertices;
             _mesh.uv = _uv;
@@ -121,9 +117,13 @@ namespace ShoulderDelivery.Infrastructure
             _meshRenderer.enabled = true;
         }
 
-        public void UpdateThrowCardboardWeight(CardboardWeight weight)
+        void CalculateTrajectory(Vector3 position, Vector3 velocity)
         {
-            _cardboardWeight = weight;
+            _points ??= new List<Vector3>(_pointCount);
+            _points.Clear();
+
+            var dt = Time.fixedDeltaTime;
+            
         }
     }
 }

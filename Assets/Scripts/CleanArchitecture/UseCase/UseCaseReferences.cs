@@ -13,7 +13,6 @@ namespace ShoulderDelivery.UseCase
         public readonly IGameSessionStore GameSessionStore;
         public readonly IStageRepository StageRepository;
         public readonly ITargetRepository TargetRepository;
-        public readonly IThrowingGuidable ThrowingGuidable;
 
         public GameSession CurrentGameSession
             => GameSessionStore?.CurrentGameSession
@@ -49,8 +48,7 @@ namespace ShoulderDelivery.UseCase
             , IGameOutputPort outputPort
             , IGameSessionStore gameSessionStore
             , IStageRepository stageRepository
-            , ITargetRepository targetRepository
-            , IThrowingGuidable throwingGuidable)
+            , ITargetRepository targetRepository)
         {
             CardboardIdGenerator = cardboardIdGenerator
                 ?? throw new ArgumentNullException(nameof(cardboardIdGenerator));
@@ -66,8 +64,6 @@ namespace ShoulderDelivery.UseCase
                 ?? throw new ArgumentNullException(nameof(stageRepository));
             TargetRepository = targetRepository
                 ?? throw new ArgumentNullException(nameof(targetRepository));
-            ThrowingGuidable = throwingGuidable
-                ?? throw new ArgumentNullException(nameof(throwingGuidable));
         }
     }
 }
