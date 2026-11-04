@@ -1,5 +1,6 @@
 using ShoulderDelivery.Entity;
 using ShoulderDerivery.Common;
+using System;
 using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
@@ -11,6 +12,8 @@ namespace ShoulderDelivery.Infrastructure
         TrailRenderer _trailRender;
         Rigidbody _rb;
         CardboardId _cardboardId;
+
+        public event Action<CardboardId, TargetId?> OnHit;
 
         public CardboardId CardboardId => _cardboardId;
         public CardboardWeight CardboardWeight => _cardboardWeight;
@@ -62,7 +65,9 @@ namespace ShoulderDelivery.Infrastructure
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (!collision.gameObject.TryGetComponent<TargetView>(out var target)) return;
 
+            OnHit?.Invoke(_cardboardId, target.TargetId);
         }
     }
 }

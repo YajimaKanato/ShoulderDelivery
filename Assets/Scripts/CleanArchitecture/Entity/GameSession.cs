@@ -6,6 +6,7 @@ namespace ShoulderDelivery.Entity
     public sealed class GameSession
     {
         readonly StageDefinition _stageDefinition;
+        readonly PlayerState _playerState;
         readonly StageState _stageState;
         readonly DeliveryState _deliveryState;
         readonly Score _score;
@@ -13,6 +14,8 @@ namespace ShoulderDelivery.Entity
 
         /// <summary>ステージ定義</summary>
         public StageDefinition StageDefinition => _stageDefinition;
+        /// <summary>現在のプレイヤーの状態</summary>
+        public PlayerState PlayerState => _playerState;
         /// <summary>現在のステージの状態</summary>
         public StageState StageState => _stageState;
         /// <summary>現在の配達状況</summary>
@@ -28,6 +31,7 @@ namespace ShoulderDelivery.Entity
                 throw new ArgumentNullException(nameof(stageDefinition));
 
             _stageDefinition = stageDefinition;
+            _playerState = new PlayerState();
             _stageState = new StageState(stageDefinition);
             _deliveryState = new DeliveryState(stageDefinition);
             _score = new Score();

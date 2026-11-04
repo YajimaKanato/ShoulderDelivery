@@ -1,30 +1,20 @@
+using ShoulderDelivery.Entity;
 using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
     public class TargetView : MonoBehaviour
     {
-        [SerializeField] TargetDefinitionAsset _definitionAsset;
+        TargetId _targetId;
+        public TargetId TargetId => _targetId;
 
-        private void OnValidate()
+        /// <summary>
+        /// IDを設定するメソッド
+        /// </summary>
+        /// <param name="targetId">ID</param>
+        public void SetTargetId(TargetId targetId)
         {
-            if (_definitionAsset != null)
-                SetPosition();
+            _targetId = targetId;
         }
-
-#if UNITY_EDITOR
-        [ContextMenu("SetPosition")]
-        void SetPosition()
-        {
-            if (_definitionAsset == null)
-            {
-                Debug.Log("アセットがアサインされていません");
-                return;
-            }
-
-            _definitionAsset.SetPosition(transform.position);
-            Debug.Log("座標を更新しました", gameObject);
-        }
-#endif
     }
 }

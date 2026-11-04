@@ -10,13 +10,15 @@ namespace ShoulderDelivery.Adapter
         IGameResultView _resultView;
         IDeliveriedView _deliveryView;
         ICardboardContextView _cardboardContextView;
+        ITargetView _targetView;
 
         public GamePresenter(IStageInfoView stageInfoView
             , IGameCountDownView gameCountDownView
             , IGameHudView hudView
             , IGameResultView resultView
             , IDeliveriedView deliveryView
-            , ICardboardContextView cardboardContextView)
+            , ICardboardContextView cardboardContextView
+            , ITargetView targetView)
         {
             _stageInfoView = stageInfoView;
             _gameCountDownView = gameCountDownView;
@@ -24,6 +26,7 @@ namespace ShoulderDelivery.Adapter
             _resultView = resultView;
             _deliveryView = deliveryView;
             _cardboardContextView = cardboardContextView;
+            _targetView = targetView;
         }
 
         public void ChangeControllerEnable(bool enable)
@@ -131,6 +134,13 @@ namespace ShoulderDelivery.Adapter
             var viewModel = new GameStartViewModel();
 
             _gameCountDownView?.ShowGameStart(viewModel);
+        }
+
+        public void ShowNextDelivery(NextDeliveryTargetOutput output)
+        {
+            var viewModel = new NextTargetViewModel(output.TargetId);
+
+            _targetView?.UpdateTarget(viewModel);
         }
     }
 }
