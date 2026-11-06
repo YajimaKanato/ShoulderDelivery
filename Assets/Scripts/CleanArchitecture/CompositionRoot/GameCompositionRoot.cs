@@ -1,5 +1,6 @@
 using ShoulderDelivery.Infrastructure;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ShoulderDelivery.CompositionRoot
 {
@@ -8,25 +9,43 @@ namespace ShoulderDelivery.CompositionRoot
     {
         [Header("Master")]
         [SerializeField] StageDefinitionAsset[] _stages;
-        StageRepository _stageRepository;
+        static string _stageId;
+        static StageRepository _stageRepository;
 
-        public StageRepository StageRepository => _stageRepository;
-
-        static GameCompositionRoot _instance;
-        public static GameCompositionRoot Instance => _instance;
+        public static StageRepository StageRepository => _stageRepository;
 
         private void Awake()
         {
-            if (_instance == null)
-            {
-                _instance = this;
-                DontDestroyOnLoad(gameObject);
-                _stageRepository = new(_stages);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            _stageRepository ??= new(_stages);
+        }
+
+        /// <summary>
+        /// ゲームをスタートするメソッド
+        /// </summary>
+        /// <param name="asset">ステージID</param>
+        public void StartGame(StageDefinitionAsset asset)
+        {
+            _stageId = asset.StageId;
+            LoadScene();
+        }
+
+        /// <summary>
+        /// シーンをロードするメソッド
+        /// </summary>
+        public void LoadScene()
+        {
+            SceneManager.LoadSceneAsync("Ingame");
+        }
+
+        /// <summary>
+        /// 現在選択しているステージIDを取得するメソッド
+        /// </summary>
+        /// <returns>現在選択しているステージID</returns>
+        public static string GetStageId()
+        {
+            var stageId = _stageId;
+            _stageId = null;
+            return stageId;
         }
     }
 }

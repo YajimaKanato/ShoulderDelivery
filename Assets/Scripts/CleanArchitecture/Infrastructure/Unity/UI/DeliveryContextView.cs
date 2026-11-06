@@ -10,12 +10,12 @@ namespace ShoulderDelivery.Infrastructure
 
         public void ShowDeliveryFailedResult(DeliveriedViewModel context)
         {
-            OnInvoke("", _failedColor);
+            OnInvoke("Wrong address", _failedColor);
         }
 
         public void ShowDeliverySucceededResult(DeliveriedViewModel context)
         {
-            OnInvoke("", _successColor);
+            OnInvoke($"Delivered +{context.CurrentGetScore}", _successColor);
         }
     }
 }
