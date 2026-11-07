@@ -14,19 +14,9 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("ガイドラインを表示するクラス")] GuideLineRenderer _guideLineRenderer;
 
         Rigidbody _rb;
-        CardboardUseCase _useCase;
         InputAction _lockOn;
         InputAction _throw;
-
-        /// <summary>
-        /// 必要なUseCase参照をセットするメソッド
-        /// </summary>
-        /// <param name="useCase">UseCase参照</param>
-        /// <exception cref="ArgumentNullException">参照が不足している</exception>
-        public void SetCardboardUseCase(CardboardUseCase useCase)
-        {
-            _useCase = useCase ?? throw new ArgumentNullException(nameof(useCase));
-        }
+        public event Action<ThrowCardboardInput> OnThrow;
 
         public override void CacheAction(Actions actions = null)
         {
@@ -56,12 +46,12 @@ namespace ShoulderDelivery.Infrastructure
                     , _rb.position.ToCoordinates()
                     , _rb.rotation.eulerAngles.ToCoordinates());
                 var cardboardLaunch = new CardboardLaunch(_throwPos.position.ToCoordinates()
-                    , _throwPos.localEulerAngles.ToCoordinates()
+                    , _throwPos.eulerAngles.ToCoordinates()
                     , _throwPos.forward.ToCoordinates()
                     , _throwingPower);
 
                 // 投擲
-                _useCase?.Throw(new ThrowCardboardInput(throwContext, cardboardLaunch));
+                OnThrow?.Invoke(new ThrowCardboardInput(throwContext, cardboardLaunch));
             }
         }
 
@@ -76,5 +66,7 @@ namespace ShoulderDelivery.Infrastructure
                 _guideLineRenderer?.DisableMesh();
             }
         }
+
+        internal void HideGuide() => _guideLineRenderer?.DisableMesh();
     }
 }

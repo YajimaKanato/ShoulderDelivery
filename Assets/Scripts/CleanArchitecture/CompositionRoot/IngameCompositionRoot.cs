@@ -12,9 +12,9 @@ namespace ShoulderDelivery.CompositionRoot
         [Header("Master")]
         [SerializeField] StageDefinitionAsset _defaultStage;
         [SerializeField] TargetView[] _targets;
-        [SerializeField] DeliveryTargetIndicator _targetIndicator;
 
         [Header("Views")]
+        [SerializeField] DeliveryTargetIndicator _targetIndicator;
         [SerializeField] InGameCountDownView _inGameCountDownView;
         [SerializeField] InGameHudView _inGameHudView;
         [SerializeField] GameResultView _gameResultView;
@@ -22,6 +22,7 @@ namespace ShoulderDelivery.CompositionRoot
         [SerializeField] DeliveryContextView _deliveryView;
         [SerializeField] CardboardLauncher _cardboardLauncher;
         [SerializeField] PlayerCardboardLaunch _playerCardboardLaunch;
+        [SerializeField] CursorManager _cursorManager;
 
         GameUseCase _runningGame;
 
@@ -36,7 +37,8 @@ namespace ShoulderDelivery.CompositionRoot
                 , _deliveryView
                 , _cardboardContextView
                 , _targetIndicator
-                , controller);
+                , controller
+                , _cursorManager);
 
             var targetRepository = new TargetRepository(_targets.Select(target => target.BindDefinition()).ToArray());
             var references = new UseCaseReferences(new CardboardIdGenerator()
@@ -49,7 +51,7 @@ namespace ShoulderDelivery.CompositionRoot
 
             var game = new GameUseCase(references);
             var cardboard = new CardboardUseCase(references);
-            _playerCardboardLaunch.SetCardboardUseCase(cardboard);
+            _playerCardboardLaunch.OnThrow += cardboard.Throw;
             _cardboardLauncher.HitTarget += cardboard.HitTarget;
             _cardboardLauncher.CardboardExpired += cardboard.Discard;
 

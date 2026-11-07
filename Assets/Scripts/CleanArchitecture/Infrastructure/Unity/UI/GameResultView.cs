@@ -28,7 +28,8 @@ namespace ShoulderDelivery.Infrastructure
             _scoreText.text = score;
             _timeText.text = time;
             _deliveryCountText.text = deliveryCount;
-            _resultText.text = "ステージクリア成功！！";
+            _resultText.text = "STAGE CLEAR";
+            gameObject.SetActive(true);
         }
 
         public void ShowFailed(GameFailedViewModel viewModel)
@@ -44,7 +45,8 @@ namespace ShoulderDelivery.Infrastructure
             _scoreText.text = score;
             _timeText.text = time;
             _deliveryCountText.text = deliveryCount;
-            _resultText.text = "ステージクリア失敗…";
+            _resultText.text = "TIME UP";
+            gameObject.SetActive(true);
         }
     }
 }

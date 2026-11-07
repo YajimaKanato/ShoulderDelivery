@@ -50,5 +50,9 @@ namespace ShoulderDelivery.UseCase
         /// <summary>次の配達先を表示するメソッド</summary>
         /// <param name="output">次の配達先の情報</param>
         void ShowNextDelivery(NextDeliveryTargetOutput output);
+
+        /// <summary>カーソルの表示を切り替えるメソッド</summary>
+        /// <param name="visible">表示するかどうか</param>
+        void ChangeCursorVisible(bool visible);
     }
 }

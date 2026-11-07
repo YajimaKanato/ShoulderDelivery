@@ -2,7 +2,6 @@ using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 using ShoulderDerivery.Common;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
@@ -13,7 +12,10 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] int _poolSize = 10;
         [SerializeField, Tooltip("投げる段ボールの重さ")] CardboardWeight _cardboardWeight;
         Dictionary<CardboardWeight, OriginalObjectPool<CardboardView>> _cardboardViewPools = new();
-        HashSet<CardboardView> _inFlightCardboardHashSet;
+        readonly Dictionary<CardboardId, CardboardView> _inFlight = new();
+
+        public event System.Action<ResolveDeliveryInput> HitTarget;
+        public event System.Action<DiscardCardboardInput> CardboardExpired;
 
         public void Awake()
         {
@@ -27,7 +29,7 @@ namespace ShoulderDelivery.Infrastructure
 
         public void LaunchCardboard(ThrowCardboardOutput output)
         {
-            var cardboardWeight = output.CardboardWeight;
+            var cardboardWeight = ResolveWeight(output.CardboardWeight);
             if (!_cardboardViewPools.TryGetValue(cardboardWeight, out var pool) || pool == null)
             {
                 Debug.LogWarning("オブジェクトプールがありませんでした");
@@ -36,14 +38,15 @@ namespace ShoulderDelivery.Infrastructure
 
             if (pool.TryRecycleObject(out var cardboard))
             {
-                if (_inFlightCardboardHashSet.Contains(cardboard)) return;
                 // 再利用
                 cardboard.gameObject.SetActive(true);
             }
             else
             {
                 // シーンに生成
-                Instantiate(cardboard);
+                cardboard = Instantiate(cardboard);
+                cardboard.OnHit += ReportHit;
+                cardboard.OnExpired += ReportExpiry;
             }
 
             // 射出に必要なデータの準備
@@ -59,15 +62,19 @@ namespace ShoulderDelivery.Infrastructure
                 , rotation
                 , launch);
 
-            _inFlightCardboardHashSet ??= new();
-            _inFlightCardboardHashSet.Add(cardboard);
+            _inFlight.Add(cardboardId, cardboard);
         }
+
+        void ReportHit(CardboardId id, TargetId? targetId)
+            => HitTarget?.Invoke(new ResolveDeliveryInput(id, targetId));
+
+        void ReportExpiry(CardboardId id)
+            => CardboardExpired?.Invoke(new DiscardCardboardInput(id));
 
         public void DiscardCardboard(CardboardId cardboardId)
         {
             // 削除する段ボールを取得
-            var cardboard = _inFlightCardboardHashSet.FirstOrDefault(c => c != null && c.CardboardId == cardboardId);
-            if (!_inFlightCardboardHashSet.Remove(cardboard)) return;
+            if (!_inFlight.Remove(cardboardId, out var cardboard)) return;
 
             // プールに戻してみる
             if (_cardboardViewPools[cardboard.CardboardWeight].TryReleaseToPool(cardboard))
@@ -93,7 +100,19 @@ namespace ShoulderDelivery.Infrastructure
 
         public void SetNextThrowingCardboard(CardboardWeight weight)
         {
-            _cardboardWeight = weight;
+            _cardboardWeight = ResolveWeight(weight);
+        }
+
+        /// <summary>
+        /// 段ボールの重さを返すメソッド
+        /// </summary>
+        /// <param name="weight">段ボールの重さ</param>
+        /// <returns>段ボールの重さ</returns>
+        CardboardWeight ResolveWeight(CardboardWeight weight)
+        {
+            return weight == CardboardWeight.NoRequested || weight == 0
+                ? CardboardWeight.Weight0
+                : weight;
         }
     }
 }

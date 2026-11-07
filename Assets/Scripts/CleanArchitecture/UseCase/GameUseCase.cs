@@ -33,6 +33,23 @@ namespace ShoulderDelivery.UseCase
             _references.OutputPort.ShowStageInfo(
                 new StageInfoOutput(stageDefinition.TimeLimitSeconds
                 , stageDefinition.RequiredDeliveryCount));
+
+            if (gameSession.DeliveryState.IsQuotaMet)
+            {
+                FinishGame();
+                return;
+            }
+
+            var targetId = gameSession.DeliveryState.CurrentTargetId;
+            var target = _references.TargetRepository.Get(targetId);
+            _references.Launcher.SetNextThrowingCardboard(target.RequestedWeight);
+            _references.OutputPort.ShowNextDelivery(NextDeliveryTargetOutput.GenerateOutput(targetId));
+            _references.OutputPort.ChangeCursorVisible(false);
+
+            if (gameSession.StageState.IsPlaying)
+                BeginPlay();
+            else
+                _references.OutputPort.ChangeControllerEnable(false);
         }
 
         /// <summary>
@@ -54,7 +71,7 @@ namespace ShoulderDelivery.UseCase
             switch (result)
             {
                 case StageTickResult.CountDownFinished:
-                    CountDownFinished();
+                    BeginPlay();
                     break;
                 case StageTickResult.TimeUp:
                     // ゲームを終了する
@@ -96,7 +113,6 @@ namespace ShoulderDelivery.UseCase
             // ノルマクリアしていたら終了
             if (_references.DeliveryState.IsQuotaMet)
             {
-                FinishGame();
                 return StageTickResult.TimeUp;
             }
 
@@ -113,7 +129,7 @@ namespace ShoulderDelivery.UseCase
         /// <summary>
         /// カウントダウン終了時のイベントメソッド
         /// </summary>
-        void CountDownFinished()
+        void BeginPlay()
         {
             _references.OutputPort.ShowGameStart(new GameStartOutput());
             _references.OutputPort.ChangeControllerEnable(true);
@@ -133,12 +149,15 @@ namespace ShoulderDelivery.UseCase
 
             // ゲームを終了状態にする
             if (!_references.StageState.Finish()) return;
+            _references.OutputPort.ChangeControllerEnable(false);
+            _references.OutputPort.ChangeCursorVisible(false);
 
             // 残り時間ボーナスを計算
             var timeBonus = ScoreCalculator.CalculateRemainingSecondsScore(stageState, scoreRules);
 
             // スコアを更新
-            _references.Score.AddScore(timeBonus);
+            score.AddScore(timeBonus);
+            _references.OutputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, score.Total));
 
             // 結果を表示
             if (deliveryState.IsQuotaMet)

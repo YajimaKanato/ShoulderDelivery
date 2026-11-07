@@ -45,7 +45,8 @@ namespace ShoulderDelivery.Infrastructure
         void ShowContext(string context, Color color)
         {
             // ログとして使われていないオブジェクトを取得
-            var text = _cardboardContextTexts.Where(t => !t.IsShowing).First();
+            var text = _cardboardContextTexts.FirstOrDefault(t => t != null && !t.IsShowing);
+            if (text == null) return;
             // 使用中リストに追加
             _showedTexts.Insert(0, text);
 

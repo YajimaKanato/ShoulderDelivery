@@ -72,7 +72,6 @@ namespace ShoulderDelivery.UseCase
                 Delivery(targetId, context);
             }
 
-            // 配達成功で
             Discard(new DiscardCardboardInput(input.CardboardId));
         }
 
@@ -104,7 +103,8 @@ namespace ShoulderDelivery.UseCase
                 , DeliveryBreakdown.Deliveried(_references.DeliveryState)));
 
             // ターゲット更新
-            UpdateTarget();
+            if (!_references.DeliveryState.IsQuotaMet)
+                UpdateTarget();
         }
 
         /// <summary>

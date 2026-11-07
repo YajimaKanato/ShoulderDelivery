@@ -32,7 +32,7 @@ namespace ShoulderDelivery.Infrastructure
             if (!IsAssigned) return;
 
             var score = viewModel.Score;
-            var remainingTime = viewModel.RemainingTime;
+            var remainingTime = Mathf.CeilToInt(viewModel.RemainingTime);
             var minutes = remainingTime / 60;
             var seconds = remainingTime % 60;
 
@@ -51,6 +51,7 @@ namespace ShoulderDelivery.Infrastructure
 
             _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
             _requiredDeliveryCountText.text = requiredDeliveryCount.ToString("0");
+            _scoreText.text = "0";
         }
     }
 }

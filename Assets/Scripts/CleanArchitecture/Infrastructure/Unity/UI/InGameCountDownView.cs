@@ -24,15 +24,7 @@ namespace ShoulderDelivery.Infrastructure
         public void ShowCountDown(CountDownViewModel viewModel)
         {
             if (!IsAssigned) return;
-            if (_countDownTween == null || _countDownTween.IsActive()) return;
-
-            var seconds = viewModel.RemainingSeconds.ToString("0");
-            _countDownText.text = seconds;
-
-            var sequence = DOTween.Sequence();
-            sequence.Append(_countDownText.transform.DOScale(0, 1).SetEase(Ease.InExpo));
-
-            _countDownTween = sequence;
+            _countDownText.text = Mathf.Max(1, Mathf.CeilToInt(viewModel.RemainingSeconds)).ToString();
         }
 
         public void ShowGameStart(GameStartViewModel viewModel)
@@ -45,13 +37,15 @@ namespace ShoulderDelivery.Infrastructure
                 _countDownTween = null;
             }
 
-            var text = "Let's Delivery!!";
-            _countDownText.text = text;
+            _countDownText.text = "START!";
+            _countDownText.transform.localScale = Vector3.one;
 
             var sequence = DOTween.Sequence();
             sequence.Append(_countDownText.transform.DOScale(0, _startAnnouncementLifeTime).SetEase(Ease.InQuad));
 
             _countDownTween = sequence;
         }
+
+        private void OnDestroy() => _countDownTween?.Kill();
     }
 }

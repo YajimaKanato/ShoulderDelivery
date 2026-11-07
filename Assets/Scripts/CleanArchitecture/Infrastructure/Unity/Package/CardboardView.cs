@@ -8,14 +8,16 @@ namespace ShoulderDelivery.Infrastructure
     public class CardboardView : MonoBehaviour
     {
         [SerializeField, Tooltip("段ボールの重さ")] CardboardWeight _cardboardWeight;
+        [SerializeField, Tooltip("段ボールの生存時間")] float _lifeTime = 10f;
 
         TrailRenderer _trailRender;
         Rigidbody _rb;
         CardboardId _cardboardId;
+        float _remainingLifetime;
 
         public event Action<CardboardId, TargetId?> OnHit;
+        public event Action<CardboardId> OnExpired;
 
-        public CardboardId CardboardId => _cardboardId;
         public CardboardWeight CardboardWeight => _cardboardWeight;
         public float RealCardboardWeight => _rb ? _rb.mass : (int)CardboardWeight;
 
@@ -32,6 +34,7 @@ namespace ShoulderDelivery.Infrastructure
             , Vector3 velo)
         {
             _cardboardId = cardboardId;
+            _remainingLifetime = _lifeTime;
 
             // 位置を調整
             transform.SetPositionAndRotation(pos, rot);
@@ -65,9 +68,18 @@ namespace ShoulderDelivery.Infrastructure
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (!collision.gameObject.TryGetComponent<TargetView>(out var target)) return;
+            var target = collision.collider.GetComponentInParent<TargetView>();
+            if (!target) return;
 
             OnHit?.Invoke(_cardboardId, target.TargetId);
+        }
+
+        private void Update()
+        {
+            if (_remainingLifetime <= 0) return;
+            _remainingLifetime -= Time.deltaTime;
+            if (_remainingLifetime <= 0)
+                OnExpired?.Invoke(_cardboardId);
         }
     }
 }

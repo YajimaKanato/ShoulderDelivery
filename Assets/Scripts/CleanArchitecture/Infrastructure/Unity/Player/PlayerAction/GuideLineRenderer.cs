@@ -1,5 +1,3 @@
-using ShoulderDelivery.UseCase;
-using ShoulderDerivery.Common;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +8,7 @@ namespace ShoulderDelivery.Infrastructure
     {
         [SerializeField, Tooltip("ガイドラインの幅のカーブ")] AnimationCurve _widthCurve = AnimationCurve.Linear(0, 1, 1, 1);
         [SerializeField, Tooltip("ガイドラインの最大幅")] float _width = 0.4f;
-        [SerializeField, Tooltip("ガイドラインの長さ")] int _guideLineLength = 10;
         [SerializeField, Tooltip("点の個数")] int _pointCount = 50;
-        [SerializeField, Tooltip("重さ補正")] float _weightFixed = 0.5f;
-        [SerializeField, Tooltip("段ボール投擲機能の参照")] CardboardLauncher _launcher;
 
         List<Vector3> _points;
         Mesh _mesh;
@@ -28,6 +23,7 @@ namespace ShoulderDelivery.Infrastructure
             _mesh = new Mesh();
             _mesh.name = "Guide";
             _meshRenderer = GetComponent<MeshRenderer>();
+            _meshRenderer.enabled = false;
 
             GetComponent<MeshFilter>().mesh = _mesh;
         }
@@ -101,8 +97,6 @@ namespace ShoulderDelivery.Infrastructure
         public void EnableMesh(Vector3 position, Vector3 velocity)
         {
             // 軌道予測
-            velocity /= _launcher.GetCardboardWeight() * _weightFixed;
-
             CalculateTrajectory(position, velocity);
 
             SetPoints(_points);
@@ -123,7 +117,18 @@ namespace ShoulderDelivery.Infrastructure
             _points.Clear();
 
             var dt = Time.fixedDeltaTime;
-            
+            for (var i = 0; i < Mathf.Max(2, _pointCount); i++)
+            {
+                _points.Add(position);
+                velocity += Physics.gravity * dt;
+                var step = velocity * dt;
+                if (Physics.Raycast(position, step.normalized, out var hit, step.magnitude))
+                {
+                    _points.Add(hit.point);
+                    break;
+                }
+                position += step;
+            }
         }
     }
 }

@@ -11,6 +11,8 @@ namespace ShoulderDelivery.Adapter
         IDeliveriedView _deliveryView;
         ICardboardContextView _cardboardContextView;
         ITargetView _targetView;
+        IControllerView _controllerView;
+        ICursorController _cursorController;
 
         public GamePresenter(IStageInfoView stageInfoView
             , IGameCountDownView gameCountDownView
@@ -18,7 +20,9 @@ namespace ShoulderDelivery.Adapter
             , IGameResultView resultView
             , IDeliveriedView deliveryView
             , ICardboardContextView cardboardContextView
-            , ITargetView targetView)
+            , ITargetView targetView
+            , IControllerView controllerView
+            , ICursorController cursorController)
         {
             _stageInfoView = stageInfoView;
             _gameCountDownView = gameCountDownView;
@@ -27,11 +31,13 @@ namespace ShoulderDelivery.Adapter
             _deliveryView = deliveryView;
             _cardboardContextView = cardboardContextView;
             _targetView = targetView;
+            _controllerView = controllerView;
+            _cursorController = cursorController;
         }
 
         public void ChangeControllerEnable(bool enable)
         {
-            // 操作権限を変更する
+            _controllerView?.SetControllerEnabled(enable);
         }
 
         public void ShowCountDown(CountDownOutput output)
@@ -68,6 +74,7 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowGameClear(GameClearOutput output)
         {
+            _targetView?.ClearTarget();
             var total = output.TotalScore;
             var requiredDeliveryCount = output.RequiredDeliveryCount;
             var deliveryCount = output.DeliveryCount;
@@ -81,6 +88,7 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowGameFailed(GameFailedOutput output)
         {
+            _targetView?.ClearTarget();
             var total = output.TotalScore;
             var requiredDeliveryCount = output.RequiredDeliveryCount;
             var deliveryCount = output.DeliveryCount;
@@ -114,17 +122,15 @@ namespace ShoulderDelivery.Adapter
         public void ShowThrowCardboardRejected(ThrowCardboardRejectedOutput output)
         {
             // ViewModel作成
-            var viewModel = new CardboardContextViewModel("段ボールを投げることができませんでした");
+            var viewModel = new CardboardContextViewModel("Cannot throw yet");
 
             _cardboardContextView?.ShowCardboardRejected(viewModel);
         }
 
         public void ShowThrowCardboardAccepted(ThrowCardboardAcceptOutput output)
         {
-            var cardboardId = output.CardboardId;
-
             // ViewModel作成
-            var viewModel = new CardboardContextViewModel($"段ボールを投げることができました\n{cardboardId}");
+            var viewModel = new CardboardContextViewModel("Package thrown");
 
             _cardboardContextView?.ShowCardboardAccepted(viewModel);
         }
@@ -141,6 +147,18 @@ namespace ShoulderDelivery.Adapter
             var viewModel = new NextTargetViewModel(output.TargetId);
 
             _targetView?.UpdateTarget(viewModel);
+        }
+
+        public void ChangeCursorVisible(bool visible)
+        {
+            if (visible)
+            {
+                _cursorController?.ShowCursor();
+            }
+            else
+            {
+                _cursorController?.HideCursor();
+            }
         }
     }
 }
