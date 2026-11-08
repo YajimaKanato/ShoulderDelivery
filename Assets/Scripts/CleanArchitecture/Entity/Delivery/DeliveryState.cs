@@ -36,6 +36,8 @@ namespace ShoulderDelivery.Entity
             {
                 _waitingDeliveryTargetIds.Enqueue(targetId);
             }
+
+            NextTarget();
         }
 
         /// <summary>

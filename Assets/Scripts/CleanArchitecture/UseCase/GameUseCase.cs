@@ -150,7 +150,7 @@ namespace ShoulderDelivery.UseCase
             // ゲームを終了状態にする
             if (!_references.StageState.Finish()) return;
             _references.OutputPort.ChangeControllerEnable(false);
-            _references.OutputPort.ChangeCursorVisible(false);
+            _references.OutputPort.ChangeCursorVisible(true);
 
             // 残り時間ボーナスを計算
             var timeBonus = ScoreCalculator.CalculateRemainingSecondsScore(stageState, scoreRules);

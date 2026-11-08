@@ -16,7 +16,8 @@ namespace ShoulderDelivery.Infrastructure
 
         public TargetDefinition Get(TargetId key)
         {
-            var asset = _assets.FirstOrDefault(x => x.TargetId == key.Id);
+            var asset = _assets.FirstOrDefault(x => x != null && x.TargetId == key.Id)
+                ?? throw new InvalidOperationException($"配達先 {key.Id} が登録されていません。");
 
             return asset.ToEntity();
         }

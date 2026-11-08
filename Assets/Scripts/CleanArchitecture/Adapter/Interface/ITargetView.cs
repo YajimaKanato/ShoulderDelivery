@@ -6,5 +6,6 @@ namespace ShoulderDelivery.Adapter
         /// <summary>次の配達先を表示するメソッド</summary>
         /// <param name="viewModel">配達先の情報</param>
         void UpdateTarget(NextTargetViewModel viewModel);
+        void ClearTarget();
     }
 }

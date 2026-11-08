@@ -96,11 +96,15 @@ namespace ShoulderDelivery.Infrastructure
         /// <param name="velocity">ガイドラインの軌道を決める速度</param>
         public void EnableMesh(Vector3 position, Vector3 velocity)
         {
+            if (_mesh == null) return;
+
             // 軌道予測
             CalculateTrajectory(position, velocity);
 
             SetPoints(_points);
 
+            // 軌道が短くなっても、前フレームの三角形が新しい頂点を参照しないようにする。
+            _mesh.Clear();
             _mesh.vertices = _vertices;
             _mesh.uv = _uv;
             _mesh.triangles = _triangles;
