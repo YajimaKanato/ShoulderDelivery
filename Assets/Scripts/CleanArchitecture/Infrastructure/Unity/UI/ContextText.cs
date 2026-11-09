@@ -13,6 +13,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] float _lifeTime = 1f;
         [SerializeField] float _duration = 0.3f;
         Sequence _sequence;
+        Tween _moveTween;
         event Action<ContextText> _onExit;
         public Action OnExit(Action<ContextText> act)
         {
@@ -41,6 +42,7 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (!IsAssigned) return;
             _sequence?.Kill();
+            _moveTween?.Kill();
 
             // テキスト設定
             _text.text = message;
@@ -58,7 +60,7 @@ namespace ShoulderDelivery.Infrastructure
                 .AppendInterval(_lifeTime)
                 .Append(_rectTransform.DOAnchorPosX(exitPosX, _duration))
                 .Join(_text.DOFade(0, _duration))
-                .OnComplete(OnKill);
+                .OnComplete(CompleteExit);
         }
 
         /// <summary>
@@ -69,7 +71,9 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (!IsAssigned) return;
 
-            _rectTransform.DOAnchorPosY(goal, _duration);
+            _moveTween?.Kill();
+            _moveTween = _rectTransform.DOAnchorPosY(goal, _duration)
+                .OnKill(() => _moveTween = null);
         }
 
         /// <summary>
@@ -80,21 +84,29 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (!IsAssigned) return;
             _sequence?.Kill();
+            _moveTween?.Kill();
 
             _sequence = DOTween.Sequence()
                 .Append(_rectTransform.DOAnchorPosX(exitPosX, _duration))
                 .Join(_text.DOFade(0, _duration))
-                .OnComplete(OnKill);
+                .OnComplete(CompleteExit);
         }
 
         /// <summary>
-        /// 実行中断メソッド
+        /// 退場が完了したログを再利用できるようにする
         /// </summary>
-        void OnKill()
+        void CompleteExit()
         {
             _sequence = null;
+            _moveTween?.Kill();
             IsShowing = false;
             _onExit?.Invoke(this);
+        }
+
+        private void OnDestroy()
+        {
+            _sequence?.Kill();
+            _moveTween?.Kill();
         }
     }
 }

@@ -62,17 +62,11 @@ namespace ShoulderDelivery.UseCase
 
             // 配達をする
             if (targetId == null || !_references.DeliveryState.TryDelivery(targetId.Value))
-            {
-                // 配達失敗
-                _references.OutputPort.ShowDeliveryFailed(DeliveryFailedOutput.Missed());
                 return;
-            }
-            else
-            {
-                Delivery(targetId, context);
-            }
 
-            Discard(new DiscardCardboardInput(input.CardboardId));
+            // 配達成功
+            Delivery(targetId, context);
+            DiscardCardboard(input.CardboardId);
         }
 
         /// <summary>
@@ -87,7 +81,7 @@ namespace ShoulderDelivery.UseCase
 
             // 配達成功情報を取得
             var deliveryResult = DeliveryResult.Delivered(targetDefinition
-                , _references.DeliveryState.DeliveryCombo);
+                , _references.DeliveryState.ResolveCombo(true));
 
             // スコアを生成
             var scoreBreakdown = ScoreCalculator.CalculateDeliveryScore(context
@@ -134,10 +128,28 @@ namespace ShoulderDelivery.UseCase
         /// <exception cref="InvalidOperationException">必要な参照がない</exception>
         public void Discard(DiscardCardboardInput input)
         {
-            // 段ボールを消す
-            var id = input.Id;
-            _references.InFlightCardboardState.Discard(id);
+            // 投擲情報のない段ボールやゲーム終了後の破棄は配達失敗にしない
+            if (!DiscardCardboard(input.Id)
+                || !_references.StageState.IsPlaying
+                || _references.DeliveryState.IsQuotaMet) return;
+
+            // コンボが途切れたことを通知
+            var deliveryState = _references.DeliveryState;
+            deliveryState.ResolveCombo(false);
+            _references.OutputPort.ShowDeliveryFailed(DeliveryFailedOutput.Missed(_references.Score.Total
+                , DeliveryBreakdown.Deliveried(deliveryState)));
+        }
+
+        /// <summary>
+        /// 段ボールを消すメソッド
+        /// </summary>
+        /// <param name="id">消す段ボールのID</param>
+        /// <returns>投擲情報を削除できたか</returns>
+        bool DiscardCardboard(CardboardId id)
+        {
+            var discarded = _references.InFlightCardboardState.Discard(id);
             _references.DiscardCardboard.DiscardCardboard(id);
+            return discarded;
         }
     }
 }

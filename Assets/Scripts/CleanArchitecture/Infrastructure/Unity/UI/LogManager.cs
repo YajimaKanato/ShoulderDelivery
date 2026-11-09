@@ -19,6 +19,9 @@ namespace ShoulderDelivery.Infrastructure
 
         private void OnEnable()
         {
+            _showedTexts.RemoveAll(text => text == null || !text.IsShowing);
+            MoveRowsFrom(0);
+
             foreach (var context in _cardboardContextTexts)
             {
                 if (context != null)
@@ -35,6 +38,7 @@ namespace ShoulderDelivery.Infrastructure
         private void OnDisable()
         {
             _disposer.Dispose();
+            _disposer = new();
         }
 
         /// <summary>
@@ -44,40 +48,38 @@ namespace ShoulderDelivery.Infrastructure
         /// <param name="color">ログの色</param>
         void ShowContext(string context, Color color)
         {
+            if (_viewCount <= 0) return;
+
             // ログとして使われていないオブジェクトを取得
             var text = _cardboardContextTexts.FirstOrDefault(t => t != null && !t.IsShowing);
             if (text == null) return;
-            // 使用中リストに追加
-            _showedTexts.Insert(0, text);
 
-            for (int i = _showedTexts.Count - 1; 0 <= i; i--)
+            if (_showedTexts.Count >= _viewCount)
             {
-                var moveText = _showedTexts[i];
-                if (moveText == null) continue;
-                if (i > _viewCount) continue;   // 退場中
-
-                if (i == _viewCount)
-                {
-                    // 表示限界を超えているものは消す
-                    moveText.ExitTween(_exitPosX);
-                }
-                else if (i == 0)
-                {
-                    // 新しく表示する
-                    moveText.EntryTween(_entryPosX, _exitPosX, _showPosY[i], color, context);
-                }
-                else
-                {
-                    // ずらす
-                    moveText.MoveTween(_showPosY[i]);
-                }
+                var lastIndex = _showedTexts.Count - 1;
+                var oldest = _showedTexts[lastIndex];
+                _showedTexts.RemoveAt(lastIndex);
+                oldest.ExitTween(_exitPosX);
             }
+
+            _showedTexts.Insert(0, text);
+            text.EntryTween(_entryPosX, _exitPosX, _showPosY[0], color, context);
+            MoveRowsFrom(1);
         }
 
         void ExitEvent(ContextText context)
         {
-            // 退場したものをリストから削除
-            _showedTexts.Remove(context);
+            var index = _showedTexts.IndexOf(context);
+            if (index < 0) return;
+
+            _showedTexts.RemoveAt(index);
+            MoveRowsFrom(index);
+        }
+
+        void MoveRowsFrom(int index)
+        {
+            for (int i = index; i < _showedTexts.Count; i++)
+                _showedTexts[i].MoveTween(_showPosY[i]);
         }
 
         private void OnValidate()

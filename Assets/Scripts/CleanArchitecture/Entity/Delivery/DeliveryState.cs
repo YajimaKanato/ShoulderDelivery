@@ -47,14 +47,7 @@ namespace ShoulderDelivery.Entity
         /// <returns>配達できたか</returns>
         public bool TryDelivery(TargetId id)
         {
-            if (_currentTargetId == id && _deliveredTargetIds.Add(id))
-            {
-                _deliverCombo++;
-                return true;
-            }
-
-            _deliverCombo = 0;
-            return false;
+            return _currentTargetId == id && _deliveredTargetIds.Add(id);
         }
 
         /// <summary>
@@ -64,6 +57,21 @@ namespace ShoulderDelivery.Entity
         {
             if (_waitingDeliveryTargetIds.Count > 0)
                 _currentTargetId = _waitingDeliveryTargetIds.Dequeue();
+        }
+
+        /// <summary>
+        /// 連続配達数を処理するメソッド
+        /// </summary>
+        /// <param name="deliveried">配達できたかどうか</param>
+        /// <returns>連続配達数</returns>
+        public int ResolveCombo(bool deliveried)
+        {
+            if (deliveried)
+                _deliverCombo++;
+            else
+                _deliverCombo = 0;
+
+            return _deliverCombo;
         }
     }
 }

@@ -1,3 +1,4 @@
+using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 
 namespace ShoulderDelivery.Adapter
@@ -109,6 +110,7 @@ namespace ShoulderDelivery.Adapter
             var viewModel = new DeliveriedViewModel(score, scoreBreakDown.Total);
 
             _deliveryView?.ShowDeliverySucceededResult(viewModel);
+            ShowDelivery(deliveryResult.Score, deliveryResult.DeliveryBreakdown);
         }
 
         public void ShowDeliveryFailed(DeliveryFailedOutput deliveryResult)
@@ -117,6 +119,22 @@ namespace ShoulderDelivery.Adapter
             var viewModel = new DeliveriedViewModel();
 
             _deliveryView?.ShowDeliveryFailedResult(viewModel);
+            ShowDelivery(deliveryResult.Score, deliveryResult.DeliveryBreakdown);
+        }
+
+        /// <summary>
+        /// 配達後のスコアと配達状況をHUDに表示するメソッド
+        /// </summary>
+        /// <param name="score">現在のスコア</param>
+        /// <param name="deliveryBreakdown">配達の内訳</param>
+        void ShowDelivery(int score, DeliveryBreakdown deliveryBreakdown)
+        {
+            var viewModel = new DeliveryViewModel(score
+                , deliveryBreakdown.DeliveryCombo
+                , deliveryBreakdown.DeliveryCount
+                , deliveryBreakdown.RequiredDeliveryCount);
+
+            _hudView?.ShowDelivery(viewModel);
         }
 
         public void ShowThrowCardboardRejected(ThrowCardboardRejectedOutput output)

@@ -25,10 +25,7 @@ namespace ShoulderDelivery.Entity
         /// <returns>正常に処理できたか</returns>
         public bool TryResolve(CardboardId id, out ThrowContext context)
         {
-            if (!_contexts.TryGetValue(id, out context)) return false;
-
-            Discard(id);
-            return true;
+            return _contexts.TryGetValue(id, out context);
         }
 
         /// <summary>

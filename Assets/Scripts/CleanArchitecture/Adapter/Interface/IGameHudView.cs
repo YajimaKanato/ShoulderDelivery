@@ -7,5 +7,9 @@ namespace ShoulderDelivery.Adapter
         /// <para>毎フレーム呼ばれる</para>
         /// <param name="viewModel">ViewModel</param>
         void ShowHud(HudViewModel viewModel);
+
+        /// <summary>配達時の状態を描画するメソッド</summary>
+        /// <param name="viewModel">ViewModel</param>
+        void ShowDelivery(DeliveryViewModel viewModel);
     }
 }

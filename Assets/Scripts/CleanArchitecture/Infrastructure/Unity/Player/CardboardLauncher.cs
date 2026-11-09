@@ -1,6 +1,7 @@
 using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 using ShoulderDerivery.Common;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +15,8 @@ namespace ShoulderDelivery.Infrastructure
         Dictionary<CardboardWeight, OriginalObjectPool<CardboardView>> _cardboardViewPools = new();
         readonly Dictionary<CardboardId, CardboardView> _inFlight = new();
 
-        public event System.Action<ResolveDeliveryInput> HitTarget;
-        public event System.Action<DiscardCardboardInput> CardboardExpired;
+        public event Action<ResolveDeliveryInput> HitTarget;
+        public event Action<DiscardCardboardInput> CardboardExpired;
 
         public void Awake()
         {

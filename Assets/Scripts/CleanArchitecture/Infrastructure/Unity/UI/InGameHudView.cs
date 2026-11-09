@@ -8,12 +8,17 @@ namespace ShoulderDelivery.Infrastructure
     {
         [SerializeField] TextMeshProUGUI _timerText;
         [SerializeField] TextMeshProUGUI _scoreText;
-        [SerializeField] TextMeshProUGUI _requiredDeliveryCountText;
+        [SerializeField] TextMeshProUGUI _deliveryCountText;
+        [SerializeField] TextMeshProUGUI _deliveryComboText;
+
+        const string SCORE = "Score : ";
+        const string DELIVERY = "Delivery : ";
+        const string COMBO = " Combo";
 
         /// <summary>参照がそろっているかを確認するためのプロパティ</summary>
         bool IsAssigned => _timerText != null
             && _scoreText != null
-            && _requiredDeliveryCountText != null;
+            && _deliveryCountText != null;
 
         private void Awake()
         {
@@ -23,8 +28,11 @@ namespace ShoulderDelivery.Infrastructure
             if (_scoreText == null)
                 UILogger.LogNotAssigned(_scoreText);
 
-            if (_requiredDeliveryCountText == null)
-                UILogger.LogNotAssigned(_requiredDeliveryCountText);
+            if (_deliveryCountText == null)
+                UILogger.LogNotAssigned(_deliveryCountText);
+
+            if (_deliveryComboText == null)
+                UILogger.LogNotAssigned(_deliveryComboText);
         }
 
         public void ShowHud(HudViewModel viewModel)
@@ -37,7 +45,7 @@ namespace ShoulderDelivery.Infrastructure
             var seconds = remainingTime % 60;
 
             _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
-            _scoreText.text = score.ToString("0");
+            _scoreText.text = SCORE + score.ToString("00000");
         }
 
         public void ShowStageInfo(StageInfoViewModel viewModel)
@@ -50,8 +58,25 @@ namespace ShoulderDelivery.Infrastructure
             var seconds = timeLimitSeconds % 60;
 
             _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
-            _requiredDeliveryCountText.text = requiredDeliveryCount.ToString("0");
-            _scoreText.text = "0";
+            ShowDelivery(new DeliveryViewModel(0, 0, 0, requiredDeliveryCount));
+        }
+
+        public void ShowDelivery(DeliveryViewModel viewModel)
+        {
+            if (!IsAssigned) return;
+
+            var score = viewModel.Score;
+            var combo = viewModel.Combo;
+            var deliveryCount = viewModel.DeliveryCount;
+            var requiredCount = viewModel.RequiredCount;
+
+            _deliveryCountText.text = DELIVERY
+                + deliveryCount.ToString("0")
+                + " / "
+                + requiredCount.ToString("0");
+            _scoreText.text = SCORE + score.ToString("00000");
+            if (_deliveryComboText != null)
+                _deliveryComboText.text = combo.ToString("0") + COMBO;
         }
     }
 }

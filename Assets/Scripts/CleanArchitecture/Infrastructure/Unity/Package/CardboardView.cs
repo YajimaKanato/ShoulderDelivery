@@ -68,7 +68,7 @@ namespace ShoulderDelivery.Infrastructure
 
         private void OnCollisionEnter(Collision collision)
         {
-            var target = collision.collider.GetComponentInParent<TargetView>();
+            var target = collision.collider.GetComponent<TargetView>();
             if (!target) return;
 
             OnHit?.Invoke(_cardboardId, target.TargetId);
