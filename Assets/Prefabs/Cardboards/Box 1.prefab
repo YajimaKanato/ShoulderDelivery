@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 582502950981696273}
   - component: {fileID: 8344638257957949136}
   - component: {fileID: 2306887385687083495}
-  - component: {fileID: -2756295005372748453}
   - component: {fileID: 5263819563583401334}
+  - component: {fileID: 2111477584168527165}
   m_Layer: 0
   m_Name: Box 1
   m_TagString: Cardboard
@@ -142,19 +142,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-2756295005372748453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4949482869891747766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9c71c032f473de439665d8b9d8c1790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Cardboard
-  _lifeTime: 5
 --- !u!96 &5263819563583401334
 TrailRenderer:
   serializedVersion: 4
@@ -274,3 +261,16 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &2111477584168527165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4949482869891747766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1182932b52dd98f43b2abd5fcbebbc9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.CardboardView
+  _cardboardWeight: 1000

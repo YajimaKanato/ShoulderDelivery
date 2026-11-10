@@ -171,7 +171,7 @@ MonoBehaviour:
     _damping: 0.5
   _brakePower: 5
   _rayDistance: 1.2
-  _rayOffset: {x: 0, y: 0.1, z: 0}
+  _rayOffset: {x: 0, y: -0.2, z: 0}
   _maxSteerAngle: 90
   _rightSteerCurve:
     _speedCurve:
@@ -248,7 +248,7 @@ MonoBehaviour:
   _cameraTransform: {fileID: 5790487730979217289}
   _shakeMaxRange: 45
   _nodMaxRange: 30
-  _mouseSensitivity: 0.01
+  _mouseSensitivity: 0.0015
   _controllerSensitivity: 1
 --- !u!114 &2293266781665814165
 MonoBehaviour:
