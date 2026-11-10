@@ -1,6 +1,7 @@
 using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ShoulderDelivery.Infrastructure
@@ -22,6 +23,14 @@ namespace ShoulderDelivery.Infrastructure
                 throw new InvalidOperationException(nameof(asset));
 
             return asset.ToEntity();
+        }
+
+        public IReadOnlyList<StageId> GetStageIds()
+        {
+            return _assets.Where(asset => asset != null)
+                .Select(asset => new StageId(asset.StageId))
+                .Distinct()
+                .ToArray();
         }
     }
 }

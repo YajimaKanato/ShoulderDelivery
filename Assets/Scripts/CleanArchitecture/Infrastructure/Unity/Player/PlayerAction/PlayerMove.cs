@@ -66,11 +66,11 @@ namespace ShoulderDelivery.Infrastructure
 
             var origin = transform.position + _rayOffset;
             // 衝突した方向のパラメータをリセットしてすぐに逆方向の動きができるように
-            if (Physics.Raycast(new Ray(origin, _rayOffset + transform.forward), _rayDistance))
+            if (Physics.Raycast(new Ray(origin, transform.forward), _rayDistance))
             {
                 _accelParam.ResetDelta();
             }
-            else if (Physics.Raycast(new Ray(origin, _rayOffset - transform.forward), _rayDistance))
+            else if (Physics.Raycast(new Ray(origin, -transform.forward), _rayDistance))
             {
                 _brakeParam.ResetDelta();
             }

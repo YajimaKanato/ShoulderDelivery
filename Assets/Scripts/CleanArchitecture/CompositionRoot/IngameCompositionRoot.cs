@@ -55,7 +55,7 @@ namespace ShoulderDelivery.CompositionRoot
             _cardboardLauncher.HitTarget += cardboard.HitTarget;
             _cardboardLauncher.CardboardExpired += cardboard.Discard;
 
-            var stageId = new StageId(GameCompositionRoot.GetStageId() ?? _defaultStage.StageId);
+            var stageId = new StageId(StageManager.GetStageId() ?? _defaultStage.StageId);
             game.Start(new GameStartInput(stageId));
             _runningGame = game;
         }
