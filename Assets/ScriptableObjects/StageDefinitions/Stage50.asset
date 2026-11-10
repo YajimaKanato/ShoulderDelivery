@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa8987636b14954a986521ab64dc5ae, type: 3}
+  m_Name: Stage50
+  m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.StageDefinitionAsset
+  _stageId: Stage50
+  _countDownSeconds: 3
+  _timeLimitSeconds: 80
+  _requiredDeliveryCount: 5
+  _targetDefinitionAssets:
+  - {fileID: 11400000, guid: 27363df4133b09e4c891181f23131bdc, type: 2}
+  - {fileID: 11400000, guid: 6cba6da077eaed945b71ee6e3b2843fb, type: 2}
+  - {fileID: 11400000, guid: e6e7dc5110d6a914f9cdb599976ef6ec, type: 2}
+  - {fileID: 11400000, guid: 92bd49bdce125be4fad9116e531eedaf, type: 2}
+  - {fileID: 11400000, guid: 26d397916dd94b54fb83f45dc31d1802, type: 2}
+  - {fileID: 11400000, guid: c43cd0ce9c61f4c44a0911e59e74b314, type: 2}
+  - {fileID: 11400000, guid: a060b33f13cfc3a4bb6fa172e91e2a21, type: 2}
+  - {fileID: 11400000, guid: 4021a298f2ba44645b07ffbd6458a234, type: 2}
+  - {fileID: 11400000, guid: 587f09e82b0f5bb47acc8ce1eee0178a, type: 2}
+  - {fileID: 11400000, guid: 0c739cdb25b75e9459f64413044cc8af, type: 2}
+  _scoreRulesAsset: {fileID: 11400000, guid: 9bea76fc53d37b84b8df3e95dc698b2d, type: 2}
