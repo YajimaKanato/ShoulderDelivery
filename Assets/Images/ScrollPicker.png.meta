@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dea6c3403e2a442418943ee2a267870d
+guid: 44034de4cfbeb3549959b2c050f27446
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PressAnyButton 1_0
+      name: ScrollRail_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 500
-        height: 100
+        x: 258
+        y: 494
+        width: 208
+        height: 1185
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,8 +138,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e623822d6b255049adb53b19457b9a6
-      internalID: -1682595777
+      spriteID: 1950c4f100ce2304f85748a9bad92205
+      internalID: 213977109
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 526dadc75f6b8b845bf1b79a85f1fc7d
+    spriteID: 18d5e3e302a1fcf45ba8c168a0491b62
     internalID: 0
     vertices: []
     indices: 
@@ -158,7 +158,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PressAnyButton 1_0: -1682595777
+      ScrollRail_0: 213977109
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ef6bb8122874c614a9776f2d9b201dc5
+guid: 0e670c034a2bf4c42a1224e01a2b82a8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Shoulder_0
+      name: Shoulder 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 2172
-        height: 724
+        width: 500
+        height: 175
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,8 +138,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1c2bb8c80dc6c0741821229d6f1f3099
-      internalID: -706768018
+      spriteID: 5fb991bb4038fc24db4dc1710122a4cf
+      internalID: 603233228
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 25b8c1edcd60a964da88415f5f472298
+    spriteID: eb7bdfa706c82d3439f3d4c4abefe10a
     internalID: 0
     vertices: []
     indices: 
@@ -158,7 +158,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Shoulder_0: -706768018
+      Shoulder 1_0: 603233228
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

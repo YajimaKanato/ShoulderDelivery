@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1684d8ea5d1b8e9428aa0f8e96b2cd8c
+guid: dea6c3403e2a442418943ee2a267870d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PressAnyButton_0
+      name: PressAnyButton 1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 2172
-        height: 724
+        width: 500
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,8 +138,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5392b1a2fd63e954fa4db6397237f0d5
-      internalID: -1402092606
+      spriteID: 6e623822d6b255049adb53b19457b9a6
+      internalID: -1682595777
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 9164ad42e73ac0d4ba5bf37a9a676a0f
+    spriteID: 526dadc75f6b8b845bf1b79a85f1fc7d
     internalID: 0
     vertices: []
     indices: 
@@ -158,7 +158,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PressAnyButton_0: -1402092606
+      PressAnyButton 1_0: -1682595777
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
