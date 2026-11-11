@@ -90,7 +90,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.StageSelectView
   _buttonPrefab: {fileID: 7983026704552077326, guid: 74152c31065c30c468a7de035826907c, type: 3}
   _scrollView: {fileID: 0}
-  _titlePanel: {fileID: 0}
   _selectPanel: {fileID: 0}
   _stageName: {fileID: 0}
   _stageInfo: {fileID: 0}

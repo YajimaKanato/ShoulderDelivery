@@ -1,12 +1,9 @@
 using ShoulderDelivery.Adapter;
 using ShoulderDelivery.Entity;
 using System;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 namespace ShoulderDelivery.Infrastructure
@@ -17,7 +14,6 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] Color AccentColor = new(0.28f, 0.85f, 0.78f);
 
         [SerializeField] ScrollRect _scrollView;
-        [SerializeField] RectTransform _titlePanel;
         [SerializeField] RectTransform _selectPanel;
         [SerializeField] TextMeshProUGUI _stageName;
         [SerializeField] TextMeshProUGUI _stageInfo;
@@ -102,20 +98,9 @@ namespace ShoulderDelivery.Infrastructure
             _startLabel.text = "LOADING...";
         }
 
-        /// <summary>タイトル画面での入力を受け付けるメソッド</summary>
-        public bool HasTitleInput()
-        {
-            return _titlePanel.gameObject.activeSelf
-                && (Keyboard.current?.anyKey.wasPressedThisFrame == true
-                    || Mouse.current?.leftButton.wasPressedThisFrame == true
-                    || Touchscreen.current?.primaryTouch.press.wasPressedThisFrame == true
-                    || Gamepad.current?.allControls.OfType<ButtonControl>().Any(button => button.wasPressedThisFrame) == true);
-        }
-
         /// <summary>ステージ選択画面に切り替えるメソッド</summary>
         public void OpenStageSelect()
         {
-            _titlePanel.gameObject.SetActive(false);
             _selectPanel.gameObject.SetActive(true);
             Canvas.ForceUpdateCanvases();
             _scrollView.verticalNormalizedPosition = 1f;

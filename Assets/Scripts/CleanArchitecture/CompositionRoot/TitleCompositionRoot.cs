@@ -23,12 +23,6 @@ namespace ShoulderDelivery.CompositionRoot
             _stageSelectView.OnStart += StartStage;
         }
 
-        private void Update()
-        {
-            if (_stageSelectView.HasTitleInput())
-                _stageSelectView.OpenStageSelect();
-        }
-
         /// <summary>選択中のステージを開始するメソッド</summary>
         void StartStage()
         {

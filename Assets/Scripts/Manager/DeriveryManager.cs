@@ -1,13 +1,17 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeriveryManager : ManagerBase
 {
     [SerializeField] RectTransform _canvas;
     [SerializeField] TextMeshProUGUI _distanceText;
     [SerializeField] TextMeshProUGUI _deriveryCountText;
-    [SerializeField] float _spaceX = 0.8f;
-    [SerializeField] float _spaceY = 0.8f;
+    [SerializeField] float _textSpaceX = 0.8f;
+    [SerializeField] float _textSpaceY = 0.8f;
+    [SerializeField] Image _targetPinImage;
+    [SerializeField] float _imageSpaceX = 0.9f;
+    [SerializeField] float _imageSpaceY = 0.9f;
     [SerializeField] int _deriveryCount = 5;
     Target[] _targets;
     Camera _camera;
@@ -17,7 +21,7 @@ public class DeriveryManager : ManagerBase
     private void Update()
     {
         if (_gameEnd) return;
-        UpdateDistanceText();
+        UpdateTargetUI();
     }
 
     public override void Init(IngameManager ingameManager)
@@ -59,7 +63,7 @@ public class DeriveryManager : ManagerBase
         _targets[_currentDeriveryIndex].RequestDerivery();
     }
 
-    void UpdateDistanceText()
+    void UpdateTargetUI()
     {
         var target = _targets[_currentDeriveryIndex].transform.position;
         var viewpoint = _camera.WorldToViewportPoint(target);
@@ -78,8 +82,13 @@ public class DeriveryManager : ManagerBase
             canvasX = Vector3.Dot(dir, _camera.transform.right) < 0 ? 0 : 1;
             canvasY = Vector3.Dot(_camera.transform.forward, dir) * 0.5f + 0.5f;
         }
-        _distanceText.transform.localPosition = new Vector3((canvasX - 0.5f) * _canvas.rect.width * _spaceX, (canvasY - 0.5f) * _canvas.rect.height * _spaceY, 0);
+        _distanceText.transform.localPosition = new Vector3((canvasX - 0.5f) * _canvas.rect.width * _textSpaceX, (canvasY - 0.5f) * _canvas.rect.height * _textSpaceY, 0);
         _distanceText.text = Vector3.Distance(_camera.transform.position, target).ToString("0000") + " m";
+
+        _targetPinImage.transform.localPosition = new Vector3((canvasX - 0.5f) * _canvas.rect.width * _imageSpaceX, (canvasY - 0.5f) * _canvas.rect.height * _imageSpaceY, 0);
+        var x = canvasX * 2 - 1;
+        var sign = Mathf.Sign(x);
+        _targetPinImage.transform.localEulerAngles = new Vector3(0, 0, (sign * (180 - (1 - canvasY) * 135)) - (45 * x));
     }
 
     public override void EndGame()
