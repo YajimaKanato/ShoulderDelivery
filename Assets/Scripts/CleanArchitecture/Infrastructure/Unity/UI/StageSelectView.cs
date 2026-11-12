@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using ShoulderDelivery.Adapter;
 using ShoulderDelivery.Entity;
 using System;
@@ -10,8 +11,7 @@ namespace ShoulderDelivery.Infrastructure
 {
     public class StageSelectView : MonoBehaviour, IStageSelectView
     {
-        [SerializeField] Button _buttonPrefab;
-        [SerializeField] Color AccentColor = new(0.28f, 0.85f, 0.78f);
+        [SerializeField] StageButton _buttonPrefab;
 
         [SerializeField] ScrollRect _scrollView;
         [SerializeField] RectTransform _selectPanel;
@@ -20,6 +20,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _stageCount;
         [SerializeField] Button _startButton;
         [SerializeField] TextMeshProUGUI _startLabel;
+        [SerializeField] float _waitTime = 0.1f;
 
         Button _firstButton;
         Button _selectedButton;
@@ -28,6 +29,7 @@ namespace ShoulderDelivery.Infrastructure
 
         public event Action<StageId> OnStageSelected;
         public event Action OnStart;
+        public event Action OnOpenStageSelect;
 
         /// <summary>タイトル画面とステージ選択画面を準備するメソッド</summary>
         public void Initialize()
@@ -38,24 +40,40 @@ namespace ShoulderDelivery.Infrastructure
         }
 
         /// <summary>ステージ選択ボタンを作成するメソッド</summary>
-        public void CreateStageSelectButton(CreateStageSelectViewModel viewModel)
+        public async void CreateStageSelectButton(CreateStageSelectViewModel viewModel)
         {
+            // ステージ数を表示
             _stageCount.text = viewModel.StageCount + " STAGES";
+
+            // ボタンを生成
             var buttons = new Button[viewModel.StageCount];
             for (int i = 0; i < buttons.Length; i++)
             {
                 var stageId = viewModel.StageIds[i];
-                var button = CreateButton(transform, stageId.Id, Color.white);
+                var stageButton = CreateButton(transform, stageId.Id, Color.white);
+                var button = stageButton.GetComponent<Button>();
                 buttons[i] = button;
-                _firstButton ??= button;
+
+                // 初めのボタンを設定
+                if (_firstButton == null)
+                {
+                    _firstButton = button;
+                    if (_firstButton) _firstButton.Select();
+                }
+
+                // イベントを登録
                 button.onClick.AddListener(() =>
                 {
                     if (_loading) return;
                     if (_selectedButton) _selectedButton.image.color = Color.white;
                     _selectedButton = button;
-                    button.image.color = AccentColor;
+                    button.image.color = Color.white;
                     OnStageSelected?.Invoke(stageId);
                 });
+
+                // 任意の秒数待ち演出をずらす
+                stageButton.OpenStageSelect();
+                await UniTask.Delay(TimeSpan.FromSeconds(_waitTime));
             }
 
             SetStageNavigation(buttons);
@@ -104,7 +122,7 @@ namespace ShoulderDelivery.Infrastructure
             _selectPanel.gameObject.SetActive(true);
             Canvas.ForceUpdateCanvases();
             _scrollView.verticalNormalizedPosition = 1f;
-            if (_firstButton) _firstButton.Select();
+            OnOpenStageSelect?.Invoke();
         }
 
         private void LateUpdate()
@@ -131,17 +149,18 @@ namespace ShoulderDelivery.Infrastructure
             _scrollView.content.anchoredPosition += Vector2.up * offset;
         }
 
-        Button CreateButton(Transform parent, string label, Color color)
+        StageButton CreateButton(Transform parent, string label, Color color)
         {
-            var button = Instantiate(_buttonPrefab, parent);
+            var stageButton = Instantiate(_buttonPrefab, parent);
+            var button = stageButton.GetComponent<Button>();
             button.onClick = new Button.ButtonClickedEvent();
             button.image.color = color;
             var text = button.GetComponentInChildren<TextMeshProUGUI>(true);
             text.text = label;
             text.enableAutoSizing = true;
             text.fontSizeMin = 14f;
-            text.fontSizeMax = 32f;
-            return button;
+            text.fontSizeMax = 25f;
+            return stageButton;
         }
     }
 }

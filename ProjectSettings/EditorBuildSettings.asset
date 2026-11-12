@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Title.unity
+    guid: d3a2e4b32c7cb174ab71d3e677930c85
+  - enabled: 1
+    path: Assets/Scenes/Ingame.unity
+    guid: 74ff8e2ebddc6f847961e6d0e82030a0
+  - enabled: 0
     path: Assets/Ignore/RayznGames/BicycleSystem/URP/Scenes/BicycleScene_URP.unity
     guid: 52f1b87deb02d3d4eafa0f0c179b4db1
   - enabled: 0

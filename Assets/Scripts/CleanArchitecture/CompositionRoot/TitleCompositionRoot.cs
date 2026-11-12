@@ -18,9 +18,9 @@ namespace ShoulderDelivery.CompositionRoot
             var presenter = new TitlePresenter(_stageSelectView);
             _titleUseCase = new TitleUseCase(GameCompositionRoot.StageRepository, presenter);
             _stageSelectView.Initialize();
-            _titleUseCase.ShowStageList();
             _stageSelectView.OnStageSelected += _titleUseCase.SelectStage;
             _stageSelectView.OnStart += StartStage;
+            _stageSelectView.OnOpenStageSelect += _titleUseCase.ShowStageList;
         }
 
         /// <summary>選択中のステージを開始するメソッド</summary>
@@ -38,6 +38,7 @@ namespace ShoulderDelivery.CompositionRoot
             if (!_stageSelectView || _titleUseCase == null) return;
             _stageSelectView.OnStageSelected -= _titleUseCase.SelectStage;
             _stageSelectView.OnStart -= StartStage;
+            _stageSelectView.OnOpenStageSelect -= _titleUseCase.ShowStageList;
         }
     }
 }
