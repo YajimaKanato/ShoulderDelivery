@@ -4,6 +4,7 @@ using ShoulderDelivery.Infrastructure;
 using ShoulderDelivery.UseCase;
 using System.Linq;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace ShoulderDelivery.CompositionRoot
 {
@@ -23,10 +24,12 @@ namespace ShoulderDelivery.CompositionRoot
         [SerializeField] CardboardLauncher _cardboardLauncher;
         [SerializeField] PlayerCardboardLaunch _playerCardboardLaunch;
         [SerializeField] CursorManager _cursorManager;
+        [SerializeField] FadeDirector _director;
 
         GameUseCase _runningGame;
+        bool _isStarted;
 
-        private void Start()
+        private async void Start()
         {
             _targetIndicator.Initialize(_targets);
             var controller = _playerCardboardLaunch.GetComponent<PlayerController>();
@@ -58,10 +61,13 @@ namespace ShoulderDelivery.CompositionRoot
             var stageId = new StageId(StageManager.GetStageId() ?? _defaultStage.StageId);
             game.Start(new GameStartInput(stageId));
             _runningGame = game;
+            if (_director != null) await _director.FadeIn();
+            _isStarted = true;
         }
 
-        private void Update()
+        private async void Update()
         {
+            if (!_isStarted) return;
             if (Time.deltaTime > 0)
                 _runningGame?.Execute(new TickInput(Time.deltaTime));
         }

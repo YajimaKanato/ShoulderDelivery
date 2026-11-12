@@ -5,6 +5,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 namespace ShoulderDelivery.Infrastructure
@@ -21,7 +22,9 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] Button _startButton;
         [SerializeField] TextMeshProUGUI _startLabel;
         [SerializeField] float _waitTime = 0.1f;
+        [SerializeField] FadeDirector _director;
 
+        Button[] _rightButtons;
         Button _firstButton;
         Button _selectedButton;
         GameObject _focusedButton;
@@ -35,7 +38,7 @@ namespace ShoulderDelivery.Infrastructure
         public void Initialize()
         {
             _startButton.interactable = false;
-            _startButton.onClick.AddListener(() => OnStart?.Invoke());
+            _startButton.onClick.AddListener(PressStartButton);
             _selectPanel.gameObject.SetActive(false);
         }
 
@@ -84,17 +87,30 @@ namespace ShoulderDelivery.Infrastructure
         void SetStageNavigation(Button[] buttons)
         {
             var columns = GetComponent<GridLayoutGroup>().constraintCount;
+            var rowCount = (buttons.Length + columns - 1) / columns;
+            _rightButtons = new Button[rowCount];
+
             for (int i = 0; i < buttons.Length; i++)
             {
                 var column = i % columns;
+                var isRightEdge = column == columns - 1 || i == buttons.Length - 1;
+
+                // 生成中にステージが選ばれていた場合も、STARTへの移動を設定する
+                var right = isRightEdge
+                    ? (_startButton.interactable ? _startButton : null)
+                    : buttons[i + 1];
+
                 buttons[i].navigation = new Navigation
                 {
                     mode = Navigation.Mode.Explicit,
                     selectOnLeft = column > 0 ? buttons[i - 1] : null,
-                    selectOnRight = column + 1 < columns && i + 1 < buttons.Length ? buttons[i + 1] : _startButton,
+                    selectOnRight = right,
                     selectOnUp = i >= columns ? buttons[i - columns] : null,
                     selectOnDown = i + columns < buttons.Length ? buttons[i + columns] : null
                 };
+
+                if (isRightEdge)
+                    _rightButtons[i / columns] = buttons[i];
             }
         }
 
@@ -106,6 +122,16 @@ namespace ShoulderDelivery.Infrastructure
                 + $"Deliveries   {viewModel.RequiredDeliveryCount}\n"
                 + $"Addresses   {viewModel.TargetCount}";
             _startButton.interactable = true;
+
+            // まだ生成中なら、生成完了時に右端の移動先を設定する
+            if (_rightButtons == null) return;
+
+            foreach (var button in _rightButtons)
+            {
+                var navigation = button.navigation;
+                navigation.selectOnRight = _startButton;
+                button.navigation = navigation;
+            }
         }
 
         /// <summary>ロード中にボタンの連打を防ぐメソッド</summary>
@@ -161,6 +187,12 @@ namespace ShoulderDelivery.Infrastructure
             text.fontSizeMin = 14f;
             text.fontSizeMax = 25f;
             return stageButton;
+        }
+
+        async void PressStartButton()
+        {
+            if (_director != null) await _director.FadeOut();
+            OnStart?.Invoke();
         }
     }
 }
