@@ -88,7 +88,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21647a1e86b583a4889ff3ad3114eff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.StageSelectView
-  _buttonPrefab: {fileID: 7983026704552077326, guid: 74152c31065c30c468a7de035826907c, type: 3}
+  _buttonPrefab: {fileID: 7983243433295256749, guid: 74152c31065c30c468a7de035826907c, type: 3}
+  AccentColor: {r: 0.28, g: 0.85, b: 0.78, a: 1}
   _scrollView: {fileID: 0}
   _selectPanel: {fileID: 0}
   _stageName: {fileID: 0}
@@ -96,3 +97,4 @@ MonoBehaviour:
   _stageCount: {fileID: 0}
   _startButton: {fileID: 0}
   _startLabel: {fileID: 0}
+  _waitTime: 0.025

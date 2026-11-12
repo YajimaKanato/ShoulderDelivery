@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ScrollPicker_0
+      name: ScrollRail_0
       rect:
         serializedVersion: 2
-        x: 290
-        y: 444
-        width: 143
-        height: 1282
+        x: 0
+        y: 0
+        width: 20
+        height: 500
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -138,8 +138,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78083338a4cdf05488586856fa70d558
-      internalID: 1358422014
+      spriteID: a25e101669146f6409b56e434187884e
+      internalID: -553148368
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 8dbf95e9d9147944cbee13ffffb0c3c6
+    spriteID: 03e4fe03dc939a84f9933b29fd08bdd1
     internalID: 0
     vertices: []
     indices: 
@@ -158,7 +158,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ScrollPicker_0: 1358422014
+      ScrollRail_0: -553148368
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

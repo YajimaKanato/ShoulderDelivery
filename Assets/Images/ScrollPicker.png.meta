@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -123,23 +123,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ScrollRail_0
+      name: ScrollPicker_0
       rect:
         serializedVersion: 2
         x: 258
-        y: 494
+        y: 493
         width: 208
-        height: 1185
+        height: 1187
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 10, y: 16, z: 10, w: 16}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1950c4f100ce2304f85748a9bad92205
-      internalID: 213977109
+      spriteID: f2a859ad583bb0c4bac0438a64a8bf5b
+      internalID: -369599737
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 18d5e3e302a1fcf45ba8c168a0491b62
+    spriteID: a62c8d6515b791443bb80ba735f4c4f4
     internalID: 0
     vertices: []
     indices: 
@@ -158,7 +158,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ScrollRail_0: 213977109
+      ScrollPicker_0: -369599737
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
