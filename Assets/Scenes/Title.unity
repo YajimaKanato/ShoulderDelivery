@@ -680,8 +680,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: 248}
-  m_SizeDelta: {x: 20, y: 500}
+  m_AnchoredPosition: {x: -25, y: 300}
+  m_SizeDelta: {x: 20, y: 600}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &671529869
 MonoBehaviour:
@@ -726,7 +726,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 157457064}
   m_HandleRect: {fileID: 157457063}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -822,7 +822,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1600, y: 900}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -3059,6 +3059,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1198107575}
     m_Modifications:
+    - target: {fileID: 1156508967154837689, guid: 2af38e0a9cd37e343b75b6b62eeaa35d, type: 3}
+      propertyPath: m_CellSize.x
+      value: 165
+      objectReference: {fileID: 0}
     - target: {fileID: 6873696042079540526, guid: 2af38e0a9cd37e343b75b6b62eeaa35d, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
