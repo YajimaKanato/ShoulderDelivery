@@ -20,7 +20,6 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _stageInfo;
         [SerializeField] TextMeshProUGUI _stageCount;
         [SerializeField] Button _startButton;
-        [SerializeField] TextMeshProUGUI _startLabel;
         [SerializeField] float _waitTime = 0.1f;
         [SerializeField] FadeDirector _director;
 
@@ -139,7 +138,6 @@ namespace ShoulderDelivery.Infrastructure
         {
             _loading = true;
             _startButton.interactable = false;
-            _startLabel.text = "LOADING...";
         }
 
         /// <summary>ステージ選択画面に切り替えるメソッド</summary>

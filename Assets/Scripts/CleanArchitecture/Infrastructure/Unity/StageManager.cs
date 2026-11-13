@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,29 +10,12 @@ namespace ShoulderDelivery.Infrastructure
         /// <summary>現在選択中のステージID</summary>
         static string _stageId;
 
-        /// <summary>
-        /// ゲームをスタートするメソッド
-        /// </summary>
-        /// <param name="asset">ステージID</param>
-        public void StartGame(StageDefinitionAsset asset)
-        {
-            LoadStage(asset.StageId);
-        }
-
         /// <summary>選択したステージIDを引き継いでシーンをロードするメソッド</summary>
         /// <param name="stageId">選択したステージID</param>
-        public static void LoadStage(string stageId)
+        public static async UniTask LoadStage(string stageId)
         {
             _stageId = stageId;
-            SceneManager.LoadSceneAsync("Ingame");
-        }
-
-        /// <summary>
-        /// シーンをロードするメソッド
-        /// </summary>
-        public void LoadScene()
-        {
-            SceneManager.LoadSceneAsync("Ingame");
+            await SceneManager.LoadSceneAsync("Ingame");
         }
 
         /// <summary>

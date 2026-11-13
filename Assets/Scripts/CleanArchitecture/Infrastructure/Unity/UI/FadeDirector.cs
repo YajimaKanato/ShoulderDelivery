@@ -7,6 +7,7 @@ namespace ShoulderDelivery.Infrastructure
 {
     public class FadeDirector : MonoBehaviour
     {
+        [SerializeField] LoadingView _loadingView;
         [SerializeField] PlayableDirector _director;
         [SerializeField] TimelineAsset _fadeInAsset;
         [SerializeField] TimelineAsset _fadeOutAsset;
@@ -22,6 +23,7 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (_director == null || _fadeOutAsset == null) return;
             _director.Play(_fadeOutAsset);
+            _loadingView?.PlayLoading();
             await UniTask.WaitUntil(() => _director.time >= _director.duration);
         }
     }

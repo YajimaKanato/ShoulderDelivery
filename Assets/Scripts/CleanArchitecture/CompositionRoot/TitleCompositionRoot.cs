@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using ShoulderDelivery.Adapter;
 using ShoulderDelivery.Infrastructure;
 using ShoulderDelivery.UseCase;
+using System;
 using UnityEngine;
 
 namespace ShoulderDelivery.CompositionRoot
@@ -8,6 +10,7 @@ namespace ShoulderDelivery.CompositionRoot
     public class TitleCompositionRoot : MonoBehaviour
     {
         [SerializeField] StageSelectView _stageSelectView;
+        [SerializeField] float _waitTime = 0.5f;
         TitleUseCase _titleUseCase;
 
         private void Start()
@@ -24,13 +27,14 @@ namespace ShoulderDelivery.CompositionRoot
         }
 
         /// <summary>選択中のステージを開始するメソッド</summary>
-        void StartStage()
+        async void StartStage()
         {
             var stage = _titleUseCase.SelectedStage;
             if (stage == null) return;
 
             _stageSelectView.ShowLoading();
-            StageManager.LoadStage(stage.Id.Id);
+            await UniTask.Delay(TimeSpan.FromSeconds(_waitTime));
+            await StageManager.LoadStage(stage.Id.Id);
         }
 
         private void OnDestroy()
