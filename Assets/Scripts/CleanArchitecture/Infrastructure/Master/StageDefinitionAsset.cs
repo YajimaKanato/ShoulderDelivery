@@ -1,6 +1,7 @@
 using UnityEngine;
 using ShoulderDelivery.Entity;
 using System.Linq;
+using ShoulderDelivery.Common;
 
 namespace ShoulderDelivery.Infrastructure
 {
@@ -8,6 +9,7 @@ namespace ShoulderDelivery.Infrastructure
     public class StageDefinitionAsset : MasterAssetBase<StageDefinition>
     {
         [SerializeField, Tooltip("このステージのID")] string _stageId = "Stage";
+        [SerializeField, Tooltip("ステージの時間帯")] StageHour _stageHour;
         [SerializeField, Tooltip("カウントダウンの時間")] int _countDownSeconds = 3;
         [SerializeField, Tooltip("制限時間")] int _timeLimitSeconds = 60;
         [SerializeField, Tooltip("必要な配達数")] int _requiredDeliveryCount = 3;
@@ -26,6 +28,7 @@ namespace ShoulderDelivery.Infrastructure
             targetIds = _targetDefinitionAssets.Select(asset => asset.ToEntity().Id).ToArray();
 
             return new StageDefinition(stageId
+                , _stageHour
                 , _countDownSeconds
                 , _timeLimitSeconds
                 , _requiredDeliveryCount

@@ -64,11 +64,12 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowStageInfo(StageInfoOutput output)
         {
+            var stageHour = output.StageHour;
             var timeLimitSeconds = output.TimeLimitSeconds;
             var requiredDeliveryCount = output.RequiredDeliveryCount;
 
             // ViewModel作成
-            var viewModel = new StageInfoViewModel(timeLimitSeconds, requiredDeliveryCount);
+            var viewModel = new StageInfoViewModel(stageHour, timeLimitSeconds, requiredDeliveryCount);
 
             _stageInfoView?.ShowStageInfo(viewModel);
         }

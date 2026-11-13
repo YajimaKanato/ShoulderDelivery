@@ -1,3 +1,4 @@
+using ShoulderDelivery.Common;
 using System;
 using System.Collections.Generic;
 
@@ -7,6 +8,7 @@ namespace ShoulderDelivery.Entity
     public sealed class StageDefinition : IEntity
     {
         readonly StageId _id;
+        readonly StageHour _stageHour;
         readonly int _countDownSeconds;
         readonly int _timeLimitSeconds;
         readonly int _requiredDeliveryCount;
@@ -14,6 +16,7 @@ namespace ShoulderDelivery.Entity
         readonly ScoreRules _scoreRules;
 
         public StageId Id => _id;
+        public StageHour StageHour => _stageHour;
         public int CountDownSeconds => _countDownSeconds;
         public int TimeLimitSeconds => _timeLimitSeconds;
         public int RequiredDeliveryCount => _requiredDeliveryCount;
@@ -21,6 +24,7 @@ namespace ShoulderDelivery.Entity
         public ScoreRules ScoreRules => _scoreRules;
 
         public StageDefinition(StageId id
+            , StageHour stageHour
             , int countDownSeconds
             , int timeLimitSeconds
             , int requiredDeliveryCount
@@ -43,6 +47,7 @@ namespace ShoulderDelivery.Entity
                 throw new ArgumentNullException(nameof(scoreRules));
 
             _id = id;
+            _stageHour = stageHour;
             _countDownSeconds = countDownSeconds;
             _timeLimitSeconds = timeLimitSeconds;
             _requiredDeliveryCount = requiredDeliveryCount;

@@ -31,8 +31,9 @@ namespace ShoulderDelivery.UseCase
 
             // ゲーム開始を通知
             _references.OutputPort.ShowStageInfo(
-                new StageInfoOutput(stageDefinition.TimeLimitSeconds
-                , stageDefinition.RequiredDeliveryCount));
+                new StageInfoOutput(stageDefinition.StageHour
+                    , stageDefinition.TimeLimitSeconds
+                    , stageDefinition.RequiredDeliveryCount));
 
             if (gameSession.DeliveryState.IsQuotaMet)
             {

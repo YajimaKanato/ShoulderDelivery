@@ -1,4 +1,6 @@
 using ShoulderDelivery.Adapter;
+using ShoulderDelivery.Common;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +16,8 @@ namespace ShoulderDelivery.Infrastructure
         const string SCORE = "Score : ";
         const string DELIVERY = "Delivery : ";
         const string COMBO = " Combo";
+
+        public event Action<StageHour> OnStart;
 
         /// <summary>参照がそろっているかを確認するためのプロパティ</summary>
         bool IsAssigned => _timerText != null
@@ -58,6 +62,7 @@ namespace ShoulderDelivery.Infrastructure
             var seconds = timeLimitSeconds % 60;
 
             _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
+            OnStart?.Invoke(viewModel.StageHour);
             ShowDelivery(new DeliveryViewModel(0, 0, 0, requiredDeliveryCount));
         }
 
