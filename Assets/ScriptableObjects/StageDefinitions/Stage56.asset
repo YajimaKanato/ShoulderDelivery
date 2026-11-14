@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Stage56
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.StageDefinitionAsset
   _stageId: Stage56
+  _stageHour: 1
   _countDownSeconds: 3
   _timeLimitSeconds: 80
   _requiredDeliveryCount: 5
@@ -27,4 +28,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92bd49bdce125be4fad9116e531eedaf, type: 2}
   - {fileID: 11400000, guid: 26d397916dd94b54fb83f45dc31d1802, type: 2}
   - {fileID: 11400000, guid: c43cd0ce9c61f4c44a0911e59e74b314, type: 2}
-  _scoreRulesAsset: {fileID: 11400000, guid: 9bea76fc53d37b84b8df3e95dc698b2d, type: 2}
+  _scoreRulesAsset: {fileID: 11400000, guid: a0ecba15e990462ca0616eb86c6e19cd, type: 2}
