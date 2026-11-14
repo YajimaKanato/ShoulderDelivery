@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ed8db016a206c49b520879dd1bec76, type: 3}
+  m_Name: Score53
+  m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.ScoreRulesAsset
+  _deliverySuccessScore: 100
+  _citizenHitPenalty: 50
+  _deliveryComboBonusRuleAsset: {fileID: 11400000, guid: 8a1b30d549624c0da1350bda1bc907ae, type: 2}
+  _speedBonusRuleAsset: {fileID: 11400000, guid: 2a89550865be484da82d3ac4d2bacc96, type: 2}
+  _distanceBonusRuleAsset: {fileID: 11400000, guid: ef13568a672844438e52d51f8898d446, type: 2}
+  _remainingTimeBonusRuleAsset: {fileID: 11400000, guid: 4398ed497ea84d77a8dbe2bf0a7cc2fd, type: 2}
