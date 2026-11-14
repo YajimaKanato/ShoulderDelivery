@@ -16,5 +16,18 @@ namespace ShoulderDelivery.Entity
         {
             _score += score.Total;
         }
+
+        /// <summary>スコアにペナルティを適用するメソッド</summary>
+        /// <param name="amount">ペナルティの点数</param>
+        /// <returns>実際に減点した点数</returns>
+        public int ApplyPenalty(int amount)
+        {
+            if (amount < 0)
+                throw new System.ArgumentOutOfRangeException(nameof(amount));
+
+            var deductedScore = System.Math.Min(_score, amount);
+            _score -= deductedScore;
+            return deductedScore;
+        }
     }
 }

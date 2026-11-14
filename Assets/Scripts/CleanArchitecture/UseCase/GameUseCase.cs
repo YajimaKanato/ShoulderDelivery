@@ -53,6 +53,18 @@ namespace ShoulderDelivery.UseCase
                 _references.OutputPort.ChangeControllerEnable(false);
         }
 
+        /// <summary>市民に衝突したときのペナルティを適用するメソッド</summary>
+        public void HitCitizen()
+        {
+            var stageState = _references.StageState;
+            if (!stageState.IsPlaying || _references.DeliveryState.IsQuotaMet) return;
+
+            var score = _references.Score;
+            var deductedScore = score.ApplyPenalty(_references.ScoreRules.CitizenHitPenalty);
+            _references.OutputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, score.Total));
+            _references.OutputPort.ShowCitizenHitPenalty(deductedScore);
+        }
+
         /// <summary>
         /// ゲームを毎フレーム更新するメソッド
         /// </summary>

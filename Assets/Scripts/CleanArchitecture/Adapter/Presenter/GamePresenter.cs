@@ -14,6 +14,7 @@ namespace ShoulderDelivery.Adapter
         ITargetView _targetView;
         IControllerView _controllerView;
         ICursorController _cursorController;
+        IScorePenaltyView _scorePenaltyView;
 
         public GamePresenter(IStageInfoView stageInfoView
             , IGameCountDownView gameCountDownView
@@ -23,7 +24,8 @@ namespace ShoulderDelivery.Adapter
             , ICardboardContextView cardboardContextView
             , ITargetView targetView
             , IControllerView controllerView
-            , ICursorController cursorController)
+            , ICursorController cursorController
+            , IScorePenaltyView scorePenaltyView)
         {
             _stageInfoView = stageInfoView;
             _gameCountDownView = gameCountDownView;
@@ -34,6 +36,7 @@ namespace ShoulderDelivery.Adapter
             _targetView = targetView;
             _controllerView = controllerView;
             _cursorController = cursorController;
+            _scorePenaltyView = scorePenaltyView;
         }
 
         public void ChangeControllerEnable(bool enable)
@@ -49,6 +52,11 @@ namespace ShoulderDelivery.Adapter
             var viewModel = new CountDownViewModel(remainingSeconds);
 
             _gameCountDownView?.ShowCountDown(viewModel);
+        }
+
+        public void ShowCitizenHitPenalty(int deductedScore)
+        {
+            _scorePenaltyView?.ShowCitizenHitPenalty(deductedScore);
         }
 
         public void ShowHud(GameHudOutput output)

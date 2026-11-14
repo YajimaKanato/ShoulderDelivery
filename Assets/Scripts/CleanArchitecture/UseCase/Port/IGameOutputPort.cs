@@ -19,6 +19,10 @@ namespace ShoulderDelivery.UseCase
         /// <param name="output">ゲームの現在の状況</param>
         void ShowHud(GameHudOutput output);
 
+        /// <summary>市民に衝突したときの減点を出力するメソッド</summary>
+        /// <param name="deductedScore">実際に減点した点数</param>
+        void ShowCitizenHitPenalty(int deductedScore);
+
         /// <summary>ゲームの結果を出力するメソッド</summary>
         /// <param name="output">ゲームの結果</param>
         void ShowGameClear(GameClearOutput output);

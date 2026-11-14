@@ -21,12 +21,15 @@ namespace ShoulderDelivery.Entity
         public DistanceBonusRule DistanceBonus => _distanceBonus;
         /// <summary>残り時間に応じたボーナススコア</summary>
         public RemainingTimeBonusRule RemainingTimeBonus => _remainingTimeBonus;
+        /// <summary>市民に衝突したときの減点</summary>
+        public int CitizenHitPenalty { get; }
 
         public ScoreRules(int deliverySuccessScore
             , DeliveryComboBonusRule deliveryComboBonus
             , SpeedBonusRule speedBonus
             , DistanceBonusRule distanceBonus
-            , RemainingTimeBonusRule remainingTimeBonus)
+            , RemainingTimeBonusRule remainingTimeBonus
+            , int citizenHitPenalty = 50)
         {
             if (deliverySuccessScore <= 0)
                 throw new ArgumentOutOfRangeException();
@@ -43,11 +46,15 @@ namespace ShoulderDelivery.Entity
             if (remainingTimeBonus == null)
                 throw new ArgumentNullException(nameof(remainingTimeBonus));
 
+            if (citizenHitPenalty < 0)
+                throw new ArgumentOutOfRangeException(nameof(citizenHitPenalty));
+
             _deliverySuccessScore = deliverySuccessScore;
             _deliveryComboBonus = deliveryComboBonus;
             _speedBonus = speedBonus;
             _distanceBonus = distanceBonus;
             _remainingTimeBonus = remainingTimeBonus;
+            CitizenHitPenalty = citizenHitPenalty;
         }
     }
 }

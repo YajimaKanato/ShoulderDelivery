@@ -25,6 +25,7 @@ namespace ShoulderDelivery.CompositionRoot
         [SerializeField] PlayerCardboardLaunch _playerCardboardLaunch;
         [SerializeField] CursorManager _cursorManager;
         [SerializeField] FadeDirector _director;
+        [SerializeField] CitizenManager _citizenManager;
 
         GameUseCase _runningGame;
         bool _isStarted;
@@ -41,7 +42,8 @@ namespace ShoulderDelivery.CompositionRoot
                 , _cardboardContextView
                 , _targetIndicator
                 , controller
-                , _cursorManager);
+                , _cursorManager
+                , _deliveryView);
 
             var targetRepository = new TargetRepository(_targets.Select(target => target.BindDefinition()).ToArray());
             var references = new UseCaseReferences(new CardboardIdGenerator()
@@ -62,7 +64,16 @@ namespace ShoulderDelivery.CompositionRoot
             game.Start(new GameStartInput(stageId));
             _runningGame = game;
             if (_director != null) await _director.FadeIn();
+            if (this == null) return;
             _isStarted = true;
+            if (_citizenManager != null)
+                _citizenManager.OnHitPlayer += _runningGame.HitCitizen;
+        }
+
+        private void OnDestroy()
+        {
+            if (_citizenManager != null && _runningGame != null)
+                _citizenManager.OnHitPlayer -= _runningGame.HitCitizen;
         }
 
         private async void Update()

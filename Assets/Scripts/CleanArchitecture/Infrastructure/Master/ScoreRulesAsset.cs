@@ -7,6 +7,7 @@ namespace ShoulderDelivery.Infrastructure
     public class ScoreRulesAsset : MasterAssetBase<ScoreRules>
     {
         [SerializeField, Tooltip("配達成功時の基礎スコア")] int _deliverySuccessScore;
+        [SerializeField, Min(0), Tooltip("市民に衝突したときの減点")] int _citizenHitPenalty = 50;
 
         [SerializeField, Tooltip("連続配達成功回数に応じたボーナスのテーブルアセット")]
         DeliveryComboBonusRuleAsset _deliveryComboBonusRuleAsset;
@@ -31,7 +32,8 @@ namespace ShoulderDelivery.Infrastructure
                 , deliveryComboBonusRule
                 , speedBonusRule
                 , distanceBonusRule
-                , remainingTimeBonusRule);
+                , remainingTimeBonusRule
+                , _citizenHitPenalty);
         }
 
 #if UNITY_EDITOR

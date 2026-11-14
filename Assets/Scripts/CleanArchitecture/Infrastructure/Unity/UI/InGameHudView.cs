@@ -56,13 +56,14 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (!IsAssigned) return;
 
+            var stageHour = viewModel.StageHour;
             var requiredDeliveryCount = viewModel.RequiredDeliveryCount;
             var timeLimitSeconds = viewModel.TimeLimitSeconds;
             var minutes = timeLimitSeconds / 60;
             var seconds = timeLimitSeconds % 60;
 
             _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
-            OnStart?.Invoke(viewModel.StageHour);
+            OnStart?.Invoke(stageHour);
             ShowDelivery(new DeliveryViewModel(0, 0, 0, requiredDeliveryCount));
         }
 

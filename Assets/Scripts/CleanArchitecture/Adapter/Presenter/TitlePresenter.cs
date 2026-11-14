@@ -25,6 +25,7 @@ namespace ShoulderDelivery.Adapter
         {
             // ViewModel作成
             var viewModel = new ShowStageInfoViewModel(stage.Id.Id
+                , stage.StageHour
                 , stage.TimeLimitSeconds
                 , stage.RequiredDeliveryCount
                 , stage.TargetIds.Count);

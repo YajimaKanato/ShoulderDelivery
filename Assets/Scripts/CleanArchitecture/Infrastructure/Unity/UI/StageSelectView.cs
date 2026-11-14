@@ -117,7 +117,8 @@ namespace ShoulderDelivery.Infrastructure
         public void ShowStageInfo(ShowStageInfoViewModel viewModel)
         {
             _stageName.text = viewModel.StageName;
-            _stageInfo.text = $"Time limit   {viewModel.TimeLimitSeconds / 60}:{viewModel.TimeLimitSeconds % 60:00}\n"
+            _stageInfo.text = $"StageHour  {viewModel.StageHour}\n"
+                + $"Time limit   {viewModel.TimeLimitSeconds / 60}:{viewModel.TimeLimitSeconds % 60:00}\n"
                 + $"Deliveries   {viewModel.RequiredDeliveryCount}\n"
                 + $"Addresses   {viewModel.TargetCount}";
             _startButton.interactable = true;
