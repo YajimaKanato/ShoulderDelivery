@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.ScoreRulesAsset
   _deliverySuccessScore: 100
   _citizenHitPenalty: 50
-  _deliveryComboBonusRuleAsset: {fileID: 11400000, guid: 3b1778f513fb4806bd8279cd2101befa, type: 2}
+  _deliveryComboBonusRuleAsset: {fileID: 11400000, guid: 5218e790293d2ac44a3eae4fddcbb8c5, type: 2}
   _speedBonusRuleAsset: {fileID: 11400000, guid: f7208f187c154009a7cd453e7b4a4b78, type: 2}
-  _distanceBonusRuleAsset: {fileID: 11400000, guid: ac14b1eb8ceb4c73a691a7e2281c9f1b, type: 2}
+  _distanceBonusRuleAsset: {fileID: 11400000, guid: 22e7a92692993924b96df2013c526b9d, type: 2}
   _remainingTimeBonusRuleAsset: {fileID: 11400000, guid: 30da7c00aa384df589b4a3fed579b794, type: 2}
