@@ -32,5 +32,15 @@ namespace ShoulderDelivery.UseCase
             SelectedStage = _stageRepository.Get(stageId);
             _outputPort.ShowStageInfo(SelectedStage);
         }
+
+        /// <summary>選択中のステージを開始するメソッド</summary>
+        /// <returns>開始するステージID</returns>
+        public StageId? StartStage()
+        {
+            if (SelectedStage == null) return null;
+
+            _outputPort.CancelStageList();
+            return SelectedStage.Id;
+        }
     }
 }

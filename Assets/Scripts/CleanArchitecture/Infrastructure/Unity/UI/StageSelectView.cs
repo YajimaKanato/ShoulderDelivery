@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using ShoulderDelivery.Adapter;
 using ShoulderDelivery.Entity;
 using System;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,7 +43,7 @@ namespace ShoulderDelivery.Infrastructure
         }
 
         /// <summary>ステージ選択ボタンを作成するメソッド</summary>
-        public async void CreateStageSelectButton(CreateStageSelectViewModel viewModel)
+        public async void CreateStageSelectButton(CreateStageSelectViewModel viewModel, CancellationToken ct)
         {
             // ステージ数を表示
             _stageCount.text = viewModel.StageCount + " STAGES";
@@ -51,6 +52,9 @@ namespace ShoulderDelivery.Infrastructure
             var buttons = new Button[viewModel.StageCount];
             for (int i = 0; i < buttons.Length; i++)
             {
+                // キャンセルされたら終了
+                if (ct.IsCancellationRequested) return;
+
                 var stageId = viewModel.StageIds[i];
                 var stageButton = CreateButton(transform, stageId.Id, Color.white);
                 var button = stageButton.GetComponent<Button>();
@@ -75,9 +79,11 @@ namespace ShoulderDelivery.Infrastructure
 
                 // 任意の秒数待ち演出をずらす
                 stageButton.OpenStageSelect();
-                await UniTask.Delay(TimeSpan.FromSeconds(_waitTime));
+                if (await UniTask.Delay(TimeSpan.FromSeconds(_waitTime), cancellationToken: ct)
+                    .SuppressCancellationThrow()) return;
             }
 
+            if (ct.IsCancellationRequested) return;
             SetStageNavigation(buttons);
         }
 
@@ -188,10 +194,15 @@ namespace ShoulderDelivery.Infrastructure
             return stageButton;
         }
 
-        async void PressStartButton()
+        /// <summary>シーン遷移前にフェードアウトするメソッド</summary>
+        public async UniTask FadeOut()
         {
             if (_director != null) await _director.FadeOut();
-            OnStart?.Invoke();
+        }
+
+        void PressStartButton()
+        {
+            if (!_loading) OnStart?.Invoke();
         }
     }
 }

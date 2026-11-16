@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace ShoulderDelivery.Adapter
 {
     /// <summary>タイトルのステージ管理の機能を持つインターフェース</summary>
@@ -5,7 +7,7 @@ namespace ShoulderDelivery.Adapter
     {
         /// <summary>ステージ選択ボタンを作成するメソッド</summary>
         /// <param name="viewModel">ViewModel</param>
-        void CreateStageSelectButton(CreateStageSelectViewModel viewModel);
+        void CreateStageSelectButton(CreateStageSelectViewModel viewModel, CancellationToken ct);
 
         /// <summary>ステージ情報を表示するメソッド</summary>
         /// <param name="viewModel">ViewModel</param>

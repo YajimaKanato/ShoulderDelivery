@@ -12,14 +12,15 @@ namespace ShoulderDelivery.CompositionRoot
         [SerializeField] StageSelectView _stageSelectView;
         [SerializeField] float _waitTime = 0.5f;
         TitleUseCase _titleUseCase;
+        TitlePresenter _presenter;
 
         private void Start()
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
-            var presenter = new TitlePresenter(_stageSelectView);
-            _titleUseCase = new TitleUseCase(GameCompositionRoot.StageRepository, presenter);
+            _presenter = new TitlePresenter(_stageSelectView);
+            _titleUseCase = new TitleUseCase(GameCompositionRoot.StageRepository, _presenter);
             _stageSelectView.Initialize();
             _stageSelectView.OnStageSelected += _titleUseCase.SelectStage;
             _stageSelectView.OnStart += StartStage;
@@ -29,16 +30,20 @@ namespace ShoulderDelivery.CompositionRoot
         /// <summary>選択中のステージを開始するメソッド</summary>
         async void StartStage()
         {
-            var stage = _titleUseCase.SelectedStage;
-            if (stage == null) return;
+            var stageId = _titleUseCase.StartStage();
+            if (!stageId.HasValue) return;
 
             _stageSelectView.ShowLoading();
+            await _stageSelectView.FadeOut();
+            if (this == null) return;
             await UniTask.Delay(TimeSpan.FromSeconds(_waitTime));
-            await StageManager.LoadStage(stage.Id.Id);
+            if (this == null) return;
+            await StageManager.LoadStage(stageId.Value.Id);
         }
 
         private void OnDestroy()
         {
+            _presenter?.CancelStageList();
             if (!_stageSelectView || _titleUseCase == null) return;
             _stageSelectView.OnStageSelected -= _titleUseCase.SelectStage;
             _stageSelectView.OnStart -= StartStage;

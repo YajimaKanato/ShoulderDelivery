@@ -1,6 +1,7 @@
 using ShoulderDelivery.Entity;
 using ShoulderDelivery.UseCase;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace ShoulderDelivery.Adapter
 {
@@ -8,6 +9,7 @@ namespace ShoulderDelivery.Adapter
     public class TitlePresenter : ITitleOutputPort
     {
         readonly IStageSelectView _stageSelectView;
+        CancellationTokenSource _cts;
 
         public TitlePresenter(IStageSelectView stageSelectView)
         {
@@ -16,9 +18,22 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowStageList(IReadOnlyList<StageId> stageIds)
         {
+            CancelStageList();
+
             // ViewModel作成
             var viewModel = new CreateStageSelectViewModel(stageIds);
-            _stageSelectView.CreateStageSelectButton(viewModel);
+            _cts = new CancellationTokenSource();
+            _stageSelectView.CreateStageSelectButton(viewModel, _cts.Token);
+        }
+
+        public void CancelStageList()
+        {
+            var cts = _cts;
+            if (cts == null) return;
+
+            _cts = null;
+            cts.Cancel();
+            cts.Dispose();
         }
 
         public void ShowStageInfo(StageDefinition stage)

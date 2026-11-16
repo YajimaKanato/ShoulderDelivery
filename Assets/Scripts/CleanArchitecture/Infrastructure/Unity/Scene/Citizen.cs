@@ -1,16 +1,22 @@
+using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.Splines;
+using Unity.Mathematics;
 
 namespace ShoulderDelivery.Infrastructure
 {
     public class Citizen : MonoBehaviour
     {
+        [SerializeField] SplineContainer _spline;
         [SerializeField] bool _isGreeting;
         Animator _animator;
         Transform _target;
         Vector3 _forward;
         bool _hitPlayer;
         bool _dancing;
+        bool _walking;
         int _hitPlayerValue;
 
         public event Action OnPlayerHit;
@@ -34,6 +40,51 @@ namespace ShoulderDelivery.Infrastructure
                     transform.forward = direction;
                 }
             }
+
+            if (_walking)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// 非同期で移動するメソッド
+        /// </summary>
+        /// <param name="start">開始割合</param>
+        /// <param name="end">終了割合</param>
+        /// <param name="duration">時間</param>
+        /// <param name="ct">キャンセルトークン</param>
+        /// <returns></returns>
+        async UniTask MoveAsync(float start, float end, float duration, CancellationToken ct)
+        {
+            float elapsed = 0f;
+            float3 position;
+
+            // 時間までループ
+            while (elapsed < duration)
+            {
+                // 踊っている間は移動しない
+                await UniTask.WaitUntil(() => !_dancing);
+
+                // キャンセルがリクエストされていたらここで中断
+                ct.ThrowIfCancellationRequested();
+
+                elapsed += Time.deltaTime;
+
+                // 進行度計算
+                float progress = Mathf.Clamp01(elapsed / duration);
+
+                // 開始点と終了点を加味した進行度に変換する
+                float t = Mathf.Lerp(start, end, progress);
+
+                position = _spline.EvaluatePosition(t);
+                transform.position = new Vector3(position.x, position.y, position.z);
+
+                await UniTask.Yield(PlayerLoopTiming.Update, ct);
+            }
+
+            position = _spline.EvaluatePosition(end);
+            transform.position = new Vector3(position.x, position.y, position.z);
         }
 
         void EnterPlayer()
