@@ -76,7 +76,7 @@ namespace ShoulderDelivery.CompositionRoot
                 _citizenManager.OnHitPlayer -= _runningGame.HitCitizen;
         }
 
-        private async void Update()
+        private void Update()
         {
             if (!_isStarted) return;
             if (Time.deltaTime > 0)
