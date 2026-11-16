@@ -5,10 +5,12 @@ namespace ShoulderDelivery.Infrastructure
 {
     public class Citizen : MonoBehaviour
     {
-        [SerializeField] string _hitPlayerState;
-        [SerializeField] string _hitPlayerValueState;
+        [SerializeField] bool _isGreeting;
         Animator _animator;
+        Transform _target;
+        Vector3 _forward;
         bool _hitPlayer;
+        bool _dancing;
         int _hitPlayerValue;
 
         public event Action OnPlayerHit;
@@ -16,10 +18,27 @@ namespace ShoulderDelivery.Infrastructure
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _target = FindAnyObjectByType<PlayerController>()?.transform;
+            _forward = transform.forward;
+        }
+
+        private void Update()
+        {
+            if (_dancing)
+            {
+                Vector3 direction = _target.position - transform.position;
+                direction.y = 0;
+
+                if (direction.sqrMagnitude > 0.0001f)
+                {
+                    transform.forward = direction;
+                }
+            }
         }
 
         void EnterPlayer()
         {
+            _dancing = true;
             _hitPlayer = true;
             _hitPlayerValue = UnityEngine.Random.Range(0, 2);
             OnPlayerHit?.Invoke();
@@ -30,10 +49,17 @@ namespace ShoulderDelivery.Infrastructure
             _hitPlayer = false;
         }
 
+        void EndDancing()
+        {
+            _dancing = _hitPlayer;
+            transform.forward = _forward;
+        }
+
         private void LateUpdate()
         {
-            _animator?.SetBool(_hitPlayerState, _hitPlayer);
-            _animator?.SetInteger(_hitPlayerValueState, _hitPlayerValue);
+            _animator?.SetBool("HitPlayer", _hitPlayer);
+            _animator?.SetInteger("HitPlayerRandomValue", _hitPlayerValue);
+            _animator?.SetBool("Greeting", _isGreeting && UnityEngine.Random.Range(0, 100) == 0);
         }
 
         private void OnCollisionEnter(Collision collision)
