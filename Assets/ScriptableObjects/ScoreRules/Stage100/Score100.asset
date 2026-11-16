@@ -15,6 +15,6 @@ MonoBehaviour:
   _deliverySuccessScore: 100
   _citizenHitPenalty: 50
   _deliveryComboBonusRuleAsset: {fileID: 11400000, guid: 5218e790293d2ac44a3eae4fddcbb8c5, type: 2}
-  _speedBonusRuleAsset: {fileID: 11400000, guid: 963f1bf42ef64bffb337d86fe3adabf1, type: 2}
+  _speedBonusRuleAsset: {fileID: 11400000, guid: ff5a4e6c8f4e42c46ae80c68cf2c7ff9, type: 2}
   _distanceBonusRuleAsset: {fileID: 11400000, guid: 22e7a92692993924b96df2013c526b9d, type: 2}
   _remainingTimeBonusRuleAsset: {fileID: 11400000, guid: 6c1405bf055d44ccae8e5c6ed1f781b3, type: 2}
