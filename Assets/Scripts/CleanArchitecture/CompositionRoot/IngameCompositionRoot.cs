@@ -29,6 +29,7 @@ namespace ShoulderDelivery.CompositionRoot
 
         GameUseCase _runningGame;
         bool _isStarted;
+        AsyncOperation _titleLoad;
 
         private async void Start()
         {
@@ -68,6 +69,14 @@ namespace ShoulderDelivery.CompositionRoot
             _isStarted = true;
             if (_citizenManager != null)
                 _citizenManager.OnHitPlayer += _runningGame.HitCitizen;
+        }
+
+        /// <summary>リザルト画面からタイトルに戻るメソッド</summary>
+        public void BackTitle()
+        {
+            if (_titleLoad != null) return;
+
+            _titleLoad = StageManager.LoadTitle();
         }
 
         private void OnDestroy()

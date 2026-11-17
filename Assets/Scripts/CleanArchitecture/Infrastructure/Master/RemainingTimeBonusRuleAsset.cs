@@ -9,7 +9,10 @@ namespace ShoulderDelivery.Infrastructure
     [CreateAssetMenu(fileName = "RemainingTimeBonus", menuName = "Master/RemainingTimeBonusRuleAsset")]
     public class RemainingTimeBonusRuleAsset : MasterAssetBase<RemainingTimeBonusRule>
     {
+        [SerializeField, Tooltip("制限時間")] int _timeLimit = 60;
         [SerializeField, Tooltip("残り時間に応じたボーナスのテーブル")] RemainingTimeBonusMaster[] _bonusTable;
+
+        public int TimeLimit => _timeLimit;
 
         public override RemainingTimeBonusRule ToEntity()
         {

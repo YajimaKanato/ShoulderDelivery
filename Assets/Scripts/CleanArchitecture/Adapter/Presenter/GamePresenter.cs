@@ -116,7 +116,10 @@ namespace ShoulderDelivery.Adapter
             var score = deliveryResult.Score;
 
             // ViewModel作成
-            var viewModel = new DeliveriedViewModel(score, scoreBreakDown.Total);
+            var viewModel = new DeliveriedViewModel(score
+                , scoreBreakDown.Total
+                , scoreBreakDown.SpeedBonus
+                , scoreBreakDown.DistanceBonus);
 
             _deliveryView?.ShowDeliverySucceededResult(viewModel);
             ShowDelivery(deliveryResult.Score, deliveryResult.DeliveryBreakdown);

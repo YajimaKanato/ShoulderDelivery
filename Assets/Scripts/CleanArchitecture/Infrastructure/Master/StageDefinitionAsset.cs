@@ -1,7 +1,6 @@
-using UnityEngine;
-using ShoulderDelivery.Entity;
-using System.Linq;
 using ShoulderDelivery.Common;
+using ShoulderDelivery.Entity;
+using UnityEngine;
 
 namespace ShoulderDelivery.Infrastructure
 {
@@ -12,8 +11,8 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("ステージの時間帯")] StageHour _stageHour;
         [SerializeField, Tooltip("カウントダウンの時間")] int _countDownSeconds = 3;
         [SerializeField, Tooltip("制限時間")] int _timeLimitSeconds = 60;
-        [SerializeField, Tooltip("必要な配達数")] int _requiredDeliveryCount = 3;
-        [SerializeField, Tooltip("配達目的地の情報アセット群")] TargetDefinitionAsset[] _targetDefinitionAssets;
+        [SerializeField, Tooltip("配達対象のインデックス")] int[] _targetIndices;
+        [SerializeField, Tooltip("配達目的地の情報アセット群")] TargetDefinitions _targetDefinitionAssets;
         [SerializeField, Tooltip("スコアのルールアセット")] ScoreRulesAsset _scoreRulesAsset;
 
         public string StageId => _stageId;
@@ -21,30 +20,36 @@ namespace ShoulderDelivery.Infrastructure
         public override StageDefinition ToEntity()
         {
             var stageId = new StageId(_stageId);
-            var targetIds = new TargetId[_targetDefinitionAssets.Length];
             var scoreRule = _scoreRulesAsset.ToEntity();
 
             // TargetIdの配列作成
-            targetIds = _targetDefinitionAssets.Select(asset => asset.ToEntity().Id).ToArray();
+            var targetIds = GenerateTargetIds();
+
+            var timeLimit = _scoreRulesAsset.RemainingTimeBonusRuleAsset?.TimeLimit ?? _timeLimitSeconds;
 
             return new StageDefinition(stageId
                 , _stageHour
                 , _countDownSeconds
-                , _timeLimitSeconds
-                , _requiredDeliveryCount
+                , timeLimit
+                , targetIds.Length
                 , targetIds
                 , scoreRule);
         }
 
-#if UNITY_EDITOR
-        /// <summary>
-        /// 配達目的地の情報アセットを設定するメソッド
-        /// </summary>
-        /// <param name="targetDefinitionAssets">配達目的地の情報アセット群</param>
-        public void SetTargetDefinitions(TargetDefinitionAsset[] targetDefinitionAssets)
+        TargetId[] GenerateTargetIds()
         {
-            _targetDefinitionAssets = targetDefinitionAssets;
+            if (_targetIndices == null) return System.Array.Empty<TargetId>();
+
+            var targets = _targetDefinitionAssets.Definitions;
+            var targetIds = new TargetId[_targetIndices.Length];
+
+            for (int i = 0; i < _targetIndices.Length; i++)
+            {
+                var index = Mathf.Clamp(_targetIndices[i], 0, targets.Count - 1);
+                targetIds[i] = targets[index].ToEntity().Id;
+            }
+
+            return targetIds;
         }
-#endif
     }
 }

@@ -46,7 +46,7 @@ namespace ShoulderDelivery.Infrastructure
         /// </summary>
         /// <param name="context">ログの内容</param>
         /// <param name="color">ログの色</param>
-        void ShowContext(string context, Color color)
+        void ShowContext(string context, Color color, Sprite sprite)
         {
             if (_viewCount <= 0) return;
 
@@ -63,7 +63,7 @@ namespace ShoulderDelivery.Infrastructure
             }
 
             _showedTexts.Insert(0, text);
-            text.EntryTween(_entryPosX, _exitPosX, _showPosY[0], color, context);
+            text.EntryTween(_entryPosX, _exitPosX, _showPosY[0], color, sprite, context);
             MoveRowsFrom(1);
         }
 

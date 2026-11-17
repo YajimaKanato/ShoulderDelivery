@@ -1,8 +1,10 @@
+using DG.Tweening;
 using ShoulderDelivery.Adapter;
 using ShoulderDelivery.Common;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ShoulderDelivery.Infrastructure
 {
@@ -12,6 +14,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _scoreText;
         [SerializeField] TextMeshProUGUI _deliveryCountText;
         [SerializeField] TextMeshProUGUI _deliveryComboText;
+        [SerializeField] ComboUI _combo;
 
         const string SCORE = "Score : ";
         const string DELIVERY = "Delivery : ";
@@ -62,6 +65,7 @@ namespace ShoulderDelivery.Infrastructure
             var minutes = timeLimitSeconds / 60;
             var seconds = timeLimitSeconds % 60;
 
+            _combo?.Exit();
             _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
             OnStart?.Invoke(stageHour);
             ShowDelivery(new DeliveryViewModel(0, 0, 0, requiredDeliveryCount));
@@ -82,7 +86,14 @@ namespace ShoulderDelivery.Infrastructure
                 + requiredCount.ToString("0");
             _scoreText.text = SCORE + score.ToString("00000");
             if (_deliveryComboText != null)
+            {
+                _combo?.Exit();
+                if (combo > 0)
+                {
+                    _combo?.Entry();
+                }
                 _deliveryComboText.text = combo.ToString("0") + COMBO;
+            }
         }
     }
 }

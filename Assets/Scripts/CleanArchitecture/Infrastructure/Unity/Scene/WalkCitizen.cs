@@ -10,7 +10,7 @@ namespace ShoulderDelivery.Infrastructure
     {
         [SerializeField] SplineContainer _spline;
         [SerializeField] int _splineIndex;
-        [SerializeField] float _walkDuration = 3f;
+        [SerializeField] float _walkPerSeconds = 2f;
         CancellationTokenSource _cts;
         UniTask _walkUniTask;
         bool _walking;
@@ -43,7 +43,7 @@ namespace ShoulderDelivery.Infrastructure
                     && _elapsed >= _walkInterval)
                 {
                     _cts = new CancellationTokenSource();
-                    _walkUniTask = MoveAsync(_startRate, 1 - _startRate, _walkDuration, _cts.Token);
+                    _walkUniTask = MoveAsync(_startRate, 1 - _startRate, _cts.Token);
                     _startRate = (byte)(1 - _startRate);
                 }
             }
@@ -54,16 +54,16 @@ namespace ShoulderDelivery.Infrastructure
         /// </summary>
         /// <param name="start">開始割合</param>
         /// <param name="end">終了割合</param>
-        /// <param name="duration">時間</param>
         /// <param name="ct">キャンセルトークン</param>
         /// <returns></returns>
-        async UniTask MoveAsync(float start, float end, float duration, CancellationToken ct)
+        async UniTask MoveAsync(float start, float end, CancellationToken ct)
         {
             float elapsed = 0f;
             float3 position;
             _walking = true;
             _forward = _spline.EvaluatePosition(_splineIndex, end).TransportF3ToV3() - _spline.EvaluatePosition(_splineIndex, start).TransportF3ToV3();
             transform.forward = _forward;
+            var duration = _forward.magnitude / _walkPerSeconds;
 
             // 時間までループ
             while (elapsed < duration)

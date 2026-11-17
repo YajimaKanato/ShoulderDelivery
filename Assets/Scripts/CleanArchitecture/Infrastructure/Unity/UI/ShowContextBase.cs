@@ -6,14 +6,14 @@ namespace ShoulderDelivery.Infrastructure
     /// <summary>ログ出力を依頼するクラスのベース</summary>
     public abstract class ShowContextBase : MonoBehaviour
     {
-        event Action<string, Color> _onShowContext;
+        event Action<string, Color, Sprite> _onShowContext;
 
         /// <summary>
         /// ログ出力のイベントに登録するメソッド
         /// </summary>
         /// <param name="act">登録するAction</param>
         /// <returns>登録解除メソッド</returns>
-        public Action OnShowContext(Action<string, Color> act)
+        public Action OnShowContext(Action<string, Color, Sprite> act)
         {
             _onShowContext += act;
             return () => _onShowContext -= act;
@@ -24,6 +24,7 @@ namespace ShoulderDelivery.Infrastructure
         /// </summary>
         /// <param name="context">出力メッセージ</param>
         /// <param name="color">テキストカラー</param>
-        protected void OnInvoke(string context, Color color) => _onShowContext?.Invoke(context, color);
+        /// <param name="sprite">テキストイメージ</param>
+        protected void OnInvoke(string context, Color color, Sprite sprite) => _onShowContext?.Invoke(context, color, sprite);
     }
 }

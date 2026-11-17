@@ -8,6 +8,7 @@ namespace ShoulderDelivery.Infrastructure
     public class StageHourManager : MonoBehaviour
     {
         [SerializeField] InGameHudView _hudView;
+        [SerializeField] CitizenManager _citizenManager;
         [SerializeField] Guard[] _guards;
         [SerializeField] StageHourPair[] _pairs;
         [SerializeField] Material _defaultSkybox;
@@ -33,6 +34,8 @@ namespace ShoulderDelivery.Infrastructure
             {
                 guard?.SetColor(color);
             }
+
+            _citizenManager?.Init(stageHour);
         }
 
         [Serializable]

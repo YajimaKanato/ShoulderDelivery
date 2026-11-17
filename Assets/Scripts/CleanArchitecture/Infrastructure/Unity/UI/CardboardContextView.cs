@@ -7,15 +7,17 @@ namespace ShoulderDelivery.Infrastructure
     {
         [SerializeField] Color _acceptColor = Color.yellow;
         [SerializeField] Color _rejectColor = Color.red;
+        [SerializeField] Sprite _successSprite;
+        [SerializeField] Sprite _failedSprite;
 
         public void ShowCardboardAccepted(CardboardContextViewModel context)
         {
-            OnInvoke(context.Context, _acceptColor);
+            OnInvoke(context.Context, _acceptColor, _successSprite);
         }
 
         public void ShowCardboardRejected(CardboardContextViewModel context)
         {
-            OnInvoke(context.Context, _rejectColor);
+            OnInvoke(context.Context, _rejectColor, _failedSprite);
         }
     }
 }

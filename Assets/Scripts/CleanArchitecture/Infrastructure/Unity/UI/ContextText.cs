@@ -2,16 +2,19 @@ using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ShoulderDelivery.Infrastructure
 {
     /// <summary>ログを表示するクラス</summary>
     public class ContextText : MonoBehaviour
     {
+        [SerializeField] Image _image;
         [SerializeField] TextMeshProUGUI _text;
-        [SerializeField] RectTransform _rectTransform;
         [SerializeField] float _lifeTime = 1f;
         [SerializeField] float _duration = 0.3f;
+        RectTransform _rectTransform;
+        Sprite _defaultSprite;
         Sequence _sequence;
         Tween _moveTween;
         event Action<ContextText> _onExit;
@@ -28,6 +31,11 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (_text == null)
                 UILogger.LogNotAssigned(_text);
+            _rectTransform = GetComponent<RectTransform>();
+            if (_image == null)
+                _image = GetComponent<Image>();
+            if (_image != null)
+                _defaultSprite = _image.sprite;
         }
 
         /// <summary>
@@ -37,13 +45,16 @@ namespace ShoulderDelivery.Infrastructure
         /// <param name="exitPosX">X軸の画面外の座標</param>
         /// <param name="startPos">演出開始位置</param>
         /// <param name="color">文字の色</param>
+        /// <param name="sprite">ログの背景に使用する画像</param>
         /// <param name="message">表示するログ</param>
-        public void EntryTween(float entryPosX, float exitPosX, float startPos, Color color, string message = null)
+        public void EntryTween(float entryPosX, float exitPosX, float startPos, Color color, Sprite sprite, string message = null)
         {
             if (!IsAssigned) return;
             _sequence?.Kill();
             _moveTween?.Kill();
 
+            if (_image != null)
+                _image.sprite = sprite != null ? sprite : _defaultSprite;
             // テキスト設定
             _text.text = message;
             // フラグ立て

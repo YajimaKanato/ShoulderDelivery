@@ -18,6 +18,12 @@ namespace ShoulderDelivery.Infrastructure
             await SceneManager.LoadSceneAsync("Ingame");
         }
 
+        /// <summary>タイトルシーンをロードするメソッド</summary>
+        public static AsyncOperation LoadTitle()
+        {
+            return SceneManager.LoadSceneAsync("Title");
+        }
+
         /// <summary>
         /// 現在選択しているステージIDを取得するメソッド
         /// </summary>
