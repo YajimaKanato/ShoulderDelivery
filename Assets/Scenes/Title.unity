@@ -608,6 +608,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348331687}
   m_CullTransparentMesh: 1
+--- !u!1 &459404120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 459404122}
+  - component: {fileID: 459404121}
+  m_Layer: 0
+  m_Name: TitleDancingCitizen
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &459404121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459404120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ebb5835cfdefe4428ebf1a1aa73faba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.TitleDancingCitizenManager
+  _citizens:
+  - {fileID: 8675004241077284951, guid: a271bb22f75bf92439b6779760b4426b, type: 3}
+  - {fileID: 6961647474663405050, guid: 64b098a3d987a2747ac39e1ad6480f64, type: 3}
+  - {fileID: 8209129871274562403, guid: 05ffbf10c3bf8224fa0224af01578275, type: 3}
+  - {fileID: 2503264704087758882, guid: 5c2745c06885a984a845aed869d1bf36, type: 3}
+  - {fileID: 8803730232888584398, guid: 6f4b7e371f12f54449b1c9257f0dfa7c, type: 3}
+  - {fileID: 4722010664798023409, guid: 644cf4578b6d3b645a777299962de384, type: 3}
+  - {fileID: 5153042011837061908, guid: bffe7fd62595cbe44a193a9e5211c09b, type: 3}
+  - {fileID: 4323612969117230150, guid: 86899a73d54249c46a0ccfed634c397e, type: 3}
+  - {fileID: 8419401577455385650, guid: 4e6b6576adfbc144287edaa3d79297e4, type: 3}
+  - {fileID: 186106343542063414, guid: 6ae62bac782348547b0167df1aec986a, type: 3}
+--- !u!4 &459404122
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459404120}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.92016363, z: -0, w: -0.39153415}
+  m_LocalPosition: {x: -61, y: 2, z: -26.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 226.1, z: 0}
 --- !u!1 &472313286
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,6 +945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ShoulderDelivery.CompositionRoot::ShoulderDelivery.CompositionRoot.TitleCompositionRoot
   _stageSelectView: {fileID: 1740578592}
+  _waitTime: 0.5
 --- !u!1 &914878081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1818,6 +1874,7 @@ GameObject:
   - component: {fileID: 1628097765}
   - component: {fileID: 1628097767}
   - component: {fileID: 1628097768}
+  - component: {fileID: 1628097769}
   m_Layer: 0
   m_Name: IntroTimeline
   m_TagString: Untagged
@@ -1916,6 +1973,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1628097769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628097764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: d9a089c654bf36144a946de4222dc336, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 459404121}
+          m_TargetAssemblyTypeName: ShoulderDelivery.Infrastructure.TitleDancingCitizen,
+            ShoulderDelivery.Infrastructure
+          m_MethodName: Spawn
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!224 &1740578591 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6873696042079540526, guid: 2af38e0a9cd37e343b75b6b62eeaa35d, type: 3}
@@ -3116,9 +3204,69 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 754401345}
     m_Modifications:
+    - target: {fileID: 1721631581647904157, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721631581647904157, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721631581647904157, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721631581647904157, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2660031123045791249, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
       propertyPath: m_Name
       value: FadeDirector
+      objectReference: {fileID: 0}
+    - target: {fileID: 3098772940185804494, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3098772940185804494, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3098772940185804494, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033647765366541654, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033647765366541654, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033647765366541654, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033647765366541654, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7336355944212543555, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7336355944212543555, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7336355944212543555, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7336355944212543555, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7621609594079444697, guid: 58482ebb1f64ee743bf09fbf176114f0, type: 3}
       propertyPath: m_Pivot.x
@@ -3234,3 +3382,4 @@ SceneRoots:
   - {fileID: 1336752657}
   - {fileID: 335757884}
   - {fileID: 1379194580}
+  - {fileID: 459404122}
