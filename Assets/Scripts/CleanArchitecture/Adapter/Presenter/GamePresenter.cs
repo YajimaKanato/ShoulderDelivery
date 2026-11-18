@@ -152,7 +152,7 @@ namespace ShoulderDelivery.Adapter
         public void ShowThrowCardboardRejected(ThrowCardboardRejectedOutput output)
         {
             // ViewModel作成
-            var viewModel = new CardboardContextViewModel("Cannot throw yet");
+            var viewModel = new CardboardContextViewModel("段ボールを投げられなかった！");
 
             _cardboardContextView?.ShowCardboardRejected(viewModel);
         }
@@ -160,7 +160,7 @@ namespace ShoulderDelivery.Adapter
         public void ShowThrowCardboardAccepted(ThrowCardboardAcceptOutput output)
         {
             // ViewModel作成
-            var viewModel = new CardboardContextViewModel("Package thrown");
+            var viewModel = new CardboardContextViewModel("段ボールを投げた！");
 
             _cardboardContextView?.ShowCardboardAccepted(viewModel);
         }

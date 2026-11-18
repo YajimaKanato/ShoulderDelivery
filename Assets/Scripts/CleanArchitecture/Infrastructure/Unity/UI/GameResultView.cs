@@ -1,6 +1,7 @@
 using ShoulderDelivery.Adapter;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ShoulderDelivery.Infrastructure
 {
@@ -10,6 +11,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _timeText;
         [SerializeField] TextMeshProUGUI _deliveryCountText;
         [SerializeField] TextMeshProUGUI _resultText;
+        [SerializeField] Button _stageSelectButton;
         bool IsAssigned => _resultText != null
             && _scoreText != null
             && _timeText != null
@@ -30,6 +32,7 @@ namespace ShoulderDelivery.Infrastructure
             _deliveryCountText.text = deliveryCount;
             _resultText.text = "STAGE CLEAR";
             gameObject.SetActive(true);
+            _stageSelectButton?.Select();
         }
 
         public void ShowFailed(GameFailedViewModel viewModel)
@@ -47,6 +50,7 @@ namespace ShoulderDelivery.Infrastructure
             _deliveryCountText.text = deliveryCount;
             _resultText.text = "TIME UP";
             gameObject.SetActive(true);
+            _stageSelectButton?.Select();
         }
     }
 }

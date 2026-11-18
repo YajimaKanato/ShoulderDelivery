@@ -10,6 +10,7 @@ namespace ShoulderDelivery.CompositionRoot
     public class TitleCompositionRoot : MonoBehaviour
     {
         [SerializeField] StageSelectView _stageSelectView;
+        [SerializeField] TitleTimelineManager _timelineManager;
         [SerializeField] float _waitTime = 0.5f;
         TitleUseCase _titleUseCase;
         TitlePresenter _presenter;
@@ -25,6 +26,8 @@ namespace ShoulderDelivery.CompositionRoot
             _stageSelectView.OnStageSelected += _titleUseCase.SelectStage;
             _stageSelectView.OnStart += StartStage;
             _stageSelectView.OnOpenStageSelect += _titleUseCase.ShowStageList;
+            if (StageManager.ConsumeOpenStageSelect())
+                _timelineManager.StartFromStageSelect();
         }
 
         /// <summary>選択中のステージを開始するメソッド</summary>

@@ -16,9 +16,9 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _deliveryComboText;
         [SerializeField] ComboUI _combo;
 
-        const string SCORE = "Score : ";
-        const string DELIVERY = "Delivery : ";
-        const string COMBO = " Combo";
+        const string SCORE = "スコア : ";
+        const string DELIVERY = "配達完了 : ";
+        const string COMBO = " コンボ！";
 
         public event Action<StageHour> OnStart;
 

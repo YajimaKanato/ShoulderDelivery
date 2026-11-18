@@ -29,7 +29,7 @@ namespace ShoulderDelivery.CompositionRoot
 
         GameUseCase _runningGame;
         bool _isStarted;
-        AsyncOperation _titleLoad;
+        bool _returningTitle;
 
         private async void Start()
         {
@@ -74,9 +74,23 @@ namespace ShoulderDelivery.CompositionRoot
         /// <summary>リザルト画面からタイトルに戻るメソッド</summary>
         public void BackTitle()
         {
-            if (_titleLoad != null) return;
+            ReturnTitle(false).Forget();
+        }
 
-            _titleLoad = StageManager.LoadTitle();
+        /// <summary>リザルト画面からステージ選択に戻るメソッド</summary>
+        public void BackStageSelect()
+        {
+            ReturnTitle(true).Forget();
+        }
+
+        async UniTask ReturnTitle(bool openStageSelect)
+        {
+            if (_returningTitle) return;
+            _returningTitle = true;
+
+            if (_director != null) await _director.FadeOut();
+            if (this == null) return;
+            await StageManager.LoadTitle(openStageSelect);
         }
 
         private void OnDestroy()

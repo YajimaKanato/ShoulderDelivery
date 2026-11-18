@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using ShoulderDelivery.Adapter;
+using ShoulderDelivery.Common;
 using ShoulderDelivery.Entity;
 using System;
 using System.Threading;
@@ -46,7 +47,7 @@ namespace ShoulderDelivery.Infrastructure
         public async void CreateStageSelectButton(CreateStageSelectViewModel viewModel, CancellationToken ct)
         {
             // ステージ数を表示
-            _stageCount.text = viewModel.StageCount + " STAGES";
+            _stageCount.text = "全 " + viewModel.StageCount + " ステージ";
 
             // ボタンを生成
             var buttons = new Button[viewModel.StageCount];
@@ -123,10 +124,9 @@ namespace ShoulderDelivery.Infrastructure
         public void ShowStageInfo(ShowStageInfoViewModel viewModel)
         {
             _stageName.text = viewModel.StageName;
-            _stageInfo.text = $"StageHour  {viewModel.StageHour}\n"
-                + $"Time limit   {viewModel.TimeLimitSeconds / 60}:{viewModel.TimeLimitSeconds % 60:00}\n"
-                + $"Deliveries   {viewModel.RequiredDeliveryCount}\n"
-                + $"Addresses   {viewModel.TargetCount}";
+            _stageInfo.text = $"時間帯  {GetStageHour(viewModel.StageHour)}\n"
+                + $"制限時間  {viewModel.TimeLimitSeconds / 60}:{viewModel.TimeLimitSeconds % 60:00}\n"
+                + $"ノルマ配達数  {viewModel.RequiredDeliveryCount}\n";
             _startButton.interactable = true;
 
             // まだ生成中なら、生成完了時に右端の移動先を設定する
@@ -203,6 +203,18 @@ namespace ShoulderDelivery.Infrastructure
         void PressStartButton()
         {
             if (!_loading) OnStart?.Invoke();
+        }
+
+        string GetStageHour(StageHour stageHour)
+        {
+            return stageHour switch
+            {
+                StageHour.Morning => "朝",
+                StageHour.Afternoon => "昼",
+                StageHour.Evening => "夕方",
+                StageHour.Night => "夜",
+                _ => "朝"
+            };
         }
     }
 }

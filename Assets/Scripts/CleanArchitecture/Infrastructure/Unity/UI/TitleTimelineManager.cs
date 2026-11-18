@@ -18,6 +18,15 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] int _enableHasInputFrame = 60;
         const double TIMELINEFPS = 60;
 
+        /// <summary>イントロ終了後の状態からステージ選択を開始するメソッド</summary>
+        public void StartFromStageSelect()
+        {
+            _director.Pause();
+            _director.time = _skipFrame / TIMELINEFPS;
+            _director.Evaluate();
+            OpenStageSelect();
+        }
+
         private void LateUpdate()
         {
             if (!HasTitleInput()) return;

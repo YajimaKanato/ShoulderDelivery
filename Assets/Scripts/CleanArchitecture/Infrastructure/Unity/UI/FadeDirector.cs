@@ -15,6 +15,7 @@ namespace ShoulderDelivery.Infrastructure
         public async UniTask FadeIn()
         {
             if (_director == null || _fadeInAsset == null) return;
+            _director.extrapolationMode = DirectorWrapMode.Hold;
             _director.Play(_fadeInAsset);
             await UniTask.WaitUntil(() => _director.time >= _director.duration);
         }
@@ -22,6 +23,7 @@ namespace ShoulderDelivery.Infrastructure
         public async UniTask FadeOut()
         {
             if (_director == null || _fadeOutAsset == null) return;
+            _director.extrapolationMode = DirectorWrapMode.Hold;
             _director.Play(_fadeOutAsset);
             _loadingView?.PlayLoading();
             await UniTask.WaitUntil(() => _director.time >= _director.duration);

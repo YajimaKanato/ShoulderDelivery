@@ -12,17 +12,17 @@ namespace ShoulderDelivery.Infrastructure
 
         public void ShowCitizenHitPenalty(int deductedScore)
         {
-            OnInvoke($"Citizen hit -{deductedScore}", _failedColor, _failedSprite);
+            OnInvoke($"市民に衝突！ -{deductedScore}", _failedColor, _failedSprite);
         }
 
         public void ShowDeliveryFailedResult(DeliveriedViewModel context)
         {
-            OnInvoke("Delivery missed", _failedColor, _failedSprite);
+            OnInvoke("配達失敗！", _failedColor, _failedSprite);
         }
 
         public void ShowDeliverySucceededResult(DeliveriedViewModel context)
         {
-            OnInvoke($"Delivered +{context.CurrentGetScore}", _successColor, _successSprite);
+            OnInvoke($"配達成功！ +{context.CurrentGetScore}", _successColor, _successSprite);
         }
     }
 }
