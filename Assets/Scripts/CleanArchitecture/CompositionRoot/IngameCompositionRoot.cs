@@ -1,15 +1,17 @@
+using Cysharp.Threading.Tasks;
 using ShoulderDelivery.Adapter;
 using ShoulderDelivery.Entity;
 using ShoulderDelivery.Infrastructure;
 using ShoulderDelivery.UseCase;
+using System;
 using System.Linq;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 
 namespace ShoulderDelivery.CompositionRoot
 {
     public class IngameCompositionRoot : MonoBehaviour
     {
+        [SerializeField] float _waitTime = 0.5f;
         [Header("Master")]
         [SerializeField] StageDefinitionAsset _defaultStage;
         [SerializeField] TargetView[] _targets;
@@ -89,6 +91,7 @@ namespace ShoulderDelivery.CompositionRoot
             _returningTitle = true;
 
             if (_director != null) await _director.FadeOut();
+            await UniTask.Delay(TimeSpan.FromSeconds(_waitTime));
             if (this == null) return;
             await StageManager.LoadTitle(openStageSelect);
         }
