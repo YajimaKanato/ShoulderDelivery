@@ -7,7 +7,6 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Playables;
 using UnityEngine.UI;
 
 namespace ShoulderDelivery.Infrastructure

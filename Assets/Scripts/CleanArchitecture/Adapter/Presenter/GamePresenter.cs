@@ -88,10 +88,10 @@ namespace ShoulderDelivery.Adapter
             var total = output.TotalScore;
             var requiredDeliveryCount = output.RequiredDeliveryCount;
             var deliveryCount = output.DeliveryCount;
-            var clearTime = output.TimeLimitSeconds - output.RemainingTime;
+            var remainingTime = output.RemainingTime;
 
             // ViewModel作成
-            var viewModel = new GameClearViewModel(total, requiredDeliveryCount, deliveryCount, clearTime);
+            var viewModel = new GameClearViewModel(total, requiredDeliveryCount, deliveryCount, remainingTime);
 
             _resultView?.ShowClear(viewModel);
         }
@@ -102,10 +102,10 @@ namespace ShoulderDelivery.Adapter
             var total = output.TotalScore;
             var requiredDeliveryCount = output.RequiredDeliveryCount;
             var deliveryCount = output.DeliveryCount;
-            var clearTime = output.TimeLimitSeconds - output.RemainingTime;
+            var remainingTime = output.RemainingTime;
 
             // ViewModel作成
-            var viewModel = new GameFailedViewModel(total, requiredDeliveryCount, deliveryCount, clearTime);
+            var viewModel = new GameFailedViewModel(total, requiredDeliveryCount, deliveryCount, remainingTime);
 
             _resultView?.ShowFailed(viewModel);
         }

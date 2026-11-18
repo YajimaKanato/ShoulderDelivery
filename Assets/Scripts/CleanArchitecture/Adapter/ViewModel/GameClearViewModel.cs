@@ -6,14 +6,14 @@ namespace ShoulderDelivery.Adapter
         public readonly int TotalScore;
         public readonly int RequiredDeliveryCount;
         public readonly int DeliveryCount;
-        public readonly float ClearTime;
+        public readonly float RemainingTime;
 
-        public GameClearViewModel(int totalScore, int requiredDeliveryCount, int deliveryCount, float clearTime)
+        public GameClearViewModel(int totalScore, int requiredDeliveryCount, int deliveryCount, float remainingTime)
         {
             TotalScore = totalScore;
             RequiredDeliveryCount = requiredDeliveryCount;
             DeliveryCount = deliveryCount;
-            ClearTime = clearTime;
+            RemainingTime = remainingTime;
         }
     }
 }
