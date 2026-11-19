@@ -17,6 +17,5 @@ MonoBehaviour:
   _countDownSeconds: 3
   _timeLimitSeconds: 80
   _requiredDeliveryCount: 5
-  _targetIndices: 0f0000000e000000100000001a0000001c000000
   _targetDefinitionAssets: {fileID: 11400000, guid: 66275b38ed8a180478cebd7c9d67bfb6, type: 2}
   _scoreRulesAsset: {fileID: 11400000, guid: 9d613e6a65ce45f18811a39bcd4b553b, type: 2}

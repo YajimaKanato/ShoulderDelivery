@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Stage33
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.StageDefinitionAsset
   _stageId: Stage33
-  _stageHour: 3
+  _stageHour: 2
   _countDownSeconds: 3
   _timeLimitSeconds: 70
   _requiredDeliveryCount: 4
-  _targetIndices: 080000000f000000110000000e000000
   _targetDefinitionAssets: {fileID: 11400000, guid: 66275b38ed8a180478cebd7c9d67bfb6, type: 2}
   _scoreRulesAsset: {fileID: 11400000, guid: eae3acadd10f4ec381fa6470d600d74e, type: 2}
