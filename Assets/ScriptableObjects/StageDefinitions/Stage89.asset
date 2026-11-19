@@ -15,7 +15,7 @@ MonoBehaviour:
   _stageId: Stage89
   _stageHour: 1
   _countDownSeconds: 3
-  _timeLimitSeconds: 100
+  _timeLimitSeconds: 210
   _requiredDeliveryCount: 7
   _targetDefinitionAssets: {fileID: 11400000, guid: 66275b38ed8a180478cebd7c9d67bfb6, type: 2}
   _scoreRulesAsset: {fileID: 11400000, guid: 418766604c40463db18ef48d527b62da, type: 2}
