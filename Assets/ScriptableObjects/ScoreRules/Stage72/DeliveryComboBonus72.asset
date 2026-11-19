@@ -10,26 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66525cfe9644c15479b0c483381a013b, type: 3}
-  m_Name: DeliveryComboBonus
+  m_Name: DeliveryComboBonus72
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.DeliveryComboBonusRuleAsset
+  _targetIndices: 0f0000001f0000001e0000001a0000000600000009000000
   _bonusTable:
   - _combo: 1
-    _bonus: 10
-  - _combo: 2
-    _bonus: 20
-  - _combo: 3
-    _bonus: 30
-  - _combo: 4
-    _bonus: 40
-  - _combo: 5
     _bonus: 50
-  - _combo: 6
-    _bonus: 60
-  - _combo: 7
-    _bonus: 70
-  - _combo: 8
-    _bonus: 80
-  - _combo: 9
-    _bonus: 90
-  - _combo: 10
+  - _combo: 2
     _bonus: 100
+  - _combo: 3
+    _bonus: 150
+  - _combo: 4
+    _bonus: 200
+  - _combo: 5
+    _bonus: 250
+  - _combo: 6
+    _bonus: 300
