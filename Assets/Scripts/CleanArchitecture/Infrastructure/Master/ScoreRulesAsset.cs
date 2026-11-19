@@ -21,6 +21,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("残り時間に応じたボーナスのテーブルアセット")]
         RemainingTimeBonusRuleAsset _remainingTimeBonusRuleAsset;
 
+        public DeliveryComboBonusRuleAsset DeliveryComboBonusRuleAsset => _deliveryComboBonusRuleAsset;
         public RemainingTimeBonusRuleAsset RemainingTimeBonusRuleAsset => _remainingTimeBonusRuleAsset;
 
         public override ScoreRules ToEntity()

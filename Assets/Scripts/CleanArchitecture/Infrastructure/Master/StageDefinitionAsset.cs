@@ -11,7 +11,6 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("ステージの時間帯")] StageHour _stageHour;
         [SerializeField, Tooltip("カウントダウンの時間")] int _countDownSeconds = 3;
         [SerializeField, Tooltip("制限時間")] int _timeLimitSeconds = 60;
-        [SerializeField, Tooltip("配達対象のインデックス")] int[] _targetIndices;
         [SerializeField, Tooltip("配達目的地の情報アセット群")] TargetDefinitions _targetDefinitionAssets;
         [SerializeField, Tooltip("スコアのルールアセット")] ScoreRulesAsset _scoreRulesAsset;
 
@@ -38,14 +37,14 @@ namespace ShoulderDelivery.Infrastructure
 
         TargetId[] GenerateTargetIds()
         {
-            if (_targetIndices == null) return System.Array.Empty<TargetId>();
+            var targetIndices = _scoreRulesAsset.DeliveryComboBonusRuleAsset.TargetIndices;
 
             var targets = _targetDefinitionAssets.Definitions;
-            var targetIds = new TargetId[_targetIndices.Length];
+            var targetIds = new TargetId[targetIndices.Count];
 
-            for (int i = 0; i < _targetIndices.Length; i++)
+            for (int i = 0; i < targetIndices.Count; i++)
             {
-                var index = Mathf.Clamp(_targetIndices[i], 0, targets.Count - 1);
+                var index = Mathf.Clamp(targetIndices[i], 0, targets.Count - 1);
                 targetIds[i] = targets[index].ToEntity().Id;
             }
 

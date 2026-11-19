@@ -1,5 +1,6 @@
 using ShoulderDelivery.Entity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,7 +10,10 @@ namespace ShoulderDelivery.Infrastructure
     [CreateAssetMenu(fileName = "DeliveryComboBonus", menuName = "Master/DeliveryComboBonusRuleAsset")]
     public class DeliveryComboBonusRuleAsset : MasterAssetBase<DeliveryComboBonusRule>
     {
+        [SerializeField, Tooltip("配達順に並べた配達対象のインデックス")] int[] _targetIndices;
         [SerializeField, Tooltip("連続配達成功ボーナスのテーブル")] DeliveryComboBonusMaster[] _bonusTable;
+
+        public IReadOnlyList<int> TargetIndices => _targetIndices ?? Array.Empty<int>();
 
         public override DeliveryComboBonusRule ToEntity()
         {
