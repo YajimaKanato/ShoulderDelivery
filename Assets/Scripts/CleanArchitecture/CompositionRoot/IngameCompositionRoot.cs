@@ -58,7 +58,7 @@ namespace ShoulderDelivery.CompositionRoot
                 , GameCompositionRoot.StageRepository
                 , targetRepository);
 
-            var game = new GameUseCase(references);
+            var game = new GameUseCase(references, GameCompositionRoot.StageClearStore);
             var cardboard = new CardboardUseCase(references);
             _playerCardboardLaunch.OnThrow += cardboard.Throw;
             _cardboardLauncher.HitTarget += cardboard.HitTarget;

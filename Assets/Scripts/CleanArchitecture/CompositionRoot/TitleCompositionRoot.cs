@@ -21,7 +21,7 @@ namespace ShoulderDelivery.CompositionRoot
             Cursor.visible = true;
 
             _presenter = new TitlePresenter(_stageSelectView);
-            _titleUseCase = new TitleUseCase(GameCompositionRoot.StageRepository, _presenter);
+            _titleUseCase = new TitleUseCase(GameCompositionRoot.StageRepository, _presenter, GameCompositionRoot.StageClearStore);
             _stageSelectView.Initialize();
             _stageSelectView.OnStageSelected += _titleUseCase.SelectStage;
             _stageSelectView.OnStart += StartStage;

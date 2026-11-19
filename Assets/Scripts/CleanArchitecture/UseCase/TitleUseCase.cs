@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using ShoulderDelivery.Entity;
 
 namespace ShoulderDelivery.UseCase
@@ -7,14 +8,17 @@ namespace ShoulderDelivery.UseCase
     {
         readonly IStageRepository _stageRepository;
         readonly ITitleOutputPort _outputPort;
+        readonly IStageClearStore _stageClearStore;
 
         /// <summary>現在選択しているステージの定義</summary>
         public StageDefinition SelectedStage { get; private set; }
 
-        public TitleUseCase(IStageRepository stageRepository, ITitleOutputPort outputPort)
+        public TitleUseCase(IStageRepository stageRepository, ITitleOutputPort outputPort, IStageClearStore stageClearStore)
         {
             _stageRepository = stageRepository
                 ?? throw new ArgumentNullException(nameof(stageRepository));
+            _stageClearStore = stageClearStore
+                ?? throw new ArgumentNullException(nameof(stageClearStore));
             _outputPort = outputPort
                 ?? throw new ArgumentNullException(nameof(outputPort));
         }
@@ -22,7 +26,10 @@ namespace ShoulderDelivery.UseCase
         /// <summary>選択できるステージの一覧を表示するメソッド</summary>
         public void ShowStageList()
         {
-            _outputPort.ShowStageList(_stageRepository.GetStageIds());
+            var stages = _stageRepository.GetStageIds()
+                .Select(id => (id, _stageClearStore.IsCleared(id)))
+                .ToArray();
+            _outputPort.ShowStageList(stages);
         }
 
         /// <summary>ステージを選択して詳細を表示するメソッド</summary>

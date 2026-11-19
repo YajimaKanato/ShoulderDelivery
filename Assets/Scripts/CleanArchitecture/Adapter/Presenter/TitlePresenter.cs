@@ -16,12 +16,12 @@ namespace ShoulderDelivery.Adapter
             _stageSelectView = stageSelectView;
         }
 
-        public void ShowStageList(IReadOnlyList<StageId> stageIds)
+        public void ShowStageList(IReadOnlyList<(StageId Id, bool IsCleared)> stages)
         {
             CancelStageList();
 
             // ViewModel作成
-            var viewModel = new CreateStageSelectViewModel(stageIds);
+            var viewModel = new CreateStageSelectViewModel(stages);
             _cts = new CancellationTokenSource();
             _stageSelectView.CreateStageSelectButton(viewModel, _cts.Token);
         }

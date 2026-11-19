@@ -7,8 +7,8 @@ namespace ShoulderDelivery.UseCase
     public interface ITitleOutputPort
     {
         /// <summary>選択できるステージの一覧を出力するメソッド</summary>
-        /// <param name="stageIds">登録されているステージID</param>
-        void ShowStageList(IReadOnlyList<StageId> stageIds);
+        /// <param name="stages">ステージIDとクリア状況</param>
+        void ShowStageList(IReadOnlyList<(StageId Id, bool IsCleared)> stages);
 
         /// <summary>選択したステージの情報を出力するメソッド</summary>
         /// <param name="stage">選択したステージの定義</param>

@@ -6,11 +6,13 @@ namespace ShoulderDelivery.UseCase
     /// <summary>ゲームの進行を管理するUseCaseクラス</summary>
     public sealed class GameUseCase
     {
-        UseCaseReferences _references;
+        readonly UseCaseReferences _references;
+        readonly IStageClearStore _stageClearStore;
 
-        public GameUseCase(UseCaseReferences references)
+        public GameUseCase(UseCaseReferences references, IStageClearStore stageClearStore)
         {
             _references = references ?? throw new ArgumentNullException(nameof(references));
+            _stageClearStore = stageClearStore ?? throw new ArgumentNullException(nameof(stageClearStore));
         }
 
         /// <summary>
@@ -175,6 +177,7 @@ namespace ShoulderDelivery.UseCase
             // 結果を表示
             if (deliveryState.IsQuotaMet)
             {
+                _stageClearStore.MarkCleared(stageDefinition.Id);
                 _references.OutputPort.ShowGameClear(new GameClearOutput(score.Total
                     , deliveryState.RequiredDeliveryCount
                     , deliveryState.DeliveredCount

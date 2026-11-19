@@ -6,12 +6,12 @@ namespace ShoulderDelivery.Adapter
     /// <summary>ステージ選択ボタンを作成するためのViewModel</summary>
     public readonly struct CreateStageSelectViewModel
     {
-        public readonly IReadOnlyList<StageId> StageIds;
-        public int StageCount => StageIds.Count;
+        public readonly IReadOnlyList<(StageId Id, bool IsCleared)> Stages;
+        public int StageCount => Stages.Count;
 
-        public CreateStageSelectViewModel(IReadOnlyList<StageId> stageIds)
+        public CreateStageSelectViewModel(IReadOnlyList<(StageId Id, bool IsCleared)> stages)
         {
-            StageIds = stageIds;
+            Stages = stages;
         }
     }
 }

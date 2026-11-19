@@ -10,9 +10,19 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] Image _button;
         [SerializeField] Sprite _selectButton;
         [SerializeField] Sprite _unselectButton;
+        [SerializeField] Sprite _clearedButton;
         [SerializeField] float _duration = 0.5f;
         [SerializeField] Image _selectImage;
         [SerializeField] Ease _ease = Ease.OutBack;
+
+        bool _isCleared;
+        bool _isSelected;
+
+        public void SetCleared(bool isCleared)
+        {
+            _isCleared = isCleared;
+            UpdateSprite();
+        }
 
         public void OpenStageSelect()
         {
@@ -23,16 +33,20 @@ namespace ShoulderDelivery.Infrastructure
 
         void ChangeSelection(bool selected)
         {
+            _isSelected = selected;
             _selectImage.enabled = selected;
+            UpdateSprite();
+        }
 
-            if (selected)
+        void UpdateSprite()
+        {
+            if (_isSelected)
             {
                 _button.sprite = _selectButton;
+                return;
             }
-            else
-            {
-                _button.sprite = _unselectButton;
-            }
+
+            _button.sprite = _isCleared && _clearedButton ? _clearedButton : _unselectButton;
         }
 
         public void OnSelect(BaseEventData eventData)

@@ -55,8 +55,8 @@ namespace ShoulderDelivery.Infrastructure
                 // キャンセルされたら終了
                 if (ct.IsCancellationRequested) return;
 
-                var stageId = viewModel.StageIds[i];
-                var stageButton = CreateButton(transform, stageId.Id, Color.white);
+                var (stageId, isCleared) = viewModel.Stages[i];
+                var stageButton = CreateButton(stageId.Id, isCleared);
                 var button = stageButton.GetComponent<Button>();
                 buttons[i] = button;
 
@@ -182,14 +182,15 @@ namespace ShoulderDelivery.Infrastructure
             _scrollView.content.anchoredPosition += Vector2.up * offset;
         }
 
-        StageButton CreateButton(Transform parent, string label, Color color)
+        StageButton CreateButton(string label, bool isCleared)
         {
-            var stageButton = Instantiate(_buttonPrefab, parent);
+            var stageButton = Instantiate(_buttonPrefab, transform);
             var button = stageButton.GetComponent<Button>();
             button.onClick = new Button.ButtonClickedEvent();
-            button.image.color = color;
+            button.image.color = Color.white;
+            stageButton.SetCleared(isCleared);
             var text = button.GetComponentInChildren<TextMeshProUGUI>(true);
-            text.text = label;
+            text.text = isCleared ? $"{label}\nクリア" : label;
             text.enableAutoSizing = true;
             text.fontSizeMin = 14f;
             text.fontSizeMax = 25f;
