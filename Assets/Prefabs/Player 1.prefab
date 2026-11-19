@@ -246,10 +246,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.PlayerCamera
   _cameraTransform: {fileID: 5790487730979217289}
-  _shakeMaxRange: 45
-  _nodMaxRange: 30
-  _mouseSensitivity: 0.0015
+  _shakeMaxRange: 75
+  _nodMaxRange: 45
+  _mouseSensitivity: 0.0005
   _controllerSensitivity: 1
+  _controllerReturnSpeed: 60
 --- !u!114 &2293266781665814165
 MonoBehaviour:
   m_ObjectHideFlags: 0
