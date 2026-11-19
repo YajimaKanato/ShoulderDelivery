@@ -2340,7 +2340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1712730271724b54a9b8edb5d5eb3086, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.CardboardContextView
-  _acceptColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _acceptColor: {r: 1, g: 1, b: 1, a: 1}
   _rejectColor: {r: 1, g: 0, b: 0, a: 1}
   _successSprite: {fileID: 21300000, guid: 2c492da0e6bf76743b48e8041c55418d, type: 3}
   _failedSprite: {fileID: 21300000, guid: 2c492da0e6bf76743b48e8041c55418d, type: 3}
@@ -4681,7 +4681,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 337, y: -59}
+  m_AnchoredPosition: {x: 337, y: 189}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &354139140
@@ -4704,7 +4704,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "\u30B9\u30C6\u30FC\u30B8\u30AF\u30EA\u30A2\uFF01"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d1a1e041aa3be834cab48f5eb05cbb46, type: 2}
   m_sharedMaterial: {fileID: -7966758073581557322, guid: d1a1e041aa3be834cab48f5eb05cbb46, type: 2}
@@ -4731,7 +4731,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 62.5
   m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4910,7 +4910,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -262, y: 165}
+  m_AnchoredPosition: {x: -262, y: 170}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &391975395
@@ -108933,7 +108933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59756801db883dd4e8ad766680a429b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.DeliveryContextView
-  _successColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _successColor: {r: 0, g: 0, b: 0, a: 1}
   _failedColor: {r: 1, g: 0, b: 0, a: 1}
   _successSprite: {fileID: 21300000, guid: 862f0cc454177004e99bcc401064f507, type: 3}
   _failedSprite: {fileID: 21300000, guid: 3adc9414b659dcd458547d93c14b6fd9, type: 3}
