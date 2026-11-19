@@ -329,7 +329,7 @@ namespace ShoulderDelivery.Infrastructure
                 {
                     ""name"": """",
                     ""id"": ""16569256-385b-4b76-86c7-e6e0dc0ea5bb"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -340,7 +340,7 @@ namespace ShoulderDelivery.Infrastructure
                 {
                     ""name"": """",
                     ""id"": ""1d4846aa-9be8-4bda-b133-4fe1c0a848ef"",
-                    ""path"": ""<XInputController>/buttonEast"",
+                    ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -362,7 +362,7 @@ namespace ShoulderDelivery.Infrastructure
                 {
                     ""name"": """",
                     ""id"": ""67558a8b-211f-4fa2-bcc2-8d5cffe49351"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -373,7 +373,7 @@ namespace ShoulderDelivery.Infrastructure
                 {
                     ""name"": """",
                     ""id"": ""511a10af-f7ec-4aa3-b8d1-f5743a6c003b"",
-                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

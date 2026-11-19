@@ -77,6 +77,9 @@ namespace ShoulderDelivery.Infrastructure
                     OnStageSelected?.Invoke(stageId);
                 });
 
+                // 最初のボタンを選んでおく
+                if (i == 0) button.onClick.Invoke();
+
                 // 任意の秒数待ち演出をずらす
                 stageButton.OpenStageSelect();
                 if (await UniTask.Delay(TimeSpan.FromSeconds(_waitTime), cancellationToken: ct)
