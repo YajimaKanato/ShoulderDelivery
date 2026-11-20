@@ -11,5 +11,8 @@ namespace ShoulderDelivery.Adapter
         /// <summary>配達時の状態を描画するメソッド</summary>
         /// <param name="viewModel">ViewModel</param>
         void ShowDelivery(DeliveryViewModel viewModel);
+
+        /// <summary>配達ボーナスをスコアに加算する演出を表示するメソッド</summary>
+        void ShowDeliveryBonus(DeliveriedViewModel viewModel);
     }
 }

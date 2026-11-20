@@ -170,9 +170,9 @@ namespace ShoulderDelivery.UseCase
             // 残り時間ボーナスを計算
             var timeBonus = ScoreCalculator.CalculateRemainingSecondsScore(stageState, scoreRules);
 
-            // スコアを更新
-            score.AddScore(timeBonus);
+            // HUDには残り時間ボーナス加算前のスコアを表示
             _references.OutputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, score.Total));
+            score.AddScore(timeBonus);
 
             var cleared = deliveryState.IsQuotaMet;
             var rank = scoreRules.RankRule.Evaluate(score.Total);

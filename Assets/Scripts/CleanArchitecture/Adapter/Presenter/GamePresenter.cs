@@ -122,6 +122,7 @@ namespace ShoulderDelivery.Adapter
                 , scoreBreakDown.DistanceBonus);
 
             _deliveryView?.ShowDeliverySucceededResult(viewModel);
+            _hudView?.ShowDeliveryBonus(viewModel);
             ShowDelivery(deliveryResult.Score, deliveryResult.DeliveryBreakdown);
         }
 
