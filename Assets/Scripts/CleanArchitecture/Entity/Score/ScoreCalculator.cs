@@ -33,7 +33,7 @@ namespace ShoulderDelivery.Entity
             var targetDefinition = deliveryResultValue.TargetDefinition;
 
             // 距離に応じたボーナススコアを計算
-            var distance = Coordinates.SqrMagnitude(throwContextValue.Position - targetDefinition.Position);
+            var distance = Coordinates.Magnitude(throwContextValue.Position - targetDefinition.Position);
             var distanceBonus = rules.DistanceBonus.ResolveDistanceBonus(distance);
 
             // 連続配達成功回数に応じたボーナススコアを計算

@@ -80,7 +80,8 @@ namespace ShoulderDelivery.Infrastructure
             var x = (canvasX - 0.5f) * canvas.rect.width;
             var y = (canvasY - 0.5f) * canvas.rect.height;
             _distance.rectTransform.localPosition = new Vector3(x * _textSpaceX, y * _textSpaceY, 0f);
-            _distance.text = $"{toTarget.magnitude:0000} m";
+            var displayDistance = toTarget.magnitude * 0.1f;
+            _distance.text = $"{displayDistance:0000} m";
             _arrow.localPosition = new Vector3(x * _imageSpaceX, y * _imageSpaceY, 0f);
 
             // UIピンの回転計算

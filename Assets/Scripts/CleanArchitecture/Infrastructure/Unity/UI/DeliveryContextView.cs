@@ -22,7 +22,15 @@ namespace ShoulderDelivery.Infrastructure
 
         public void ShowDeliverySucceededResult(DeliveriedViewModel context)
         {
-            OnInvoke($"配達成功！ +{context.CurrentGetScore}", _successColor, _successSprite);
+            var message = $"配達成功！ +{context.CurrentGetScore}";
+            if (context.SpeedBonus > 0 || context.DistanceBonus > 0)
+            {
+                var speed = context.SpeedBonus > 0 ? $"速度 +{context.SpeedBonus}" : "";
+                var distance = context.DistanceBonus > 0 ? $"距離 +{context.DistanceBonus}" : "";
+                var separator = context.SpeedBonus > 0 && context.DistanceBonus > 0 ? "  " : "";
+                message += $"\n{speed}{separator}{distance}";
+            }
+            OnInvoke(message, _successColor, _successSprite);
         }
     }
 }

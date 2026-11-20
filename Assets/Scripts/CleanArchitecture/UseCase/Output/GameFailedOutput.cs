@@ -7,6 +7,7 @@ namespace ShoulderDelivery.UseCase
     public readonly struct GameFailedOutput
     {
         public readonly int TotalScore;
+        public readonly int RemainingTimeBonus;
         public readonly int RequiredDeliveryCount;
         public readonly int DeliveryCount;
         public readonly int TimeLimitSeconds;
@@ -18,7 +19,7 @@ namespace ShoulderDelivery.UseCase
             , int deliveryCount
             , int timeLimitSeconds
             , float remainingTime
-            , ScoreRank rank)
+            , ScoreRank rank, int remainingTimeBonus = 0)
         {
             if (totalScore < 0)
                 throw new ArgumentOutOfRangeException(nameof(totalScore));
@@ -36,6 +37,7 @@ namespace ShoulderDelivery.UseCase
                 throw new ArgumentOutOfRangeException(nameof(remainingTime));
 
             TotalScore = totalScore;
+            RemainingTimeBonus = remainingTimeBonus;
             RequiredDeliveryCount = requiredDeliveryCount;
             DeliveryCount = deliveryCount;
             TimeLimitSeconds = timeLimitSeconds;

@@ -186,7 +186,7 @@ namespace ShoulderDelivery.UseCase
                     , deliveryState.DeliveredCount
                     , stageDefinition.TimeLimitSeconds
                     , stageState.RemainingTime
-                    , rank));
+                    , rank, timeBonus.Total));
             }
             else
             {
@@ -195,7 +195,7 @@ namespace ShoulderDelivery.UseCase
                     , deliveryState.DeliveredCount
                     , stageDefinition.TimeLimitSeconds
                     , stageState.RemainingTime
-                    , rank));
+                    , rank, timeBonus.Total));
             }
         }
     }

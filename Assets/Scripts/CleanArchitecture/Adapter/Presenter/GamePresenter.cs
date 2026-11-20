@@ -91,7 +91,7 @@ namespace ShoulderDelivery.Adapter
             var remainingTime = output.RemainingTime;
 
             // ViewModel作成
-            var viewModel = new GameClearViewModel(total, requiredDeliveryCount, deliveryCount, remainingTime, output.Rank);
+            var viewModel = new GameClearViewModel(total, requiredDeliveryCount, deliveryCount, remainingTime, output.Rank, output.RemainingTimeBonus);
 
             _resultView?.ShowClear(viewModel);
         }
@@ -105,7 +105,7 @@ namespace ShoulderDelivery.Adapter
             var remainingTime = output.RemainingTime;
 
             // ViewModel作成
-            var viewModel = new GameFailedViewModel(total, requiredDeliveryCount, deliveryCount, remainingTime, output.Rank);
+            var viewModel = new GameFailedViewModel(total, requiredDeliveryCount, deliveryCount, remainingTime, output.Rank, output.RemainingTimeBonus);
 
             _resultView?.ShowFailed(viewModel);
         }

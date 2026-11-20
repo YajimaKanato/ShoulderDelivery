@@ -13,6 +13,8 @@ namespace ShoulderDelivery.Infrastructure
     public class GameResultView : MonoBehaviour, IGameResultView
     {
         [SerializeField] TextMeshProUGUI _scoreText;
+        [SerializeField] TextMeshProUGUI _remainingTimeBonusText;
+        [SerializeField, Min(0)] float _bonusMoveDistance = 80f;
         [SerializeField] TextMeshProUGUI _timeText;
         [SerializeField] TextMeshProUGUI _deliveryCountText;
         [SerializeField] TextMeshProUGUI _resultText;
@@ -37,18 +39,18 @@ namespace ShoulderDelivery.Infrastructure
         public void ShowClear(GameClearViewModel viewModel)
         {
             ShowResultAsync("配達完了！", "ステージクリア！", viewModel.DeliveryCount, viewModel.RequiredDeliveryCount
-                , viewModel.RemainingTime, viewModel.TotalScore, viewModel.Rank).SuppressCancellationThrow().Forget();
+                , viewModel.RemainingTime, viewModel.TotalScore, viewModel.Rank, viewModel.RemainingTimeBonus).SuppressCancellationThrow().Forget();
         }
 
         public void ShowFailed(GameFailedViewModel viewModel)
         {
             ShowResultAsync("タイムアップ！", "タイムアップ", viewModel.DeliveryCount, viewModel.RequiredDeliveryCount
-                , viewModel.RemainingTime, viewModel.TotalScore, viewModel.Rank).SuppressCancellationThrow().Forget();
+                , viewModel.RemainingTime, viewModel.TotalScore, viewModel.Rank, viewModel.RemainingTimeBonus).SuppressCancellationThrow().Forget();
         }
 
         /// <summary>演出と数値表示が終わってからボタン操作を受け付けるメソッド</summary>
         async UniTask ShowResultAsync(string finish, string result, int deliveryCount, int requiredDeliveryCount
-            , float remainingTime, int score, ScoreRank rank)
+            , float remainingTime, int score, ScoreRank rank, int remainingTimeBonus)
         {
             if (!IsAssigned || _performanceCancellation != null) return;
 
@@ -90,8 +92,14 @@ namespace ShoulderDelivery.Infrastructure
                 var remainingSeconds = StageTimeDisplay.GetRemainingSeconds(remainingTime);
                 await CountNumberAsync(remainingSeconds, _timeDuration, SetTime, ct);
                 // スコア表示
-                await CountNumberAsync(score, _scoreDuration
+                var earnedScore = score - remainingTimeBonus;
+                await CountNumberAsync(earnedScore, _scoreDuration
                     , value => _scoreText.text = value.ToString("0"), ct);
+                if (remainingTimeBonus > 0)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(0.4), ignoreTimeScale: true, cancellationToken: ct);
+                    await ShowTimeBonusAsync(earnedScore, score, remainingTimeBonus, ct);
+                }
                 await ShowRankStampAsync(rank, ct);
             }
             finally
@@ -152,18 +160,59 @@ namespace ShoulderDelivery.Infrastructure
             }
         }
 
-        /// <summary>指定した秒数で数値を0から目標値まで変化させるメソッド</summary>
-        async UniTask CountNumberAsync(int target, float duration, Action<int> showNumber, CancellationToken ct)
+        /// <summary>指定した秒数で数値を開始値から目標値まで変化させるメソッド</summary>
+        async UniTask CountNumberAsync(int target, float duration, Action<int> showNumber, CancellationToken ct, int start = 0)
         {
             ct.ThrowIfCancellationRequested();
             var elapsed = 0f;
-            while (elapsed < duration && target != 0)
+            while (elapsed < duration && target != start)
             {
-                showNumber(Mathf.RoundToInt(Mathf.Lerp(0, target, elapsed / duration)));
+                showNumber(Mathf.RoundToInt(Mathf.Lerp(start, target, elapsed / duration)));
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 elapsed += Time.unscaledDeltaTime;
             }
             showNumber(target);
+        }
+
+        /// <summary>ボーナスを表示し、移動とフェードに合わせてスコアを加算するメソッド</summary>
+        async UniTask ShowTimeBonusAsync(int earnedScore, int totalScore, int bonus, CancellationToken ct)
+        {
+            const float duration = 0.6f;
+            var label = _remainingTimeBonusText;
+            if (label == null)
+            {
+                await CountNumberAsync(totalScore, duration, value => _scoreText.text = value.ToString(), ct, earnedScore);
+                return;
+            }
+
+            var startPosition = label.rectTransform.anchoredPosition;
+            var startAlpha = label.alpha;
+            label.text = $"残り時間ボーナス +{bonus}";
+            label.gameObject.SetActive(true);
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(0.6), ignoreTimeScale: true, cancellationToken: ct);
+                var elapsed = 0f;
+                while (elapsed < duration)
+                {
+                    var progress = elapsed / duration;
+                    label.rectTransform.anchoredPosition = startPosition + Vector2.down * (_bonusMoveDistance * progress);
+                    label.alpha = startAlpha * (1 - progress);
+                    _scoreText.text = Mathf.RoundToInt(Mathf.Lerp(earnedScore, totalScore, progress)).ToString();
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    elapsed += Time.unscaledDeltaTime;
+                }
+                _scoreText.text = totalScore.ToString();
+            }
+            finally
+            {
+                if (label != null)
+                {
+                    label.gameObject.SetActive(false);
+                    label.rectTransform.anchoredPosition = startPosition;
+                    label.alpha = startAlpha;
+                }
+            }
         }
 
         async UniTask ShowRankStampAsync(ScoreRank rank, CancellationToken ct)
