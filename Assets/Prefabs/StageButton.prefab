@@ -289,6 +289,7 @@ MonoBehaviour:
   _button: {fileID: 7220766313551626772}
   _selectButton: {fileID: 1909652595, guid: 65619a9018ffe0746ae18bbbcc588825, type: 3}
   _unselectButton: {fileID: 319286928, guid: 26b1c7af917c73942bd1e3add2d5168f, type: 3}
+  _clearedButton: {fileID: 21300000, guid: 37d4eb0c70831864b961f1355705bfd7, type: 3}
   _duration: 0.5
   _selectImage: {fileID: 9222771785369714875}
   _ease: 27
