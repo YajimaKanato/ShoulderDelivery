@@ -1,4 +1,5 @@
 using System;
+using ShoulderDelivery.Entity;
 
 namespace ShoulderDelivery.UseCase
 {
@@ -10,12 +11,14 @@ namespace ShoulderDelivery.UseCase
         public readonly int DeliveryCount;
         public readonly int TimeLimitSeconds;
         public readonly float RemainingTime;
+        public readonly ScoreRank Rank;
 
         public GameFailedOutput(int totalScore
             , int requiredDeliveryCount
             , int deliveryCount
             , int timeLimitSeconds
-            , float remainingTime)
+            , float remainingTime
+            , ScoreRank rank)
         {
             if (totalScore < 0)
                 throw new ArgumentOutOfRangeException(nameof(totalScore));
@@ -37,6 +40,7 @@ namespace ShoulderDelivery.UseCase
             DeliveryCount = deliveryCount;
             TimeLimitSeconds = timeLimitSeconds;
             RemainingTime = remainingTime;
+            Rank = rank;
         }
     }
 }

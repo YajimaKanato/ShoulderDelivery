@@ -47,11 +47,8 @@ namespace ShoulderDelivery.Infrastructure
             if (!IsAssigned) return;
 
             var score = viewModel.Score;
-            var remainingTime = Mathf.CeilToInt(viewModel.RemainingTime);
-            var minutes = remainingTime / 60;
-            var seconds = remainingTime % 60;
-
-            _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
+            var remainingSeconds = StageTimeDisplay.GetRemainingSeconds(viewModel.RemainingTime);
+            _timerText.text = StageTimeDisplay.Format(remainingSeconds);
             _scoreText.text = SCORE + score.ToString("00000");
         }
 
@@ -61,12 +58,8 @@ namespace ShoulderDelivery.Infrastructure
 
             var stageHour = viewModel.StageHour;
             var requiredDeliveryCount = viewModel.RequiredDeliveryCount;
-            var timeLimitSeconds = viewModel.TimeLimitSeconds;
-            var minutes = timeLimitSeconds / 60;
-            var seconds = timeLimitSeconds % 60;
-
             _combo?.Exit();
-            _timerText.text = $"{minutes.ToString("0")}:{seconds.ToString("00")}";
+            _timerText.text = StageTimeDisplay.Format(viewModel.TimeLimitSeconds);
             OnStart?.Invoke(stageHour);
             ShowDelivery(new DeliveryViewModel(0, 0, 0, requiredDeliveryCount));
         }

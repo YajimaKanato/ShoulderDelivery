@@ -13,6 +13,14 @@ namespace ShoulderDelivery.Infrastructure
         sealed class SaveData
         {
             public List<string> clearedStageIds = new();
+            public List<StageBestScore> bestScores = new();
+        }
+
+        [Serializable]
+        sealed class StageBestScore
+        {
+            public string stageId;
+            public int score;
         }
 
         readonly string _path;
@@ -27,9 +35,24 @@ namespace ShoulderDelivery.Infrastructure
 
         public bool IsCleared(StageId stageId) => _data.clearedStageIds.Contains(stageId.Id);
 
-        public void MarkCleared(StageId stageId)
+        public int? GetBestScore(StageId stageId)
+            => _data.bestScores.Find(record => record.stageId == stageId.Id)?.score;
+
+        public void RecordResult(StageId stageId, int score, bool cleared)
         {
-            if (!IsCleared(stageId))
+            var record = _data.bestScores.Find(entry => entry.stageId == stageId.Id);
+            if (record == null)
+            {
+                _data.bestScores.Add(new StageBestScore { stageId = stageId.Id, score = score });
+                _hasUnsavedChanges = true;
+            }
+            else if (score > record.score)
+            {
+                record.score = score;
+                _hasUnsavedChanges = true;
+            }
+
+            if (cleared && !IsCleared(stageId))
             {
                 _data.clearedStageIds.Add(stageId.Id);
                 _hasUnsavedChanges = true;
@@ -60,7 +83,11 @@ namespace ShoulderDelivery.Infrastructure
             try
             {
                 var data = JsonUtility.FromJson<SaveData>(File.ReadAllText(_path));
-                if (data?.clearedStageIds != null) return data;
+                if (data?.clearedStageIds != null)
+                {
+                    data.bestScores ??= new List<StageBestScore>();
+                    return data;
+                }
                 Debug.LogWarning("ステージのセーブデータにクリア済みステージの一覧がありません。");
             }
             catch (FileNotFoundException)

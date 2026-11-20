@@ -36,14 +36,16 @@ namespace ShoulderDelivery.Adapter
             cts.Dispose();
         }
 
-        public void ShowStageInfo(StageDefinition stage)
+        public void ShowStageInfo(StageDefinition stage, int? bestScore)
         {
             // ViewModel作成
             var viewModel = new ShowStageInfoViewModel(stage.Id.Id
                 , stage.StageHour
                 , stage.TimeLimitSeconds
                 , stage.RequiredDeliveryCount
-                , stage.TargetIds.Count);
+                , stage.TargetIds.Count
+                , bestScore
+                , bestScore.HasValue ? stage.ScoreRules.RankRule.Evaluate(bestScore.Value) : (ScoreRank?)null);
 
             _stageSelectView.ShowStageInfo(viewModel);
         }

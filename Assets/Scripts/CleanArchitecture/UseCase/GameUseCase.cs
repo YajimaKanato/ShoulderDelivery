@@ -174,15 +174,19 @@ namespace ShoulderDelivery.UseCase
             score.AddScore(timeBonus);
             _references.OutputPort.ShowHud(new GameHudOutput(stageState.RemainingTime, score.Total));
 
+            var cleared = deliveryState.IsQuotaMet;
+            var rank = scoreRules.RankRule.Evaluate(score.Total);
+            _stageClearStore.RecordResult(stageDefinition.Id, score.Total, cleared);
+
             // 結果を表示
-            if (deliveryState.IsQuotaMet)
+            if (cleared)
             {
-                _stageClearStore.MarkCleared(stageDefinition.Id);
                 _references.OutputPort.ShowGameClear(new GameClearOutput(score.Total
                     , deliveryState.RequiredDeliveryCount
                     , deliveryState.DeliveredCount
                     , stageDefinition.TimeLimitSeconds
-                    , stageState.RemainingTime));
+                    , stageState.RemainingTime
+                    , rank));
             }
             else
             {
@@ -190,7 +194,8 @@ namespace ShoulderDelivery.UseCase
                     , deliveryState.RequiredDeliveryCount
                     , deliveryState.DeliveredCount
                     , stageDefinition.TimeLimitSeconds
-                    , stageState.RemainingTime));
+                    , stageState.RemainingTime
+                    , rank));
             }
         }
     }

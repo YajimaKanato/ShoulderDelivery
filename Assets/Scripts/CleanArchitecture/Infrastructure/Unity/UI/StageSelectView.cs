@@ -127,8 +127,9 @@ namespace ShoulderDelivery.Infrastructure
         {
             _stageName.text = viewModel.StageName;
             _stageInfo.text = $"時間帯  {GetStageHour(viewModel.StageHour)}\n"
-                + $"制限時間  {viewModel.TimeLimitSeconds / 60}:{viewModel.TimeLimitSeconds % 60:00}\n"
-                + $"ノルマ配達数  {viewModel.RequiredDeliveryCount}\n";
+                + $"制限時間  {StageTimeDisplay.Format(viewModel.TimeLimitSeconds)}\n"
+                + $"ノルマ配達数  {viewModel.RequiredDeliveryCount}\n"
+                + $"ベスト  {viewModel.BestScore?.ToString("N0") ?? "--"}  /  {viewModel.BestRank?.ToString() ?? "--"}";
             _startButton.interactable = true;
 
             // まだ生成中なら、生成完了時に右端の移動先を設定する

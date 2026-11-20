@@ -5,6 +5,7 @@ namespace ShoulderDelivery.UseCase
     public interface IStageClearStore
     {
         bool IsCleared(StageId stageId);
-        void MarkCleared(StageId stageId);
+        int? GetBestScore(StageId stageId);
+        void RecordResult(StageId stageId, int score, bool cleared);
     }
 }

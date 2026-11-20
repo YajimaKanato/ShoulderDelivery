@@ -12,7 +12,8 @@ namespace ShoulderDelivery.UseCase
 
         /// <summary>選択したステージの情報を出力するメソッド</summary>
         /// <param name="stage">選択したステージの定義</param>
-        void ShowStageInfo(StageDefinition stage);
+        /// <param name="bestScore">保存済みの最高スコア</param>
+        void ShowStageInfo(StageDefinition stage, int? bestScore);
 
         /// <summary>ステージ選択ボタンの生成を中断するメソッド</summary>
         void CancelStageList();

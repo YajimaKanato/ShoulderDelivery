@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using ShoulderDelivery.Adapter;
+using ShoulderDelivery.Entity;
 using System;
 using System.Threading;
 using TMPro;
@@ -15,6 +16,8 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _timeText;
         [SerializeField] TextMeshProUGUI _deliveryCountText;
         [SerializeField] TextMeshProUGUI _resultText;
+        [SerializeField] TextMeshProUGUI _rankStamp;
+        [SerializeField, Min(0)] float _rankStampDuration = 0.3f;
         [SerializeField] Button _stageSelectButton;
         [SerializeField] PlayableDirector _playableDirector;
         [SerializeField] TextMeshProUGUI _finishText;
@@ -34,18 +37,18 @@ namespace ShoulderDelivery.Infrastructure
         public void ShowClear(GameClearViewModel viewModel)
         {
             ShowResultAsync("配達完了！", "ステージクリア！", viewModel.DeliveryCount, viewModel.RequiredDeliveryCount
-                , viewModel.RemainingTime, viewModel.TotalScore).SuppressCancellationThrow().Forget();
+                , viewModel.RemainingTime, viewModel.TotalScore, viewModel.Rank).SuppressCancellationThrow().Forget();
         }
 
         public void ShowFailed(GameFailedViewModel viewModel)
         {
             ShowResultAsync("タイムアップ！", "タイムアップ", viewModel.DeliveryCount, viewModel.RequiredDeliveryCount
-                , viewModel.RemainingTime, viewModel.TotalScore).SuppressCancellationThrow().Forget();
+                , viewModel.RemainingTime, viewModel.TotalScore, viewModel.Rank).SuppressCancellationThrow().Forget();
         }
 
         /// <summary>演出と数値表示が終わってからボタン操作を受け付けるメソッド</summary>
         async UniTask ShowResultAsync(string finish, string result, int deliveryCount, int requiredDeliveryCount
-            , float remainingTime, int score)
+            , float remainingTime, int score, ScoreRank rank)
         {
             if (!IsAssigned || _performanceCancellation != null) return;
 
@@ -75,6 +78,7 @@ namespace ShoulderDelivery.Infrastructure
                 _deliveryCountText.text = $"0 / {requiredDeliveryCount}";
                 SetTime(0);
                 _scoreText.text = "0";
+                if (_rankStamp != null) _rankStamp.gameObject.SetActive(false);
                 gameObject.SetActive(true);
 
                 // リザルトの演出
@@ -83,10 +87,12 @@ namespace ShoulderDelivery.Infrastructure
                 await CountNumberAsync(deliveryCount, _deliveryCountDuration
                     , value => _deliveryCountText.text = $"{value} / {requiredDeliveryCount}", ct);
                 // 残り時間表示
-                await CountNumberAsync(Mathf.FloorToInt(Mathf.Max(0, remainingTime)), _timeDuration, SetTime, ct);
+                var remainingSeconds = StageTimeDisplay.GetRemainingSeconds(remainingTime);
+                await CountNumberAsync(remainingSeconds, _timeDuration, SetTime, ct);
                 // スコア表示
                 await CountNumberAsync(score, _scoreDuration
                     , value => _scoreText.text = value.ToString("0"), ct);
+                await ShowRankStampAsync(rank, ct);
             }
             finally
             {
@@ -160,9 +166,40 @@ namespace ShoulderDelivery.Infrastructure
             showNumber(target);
         }
 
+        async UniTask ShowRankStampAsync(ScoreRank rank, CancellationToken ct)
+        {
+            if (_rankStamp == null) return;
+            ct.ThrowIfCancellationRequested();
+
+            var stamp = _rankStamp.rectTransform;
+            var originalScale = stamp.localScale;
+            _rankStamp.text = rank.ToString();
+            stamp.localScale = originalScale * 1.8f;
+            _rankStamp.gameObject.SetActive(true);
+
+            try
+            {
+                var elapsed = 0f;
+                while (elapsed < _rankStampDuration)
+                {
+                    var progress = elapsed / _rankStampDuration;
+                    var scale = progress < 0.55f
+                        ? Mathf.Lerp(1.8f, 0.9f, Mathf.Pow(progress / 0.55f, 2))
+                        : Mathf.Lerp(0.9f, 1f, (progress - 0.55f) / 0.45f);
+                    stamp.localScale = originalScale * scale;
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    elapsed += Time.unscaledDeltaTime;
+                }
+            }
+            finally
+            {
+                if (stamp != null) stamp.localScale = originalScale;
+            }
+        }
+
         void SetTime(int seconds)
         {
-            _timeText.text = $"{seconds / 60:00} : {seconds % 60:00}";
+            _timeText.text = StageTimeDisplay.Format(seconds);
         }
 
         async UniTask ResultPerformanceAsync(CancellationToken ct)

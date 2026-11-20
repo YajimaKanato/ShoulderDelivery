@@ -6,10 +6,10 @@ namespace ShoulderDelivery.Adapter
     public readonly struct StageInfoViewModel
     {
         public readonly StageHour StageHour;
-        public readonly float TimeLimitSeconds;
+        public readonly int TimeLimitSeconds;
         public readonly int RequiredDeliveryCount;
 
-        public StageInfoViewModel(StageHour stageHour, float timeLimitSeconds, int requiredDeliveryCount)
+        public StageInfoViewModel(StageHour stageHour, int timeLimitSeconds, int requiredDeliveryCount)
         {
             StageHour = stageHour;
             TimeLimitSeconds = timeLimitSeconds;

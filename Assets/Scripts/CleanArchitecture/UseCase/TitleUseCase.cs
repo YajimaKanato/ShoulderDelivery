@@ -37,7 +37,7 @@ namespace ShoulderDelivery.UseCase
         public void SelectStage(StageId stageId)
         {
             SelectedStage = _stageRepository.Get(stageId);
-            _outputPort.ShowStageInfo(SelectedStage);
+            _outputPort.ShowStageInfo(SelectedStage, _stageClearStore.GetBestScore(stageId));
         }
 
         /// <summary>選択中のステージを開始するメソッド</summary>

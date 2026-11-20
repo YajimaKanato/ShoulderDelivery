@@ -21,6 +21,9 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("残り時間に応じたボーナスのテーブルアセット")]
         RemainingTimeBonusRuleAsset _remainingTimeBonusRuleAsset;
 
+        [SerializeField, Tooltip("獲得スコアから評価ランクを判定するアセット")]
+        ScoreRankRuleAsset _scoreRankRuleAsset;
+
         public DeliveryComboBonusRuleAsset DeliveryComboBonusRuleAsset => _deliveryComboBonusRuleAsset;
         public RemainingTimeBonusRuleAsset RemainingTimeBonusRuleAsset => _remainingTimeBonusRuleAsset;
 
@@ -36,7 +39,8 @@ namespace ShoulderDelivery.Infrastructure
                 , speedBonusRule
                 , distanceBonusRule
                 , remainingTimeBonusRule
-                , _citizenHitPenalty);
+                , _citizenHitPenalty
+                , _scoreRankRuleAsset != null ? _scoreRankRuleAsset.ToEntity() : null);
         }
 
 #if UNITY_EDITOR
