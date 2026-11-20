@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: DistanceBonus
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.DistanceBonusRuleAsset
   _bonusTable:
-  - _distance: 50
+  - _distance: 6
     _bonus: 20
-  - _distance: 100
+  - _distance: 12
     _bonus: 40
-  - _distance: 150
+  - _distance: 18
     _bonus: 60
-  - _distance: 200
+  - _distance: 24
     _bonus: 80
-  - _distance: 250
+  - _distance: 30
     _bonus: 100
-  - _distance: 300
+  - _distance: 36
     _bonus: 120
-  - _distance: 350
+  - _distance: 42
     _bonus: 140
-  - _distance: 400
+  - _distance: 48
     _bonus: 160
-  - _distance: 450
+  - _distance: 54
     _bonus: 180
-  - _distance: 500
+  - _distance: 60
     _bonus: 200

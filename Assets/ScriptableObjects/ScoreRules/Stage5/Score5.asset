@@ -18,4 +18,4 @@ MonoBehaviour:
   _speedBonusRuleAsset: {fileID: 11400000, guid: ff5a4e6c8f4e42c46ae80c68cf2c7ff9, type: 2}
   _distanceBonusRuleAsset: {fileID: 11400000, guid: 22e7a92692993924b96df2013c526b9d, type: 2}
   _remainingTimeBonusRuleAsset: {fileID: 11400000, guid: f70dd97f861a48b19d903be27440d02c, type: 2}
-  _scoreRankRuleAsset: {fileID: 11400000, guid: 98831da0bd654154b8f43711d3a17d80, type: 2}
+  _scoreRankRuleAsset: {fileID: 11400000, guid: 6d41d89388cd4be383e8f71cf2f6c0a8, type: 2}
