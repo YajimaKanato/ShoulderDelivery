@@ -23,13 +23,15 @@ namespace ShoulderDelivery.Entity
         public RemainingTimeBonusRule RemainingTimeBonus => _remainingTimeBonus;
         /// <summary>市民に衝突したときの減点</summary>
         public int CitizenHitPenalty { get; }
+        public ScoreRankRule RankRule { get; }
 
         public ScoreRules(int deliverySuccessScore
             , DeliveryComboBonusRule deliveryComboBonus
             , SpeedBonusRule speedBonus
             , DistanceBonusRule distanceBonus
             , RemainingTimeBonusRule remainingTimeBonus
-            , int citizenHitPenalty = 50)
+            , int citizenHitPenalty = 50
+            , ScoreRankRule rankRule = null)
         {
             if (deliverySuccessScore <= 0)
                 throw new ArgumentOutOfRangeException();
@@ -55,6 +57,7 @@ namespace ShoulderDelivery.Entity
             _distanceBonus = distanceBonus;
             _remainingTimeBonus = remainingTimeBonus;
             CitizenHitPenalty = citizenHitPenalty;
+            RankRule = rankRule ?? ScoreRankRule.Default;
         }
     }
 }
