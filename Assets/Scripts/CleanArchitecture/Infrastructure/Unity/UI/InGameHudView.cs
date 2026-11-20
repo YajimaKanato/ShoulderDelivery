@@ -11,7 +11,10 @@ namespace ShoulderDelivery.Infrastructure
     public class InGameHudView : MonoBehaviour, IGameHudView, IStageInfoView
     {
         [SerializeField] TextMeshProUGUI _timerText;
+        [SerializeField] Image _timerGaugeFill;
+        [SerializeField] RectTransform _timerGaugeMarker;
         [SerializeField] TextMeshProUGUI _scoreText;
+        [SerializeField] TextMeshProUGUI _speedText;
         [SerializeField] TextMeshProUGUI _deliveryCountText;
         [SerializeField] TextMeshProUGUI _deliveryComboText;
         [SerializeField] ComboUI _combo;
@@ -23,6 +26,20 @@ namespace ShoulderDelivery.Infrastructure
         Sequence _bonusSequence;
         int _actualScore;
         int _pendingBonus;
+        float _timeLimitSeconds;
+        Rigidbody _speedSource;
+
+        public void SetSpeedSource(Rigidbody source)
+        {
+            _speedSource = source;
+        }
+
+        private void LateUpdate()
+        {
+            if (_speedText == null || _speedSource == null) return;
+
+            _speedText.SetText("移動速度 {0:1} /s", _speedSource.linearVelocity.magnitude);
+        }
 
         const string SCORE = "スコア : ";
         const string DELIVERY = "配達完了 : ";
@@ -57,6 +74,7 @@ namespace ShoulderDelivery.Infrastructure
             var score = viewModel.Score;
             var remainingSeconds = StageTimeDisplay.GetRemainingSeconds(viewModel.RemainingTime);
             _timerText.text = StageTimeDisplay.Format(remainingSeconds);
+            UpdateTimerGauge(viewModel.RemainingTime);
             ShowScore(score);
         }
 
@@ -69,8 +87,26 @@ namespace ShoulderDelivery.Infrastructure
             StopDeliveryBonus();
             _combo?.Exit();
             _timerText.text = StageTimeDisplay.Format(viewModel.TimeLimitSeconds);
+            _timeLimitSeconds = viewModel.TimeLimitSeconds;
+            UpdateTimerGauge(_timeLimitSeconds);
             OnStart?.Invoke(stageHour);
             ShowDelivery(new DeliveryViewModel(0, 0, 0, requiredDeliveryCount));
+        }
+
+        void UpdateTimerGauge(float remainingTime)
+        {
+            if (_timerGaugeFill == null) return;
+
+            var ratio = _timeLimitSeconds > 0 ? Mathf.Clamp01(remainingTime / _timeLimitSeconds) : 0f;
+            _timerGaugeFill.fillAmount = ratio;
+            if (_timerGaugeMarker == null) return;
+
+            // マーカーをゲージの塗りつぶしの右端に合わせる
+            var fill = _timerGaugeFill.rectTransform;
+            var edge = fill.TransformPoint(Mathf.Lerp(fill.rect.xMin, fill.rect.xMax, ratio), 0f, 0f);
+            var position = _timerGaugeMarker.localPosition;
+            position.x = _timerGaugeMarker.parent.InverseTransformPoint(edge).x;
+            _timerGaugeMarker.localPosition = position;
         }
 
         public void ShowDelivery(DeliveryViewModel viewModel)

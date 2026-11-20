@@ -37,6 +37,7 @@ namespace ShoulderDelivery.CompositionRoot
         {
             _targetIndicator.Initialize(_targets);
             var controller = _playerCardboardLaunch.GetComponent<PlayerController>();
+            _inGameHudView?.SetSpeedSource(_playerCardboardLaunch.GetComponent<Rigidbody>());
             _gameResultView?.gameObject.SetActive(false);
             var presenter = new GamePresenter(_inGameHudView
                 , _inGameCountDownView

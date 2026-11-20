@@ -21,7 +21,7 @@ namespace ShoulderDelivery.Infrastructure
         [Serializable]
         class DistanceBonusMaster
         {
-            [SerializeField, Tooltip("この数値以上という比較")] float _distance;
+            [SerializeField, Tooltip("実測距離の下限。画面表示の距離を10倍して設定")] float _distance;
             [SerializeField, Tooltip("この数値以上になったときにもらえるスコア")] int _bonus;
 
             public DistanceBonus GenerateBonus()
