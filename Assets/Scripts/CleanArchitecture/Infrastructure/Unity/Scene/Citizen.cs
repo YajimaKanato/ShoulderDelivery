@@ -37,11 +37,13 @@ namespace ShoulderDelivery.Infrastructure
             }
         }
 
-        void EnterPlayer()
+        void EnterPlayer(PlayerController player)
         {
             _dancing = true;
             _hitPlayer = true;
             _hitPlayerValue = UnityEngine.Random.Range(0, 2);
+            if (player.TryGetComponent<PlayerCamera>(out var camera))
+                camera.ShakeOnHit(player.SpeedBeforePhysics);
             OnPlayerHit?.Invoke();
         }
 
@@ -67,7 +69,7 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (!collision.gameObject.TryGetComponent<PlayerController>(out var player)) return;
 
-            EnterPlayer();
+            EnterPlayer(player);
         }
 
         private void OnCollisionExit(Collision collision)

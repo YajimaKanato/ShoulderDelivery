@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +18,24 @@ namespace ShoulderDelivery.Infrastructure
         bool _useGamepad;
         float _yawDelta;
         float _pitchDelta;
+        [SerializeField]
+        CinemachineImpulseDefinition _hitImpulse = new()
+        {
+            ImpulseChannel = 1,
+            ImpulseShape = CinemachineImpulseDefinition.ImpulseShapes.Bump,
+            ImpulseType = CinemachineImpulseDefinition.ImpulseTypes.Uniform,
+            ImpulseDuration = 0.25f
+        };
+        [SerializeField, Min(0), Tooltip("衝突時のカメラシェイクの最大の強さ")] float _hitImpulseStrength = 0.2f;
+        [SerializeField, Min(0.01f), Tooltip("衝突時の揺れが最大になる移動速度")] float _hitImpulseMaxSpeed = 14.95f;
+
+        public void ShakeOnHit(float speed)
+        {
+            if (_hitImpulseStrength <= 0f || _hitImpulse.ImpulseDuration <= 0f) return;
+            var strength = _hitImpulseStrength * Mathf.Clamp01(speed / _hitImpulseMaxSpeed);
+            if (strength > 0f)
+                _hitImpulse.CreateEvent(transform.position, Vector3.down * strength);
+        }
 
         public override void CacheAction(Actions actions = null)
         {
@@ -71,11 +90,7 @@ namespace ShoulderDelivery.Infrastructure
                 _pitchDelta = rotation.y;
             }
 
-            _cameraTransform.localRotation =
-                Quaternion.Euler(
-                    -_pitchDelta
-                    , _yawDelta
-                    , 0);
+            _cameraTransform.localRotation = Quaternion.Euler(-_pitchDelta, _yawDelta, 0f);
         }
     }
 }

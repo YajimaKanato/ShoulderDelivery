@@ -13,17 +13,13 @@ namespace ShoulderDelivery.Infrastructure
 
         void ChangeSelection(bool selected)
         {
-            _selectImage.enabled = selected;
+            if (_selectImage != null) _selectImage.enabled = selected;
 
-            if (selected)
-            {
-                _button.sprite = _selectButton;
-            }
-            else
-            {
-                _button.sprite = _unselectButton;
-            }
+            var sprite = selected ? _selectButton : _unselectButton;
+            if (_button != null && sprite != null) _button.sprite = sprite;
         }
+
+        private void OnDisable() => ChangeSelection(false);
 
         public void OnSelect(BaseEventData eventData)
         {

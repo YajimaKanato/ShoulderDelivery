@@ -78,6 +78,24 @@ namespace ShoulderDelivery.Infrastructure
             }
         }
 
+        public bool TryReset()
+        {
+            try
+            {
+                File.Delete(_path + ".tmp");
+                File.Delete(_path);
+                _data.clearedStageIds.Clear();
+                _data.bestScores.Clear();
+                _hasUnsavedChanges = false;
+                return true;
+            }
+            catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException)
+            {
+                Debug.LogWarning($"セーブデータをリセットできませんでした。{exception.Message}");
+                return false;
+            }
+        }
+
         SaveData Load()
         {
             try

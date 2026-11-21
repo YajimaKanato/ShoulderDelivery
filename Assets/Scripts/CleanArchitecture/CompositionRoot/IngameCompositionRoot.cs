@@ -31,12 +31,14 @@ namespace ShoulderDelivery.CompositionRoot
 
         GameUseCase _runningGame;
         bool _isStarted;
-        bool _returningTitle;
+        bool _loadingScene;
+        PlayerController _controller;
 
         private async void Start()
         {
             _targetIndicator.Initialize(_targets);
             var controller = _playerCardboardLaunch.GetComponent<PlayerController>();
+            _controller = controller;
             _inGameHudView?.SetSpeedSource(_playerCardboardLaunch.GetComponent<Rigidbody>());
             _gameResultView?.gameObject.SetActive(false);
             var presenter = new GamePresenter(_inGameHudView
@@ -89,13 +91,35 @@ namespace ShoulderDelivery.CompositionRoot
 
         async UniTask ReturnTitle(bool openStageSelect)
         {
-            if (_returningTitle) return;
-            _returningTitle = true;
+            if (_loadingScene) return;
+            _loadingScene = true;
 
-            if (_director != null) await _director.FadeOut();
-            await UniTask.Delay(TimeSpan.FromSeconds(_waitTime));
+            await FadeOutAsync();
             if (this == null) return;
             await StageManager.LoadTitle(openStageSelect);
+        }
+
+        async UniTask FadeOutAsync()
+        {
+            if (_director != null) await _director.FadeOut();
+            await UniTask.Delay(TimeSpan.FromSeconds(_waitTime));
+        }
+
+        public void RetryStage()
+        {
+            if (_loadingScene) return;
+            _loadingScene = true;
+            _controller.SetControllerEnabled(false);
+            RetryStageAsync().Forget();
+        }
+
+        async UniTask RetryStageAsync()
+        {
+            // 開始時のフェードと同じDirectorを使うので、先に再生が終わるのを待つ
+            await UniTask.WaitUntil(() => _isStarted, cancellationToken: this.GetCancellationTokenOnDestroy());
+            await FadeOutAsync();
+            if (this == null) return;
+            await StageManager.LoadStage(StageManager.GetStageId() ?? _defaultStage.StageId);
         }
 
         private void OnDestroy()
@@ -106,6 +130,12 @@ namespace ShoulderDelivery.CompositionRoot
 
         private void Update()
         {
+            if (_loadingScene) return;
+            if (_controller != null && _controller.RestartPressed)
+            {
+                RetryStage();
+                return;
+            }
             if (!_isStarted) return;
             if (Time.deltaTime > 0)
                 _runningGame?.Execute(new TickInput(Time.deltaTime));

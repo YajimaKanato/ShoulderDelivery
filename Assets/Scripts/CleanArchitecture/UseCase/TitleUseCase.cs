@@ -49,5 +49,7 @@ namespace ShoulderDelivery.UseCase
             _outputPort.CancelStageList();
             return SelectedStage.Id;
         }
+
+        public bool TryResetSave() => _stageClearStore.TryReset();
     }
 }

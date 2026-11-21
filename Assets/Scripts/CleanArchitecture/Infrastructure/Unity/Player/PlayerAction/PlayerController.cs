@@ -1,5 +1,6 @@
 using ShoulderDelivery.Adapter;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ShoulderDelivery.Infrastructure
 {
@@ -7,11 +8,19 @@ namespace ShoulderDelivery.Infrastructure
     {
         PlayerActionBase[] _playerActionBases;
         Actions _actions;
+        InputAction _restart;
         bool _inputEnabled;
+        Rigidbody _body;
+
+        public bool RestartPressed => _restart?.WasPressedThisFrame() == true;
+        public float SpeedBeforePhysics { get; private set; }
 
         private void Awake()
         {
             _actions = new();
+            _body = GetComponent<Rigidbody>();
+            _restart = _actions.Ingame.Restart;
+            _restart.Enable();
 
             _playerActionBases ??= GetComponents<PlayerActionBase>();
             foreach (var playerActionBase in _playerActionBases)
@@ -28,9 +37,12 @@ namespace ShoulderDelivery.Infrastructure
 
         private void FixedUpdate()
         {
-            if (!_inputEnabled) return;
-            foreach (var playerActionBase in _playerActionBases)
-                playerActionBase?.OnFixedUpdate();
+            if (_inputEnabled)
+                foreach (var playerActionBase in _playerActionBases)
+                    playerActionBase?.OnFixedUpdate();
+
+            // 衝突で減速する前の移動速度を保持する
+            SpeedBeforePhysics = _body != null ? _body.linearVelocity.magnitude : 0f;
         }
 
         public void SetControllerEnabled(bool enabled)
@@ -43,6 +55,8 @@ namespace ShoulderDelivery.Infrastructure
             }
 
             _actions.Ingame.Disable();
+            // カウントダウン中やリザルト表示中もリスタートは受け付ける
+            _restart.Enable();
             GetComponent<PlayerCardboardLaunch>()?.HideGuide();
             if (TryGetComponent<Rigidbody>(out var body))
             {
@@ -51,6 +65,10 @@ namespace ShoulderDelivery.Infrastructure
             }
         }
 
-        private void OnDestroy() => _actions?.Dispose();
+        private void OnDestroy()
+        {
+            _actions?.Disable();
+            _actions?.Dispose();
+        }
     }
 }

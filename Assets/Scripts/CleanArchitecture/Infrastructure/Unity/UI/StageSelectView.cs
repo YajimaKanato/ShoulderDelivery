@@ -21,6 +21,11 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] TextMeshProUGUI _stageInfo;
         [SerializeField] TextMeshProUGUI _stageCount;
         [SerializeField] Button _startButton;
+        [SerializeField] Button _resetButton;
+        [SerializeField] GameObject _resetConfirmation;
+        [SerializeField] TextMeshProUGUI _resetPrompt;
+        [SerializeField] Button _cancelResetButton;
+        [SerializeField] Button _confirmResetButton;
         [SerializeField] float _waitTime = 0.1f;
         [SerializeField] FadeDirector _director;
 
@@ -40,6 +45,38 @@ namespace ShoulderDelivery.Infrastructure
             _startButton.interactable = false;
             _startButton.onClick.AddListener(PressStartButton);
             _selectPanel.gameObject.SetActive(false);
+        }
+
+        public void InitializeSaveReset(Func<bool> resetSave)
+        {
+            if (_resetButton == null || _resetConfirmation == null || _resetPrompt == null
+                || _cancelResetButton == null || _confirmResetButton == null) return;
+
+            _resetConfirmation.SetActive(false);
+            var confirmationMessage = _resetPrompt.text;
+            _resetButton.onClick.AddListener(() =>
+            {
+                if (_loading) return;
+                _resetPrompt.text = confirmationMessage;
+                _selectPanel.gameObject.SetActive(false);
+                _resetConfirmation.SetActive(true);
+                _cancelResetButton.Select();
+            });
+            _cancelResetButton.onClick.AddListener(() =>
+            {
+                if (_loading) return;
+                _resetConfirmation.SetActive(false);
+                _selectPanel.gameObject.SetActive(true);
+                _resetButton.Select();
+            });
+            _confirmResetButton.onClick.AddListener(() =>
+            {
+                if (_loading) return;
+                _loading = true;
+                if (resetSave()) return;
+                _loading = false;
+                _resetPrompt.text = "セーブデータをリセットできませんでした";
+            });
         }
 
         /// <summary>ステージ選択ボタンを作成するメソッド</summary>
@@ -64,7 +101,8 @@ namespace ShoulderDelivery.Infrastructure
                 if (_firstButton == null)
                 {
                     _firstButton = button;
-                    if (_firstButton) _firstButton.Select();
+                    SetResetReturnButton(button);
+                    _firstButton.Select();
                 }
 
                 // イベントを登録
@@ -113,7 +151,7 @@ namespace ShoulderDelivery.Infrastructure
                     mode = Navigation.Mode.Explicit,
                     selectOnLeft = column > 0 ? buttons[i - 1] : null,
                     selectOnRight = right,
-                    selectOnUp = i >= columns ? buttons[i - columns] : null,
+                    selectOnUp = i >= columns ? buttons[i - columns] : _resetButton,
                     selectOnDown = i + columns < buttons.Length ? buttons[i + columns] : null
                 };
 
@@ -166,11 +204,13 @@ namespace ShoulderDelivery.Infrastructure
             if (!selected || selected == _focusedButton || !selected.transform.IsChildOf(transform)) return;
 
             _focusedButton = selected;
+            var stageButton = selected.GetComponent<Button>();
+            SetResetReturnButton(stageButton);
             // 開始ボタンから左に戻ったときは直前のステージボタンに戻す
             _startButton.navigation = new Navigation
             {
                 mode = Navigation.Mode.Explicit,
-                selectOnLeft = selected.GetComponent<Button>()
+                selectOnLeft = stageButton
             };
 
             var viewport = _scrollView.viewport;
@@ -181,6 +221,16 @@ namespace ShoulderDelivery.Infrastructure
 
             _scrollView.StopMovement();
             _scrollView.content.anchoredPosition += Vector2.up * offset;
+        }
+
+        void SetResetReturnButton(Button stageButton)
+        {
+            if (_resetButton == null) return;
+            _resetButton.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnDown = stageButton
+            };
         }
 
         StageButton CreateButton(string label, bool isCleared)

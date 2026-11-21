@@ -11,8 +11,6 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("後輪にかかるモーターの強さ")] float _accelPower = 10;
         [SerializeField, Tooltip("ブレーキのパラメータカーブ")] ParameterCurve _brakeParam;
         [SerializeField, Tooltip("ブレーキにかかる力")] float _brakePower = 5;
-        [SerializeField, Tooltip("正面方向のRayの長さ")] float _rayDistance = 2;
-        [SerializeField, Tooltip("Rayのオフセット")] Vector3 _rayOffset = Vector3.zero;
 
         [Header("旋回に関するデータ")]
         [SerializeField, Tooltip("最大の旋回角度")] float _maxSteerAngle = 45f;
@@ -27,6 +25,8 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("カメラの傾き角度")] float _maxCameraAngle = 30;
         [SerializeField, Tooltip("カメラ角度")] Transform _cameraAngle;
 
+        PlayerCamera _playerCamera;
+        PlayerController _playerController;
         Rigidbody _rb;
         InputAction _accel;
         InputAction _brake;
@@ -63,19 +63,41 @@ namespace ShoulderDelivery.Infrastructure
         void UpdateMove()
         {
             _moveSpeed = Accel() * _accelPower - Brake() * _brakePower;
+            _steerParam = _maxSteerAngle * Steer();
+        }
 
-            var origin = transform.position + _rayOffset;
-            // 衝突した方向のパラメータをリセットしてすぐに逆方向の動きができるように
-            if (Physics.Raycast(new Ray(origin, transform.forward), _rayDistance))
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!isActiveAndEnabled) return;
+
+            // 接触面の法線は相手からプレイヤーへ向くので、符号を反転して前後を判定する
+            var direction = 0f;
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                var contactDirection = -Vector3.Dot(transform.forward, collision.GetContact(i).normal);
+                if (Mathf.Abs(contactDirection) > Mathf.Abs(direction))
+                    direction = contactDirection;
+            }
+
+            if (direction > 0.1f)
             {
                 _accelParam.ResetDelta();
+                _moveSpeed = Mathf.Min(0f, _moveSpeed);
             }
-            else if (Physics.Raycast(new Ray(origin, -transform.forward), _rayDistance))
+            else if (direction < -0.1f)
             {
                 _brakeParam.ResetDelta();
+                _moveSpeed = Mathf.Max(0f, _moveSpeed);
             }
+            else return;
 
-            _steerParam = _maxSteerAngle * Steer();
+            // 市民との衝突では Citizen 側でシェイクする
+            if (collision.collider.GetComponentInParent<Citizen>() != null) return;
+
+            _playerCamera ??= GetComponent<PlayerCamera>();
+            _playerController ??= GetComponent<PlayerController>();
+            if (_playerCamera != null && _playerController != null)
+                _playerCamera.ShakeOnHit(_playerController.SpeedBeforePhysics);
         }
 
         void FixedUpdateMove()
@@ -146,15 +168,5 @@ namespace ShoulderDelivery.Infrastructure
         }
         #endregion
 
-        private void OnDrawGizmosSelected()
-        {
-            var origin = transform.position + _rayOffset;
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(origin, origin + transform.forward * _rayDistance);
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(origin, origin - transform.forward * _rayDistance);
-        }
     }
 }

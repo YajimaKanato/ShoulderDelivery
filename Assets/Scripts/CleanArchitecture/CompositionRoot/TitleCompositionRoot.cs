@@ -23,11 +23,28 @@ namespace ShoulderDelivery.CompositionRoot
             _presenter = new TitlePresenter(_stageSelectView);
             _titleUseCase = new TitleUseCase(GameCompositionRoot.StageRepository, _presenter, GameCompositionRoot.StageClearStore);
             _stageSelectView.Initialize();
+            _stageSelectView.InitializeSaveReset(ResetSave);
             _stageSelectView.OnStageSelected += _titleUseCase.SelectStage;
             _stageSelectView.OnStart += StartStage;
             _stageSelectView.OnOpenStageSelect += _titleUseCase.ShowStageList;
             if (StageManager.ConsumeOpenStageSelect())
                 _timelineManager.StartFromStageSelect();
+        }
+
+        bool ResetSave()
+        {
+            if (!_titleUseCase.TryResetSave()) return false;
+
+            _presenter.CancelStageList();
+            ReloadStageSelectAsync().Forget();
+            return true;
+        }
+
+        async UniTask ReloadStageSelectAsync()
+        {
+            await _stageSelectView.FadeOut();
+            if (this == null) return;
+            await StageManager.LoadTitle(true);
         }
 
         /// <summary>選択中のステージを開始するメソッド</summary>

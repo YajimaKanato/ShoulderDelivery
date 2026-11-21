@@ -22,6 +22,7 @@ namespace ShoulderDelivery.Infrastructure
         /// <summary>タイトルシーンをロードするメソッド</summary>
         public static AsyncOperation LoadTitle(bool openStageSelect = false)
         {
+            _stageId = null;
             _openStageSelect = openStageSelect;
             return SceneManager.LoadSceneAsync("Title");
         }
@@ -40,9 +41,7 @@ namespace ShoulderDelivery.Infrastructure
         /// <returns>現在選択しているステージID</returns>
         public static string GetStageId()
         {
-            var stageId = _stageId;
-            _stageId = null;
-            return stageId;
+            return _stageId;
         }
     }
 }
