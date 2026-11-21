@@ -16,11 +16,14 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] StageSelectView _stageSelectView;
         [SerializeField] GameObject _titleMenu;
         [SerializeField] GameObject _infoWindow;
+        [SerializeField] GameObject _configWindow;
         [SerializeField] Button _stageSelectButton;
         [SerializeField] Button _infoButton;
+        [SerializeField] Button _configButton;
         [SerializeField] Button _backButton;
         [SerializeField] GameObject[] _titleObjects;
         [SerializeField] PlayableDirector _director;
+        [SerializeField] TitleDancingCitizen _dancingCitizen;
         [SerializeField] int _enableHasInputFrame = 60;
         const double TIMELINEFPS = 60;
 
@@ -31,6 +34,7 @@ namespace ShoulderDelivery.Infrastructure
         {
             _stageSelectButton.onClick.AddListener(OpenStageSelect);
             _infoButton.onClick.AddListener(OpenInfo);
+            _configButton.onClick.AddListener(OpenConfig);
             _backButton.onClick.AddListener(CloseWindow);
         }
 
@@ -53,6 +57,8 @@ namespace ShoulderDelivery.Infrastructure
             _director.Pause();
             _director.time = _director.duration;
             _director.Evaluate();
+            // スキップでSignalを飛ばした場合も市民を出す
+            _dancingCitizen?.Spawn();
             _menuReady = true;
             ShowTitle(_stageSelectButton);
         }
@@ -79,6 +85,12 @@ namespace ShoulderDelivery.Infrastructure
             _infoWindow.SetActive(true);
         }
 
+        void OpenConfig()
+        {
+            OpenWindow(_configButton);
+            _configWindow.SetActive(true);
+        }
+
         void OpenWindow(Button from)
         {
             ClearSelection();
@@ -95,6 +107,7 @@ namespace ShoulderDelivery.Infrastructure
         {
             if (!_stageSelectView.TryCloseStageSelect()) return;
             _infoWindow.SetActive(false);
+            _configWindow.SetActive(false);
             ShowTitle(_returnButton);
         }
 
