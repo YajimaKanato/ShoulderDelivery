@@ -145,6 +145,15 @@ public partial class @Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""516dea62-8e7d-4379-88d8-2863ba978de0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -389,6 +398,39 @@ public partial class @Actions: IInputActionCollection2, IDisposable
                     ""action"": ""LockOn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""976a24b5-c122-4f51-9f82-c371b4865386"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41b07515-97fd-45fb-a899-c0b10d1651ab"",
+                    ""path"": ""<XInputController>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aea06b08-a77f-4ef9-b5ea-a9e14476ec98"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -403,6 +445,7 @@ public partial class @Actions: IInputActionCollection2, IDisposable
         m_Ingame_Camera = m_Ingame.FindAction("Camera", throwIfNotFound: true);
         m_Ingame_Throw = m_Ingame.FindAction("Throw", throwIfNotFound: true);
         m_Ingame_LockOn = m_Ingame.FindAction("LockOn", throwIfNotFound: true);
+        m_Ingame_Restart = m_Ingame.FindAction("Restart", throwIfNotFound: true);
     }
 
     ~@Actions()
@@ -489,6 +532,7 @@ public partial class @Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Ingame_Camera;
     private readonly InputAction m_Ingame_Throw;
     private readonly InputAction m_Ingame_LockOn;
+    private readonly InputAction m_Ingame_Restart;
     /// <summary>
     /// Provides access to input actions defined in input action map "Ingame".
     /// </summary>
@@ -524,6 +568,10 @@ public partial class @Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Ingame/LockOn".
         /// </summary>
         public InputAction @LockOn => m_Wrapper.m_Ingame_LockOn;
+        /// <summary>
+        /// Provides access to the underlying input action "Ingame/Restart".
+        /// </summary>
+        public InputAction @Restart => m_Wrapper.m_Ingame_Restart;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -568,6 +616,9 @@ public partial class @Actions: IInputActionCollection2, IDisposable
             @LockOn.started += instance.OnLockOn;
             @LockOn.performed += instance.OnLockOn;
             @LockOn.canceled += instance.OnLockOn;
+            @Restart.started += instance.OnRestart;
+            @Restart.performed += instance.OnRestart;
+            @Restart.canceled += instance.OnRestart;
         }
 
         /// <summary>
@@ -597,6 +648,9 @@ public partial class @Actions: IInputActionCollection2, IDisposable
             @LockOn.started -= instance.OnLockOn;
             @LockOn.performed -= instance.OnLockOn;
             @LockOn.canceled -= instance.OnLockOn;
+            @Restart.started -= instance.OnRestart;
+            @Restart.performed -= instance.OnRestart;
+            @Restart.canceled -= instance.OnRestart;
         }
 
         /// <summary>
@@ -679,5 +733,12 @@ public partial class @Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLockOn(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Restart" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRestart(InputAction.CallbackContext context);
     }
 }
