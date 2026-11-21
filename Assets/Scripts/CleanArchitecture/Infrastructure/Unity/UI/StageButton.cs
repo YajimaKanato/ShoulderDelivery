@@ -40,6 +40,7 @@ namespace ShoulderDelivery.Infrastructure
 
         void UpdateSprite()
         {
+            if (!_button) return;
             if (_isSelected)
             {
                 _button.sprite = _selectButton;

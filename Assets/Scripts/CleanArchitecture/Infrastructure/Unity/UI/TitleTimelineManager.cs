@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
 namespace ShoulderDelivery.Infrastructure
 {
@@ -12,33 +14,47 @@ namespace ShoulderDelivery.Infrastructure
     public class TitleTimelineManager : MonoBehaviour
     {
         [SerializeField] StageSelectView _stageSelectView;
+        [SerializeField] GameObject _titleMenu;
+        [SerializeField] GameObject _infoWindow;
+        [SerializeField] Button _stageSelectButton;
+        [SerializeField] Button _infoButton;
+        [SerializeField] Button _backButton;
         [SerializeField] GameObject[] _titleObjects;
         [SerializeField] PlayableDirector _director;
-        [SerializeField] int _skipFrame = 220;
         [SerializeField] int _enableHasInputFrame = 60;
         const double TIMELINEFPS = 60;
+
+        Button _returnButton;
+        bool _menuReady;
+
+        void Awake()
+        {
+            _stageSelectButton.onClick.AddListener(OpenStageSelect);
+            _infoButton.onClick.AddListener(OpenInfo);
+            _backButton.onClick.AddListener(CloseWindow);
+        }
 
         /// <summary>イントロ終了後の状態からステージ選択を開始するメソッド</summary>
         public void StartFromStageSelect()
         {
-            _director.Pause();
-            _director.time = _skipFrame / TIMELINEFPS;
-            _director.Evaluate();
+            FinishIntro();
             OpenStageSelect();
         }
 
         private void LateUpdate()
         {
-            if (!HasTitleInput()) return;
+            if (_menuReady) return;
+            if (HasTitleInput() || _director.time >= _director.duration - 0.0001)
+                FinishIntro();
+        }
 
-            // 演出中の入力はスキップに使い、次の入力でステージ選択に進む
-            if (_director.time < _skipFrame / TIMELINEFPS)
-            {
-                _director.time = _skipFrame / TIMELINEFPS;
-                return;
-            }
-
-            OpenStageSelect();
+        void FinishIntro()
+        {
+            _director.Pause();
+            _director.time = _director.duration;
+            _director.Evaluate();
+            _menuReady = true;
+            ShowTitle(_stageSelectButton);
         }
 
         /// <summary>タイトル画面でのボタン入力を取得するメソッド</summary>
@@ -53,11 +69,48 @@ namespace ShoulderDelivery.Infrastructure
 
         void OpenStageSelect()
         {
+            OpenWindow(_stageSelectButton);
+            _stageSelectView.OpenStageSelect(_backButton);
+        }
+
+        void OpenInfo()
+        {
+            OpenWindow(_infoButton);
+            _infoWindow.SetActive(true);
+        }
+
+        void OpenWindow(Button from)
+        {
+            ClearSelection();
+            _returnButton = from;
+            _titleMenu.SetActive(false);
             foreach (var titleObject in _titleObjects)
                 titleObject.SetActive(false);
+            _backButton.navigation = Navigation.defaultNavigation;
+            _backButton.gameObject.SetActive(true);
+            _backButton.Select();
+        }
 
-            _stageSelectView.OpenStageSelect();
-            enabled = false;
+        void CloseWindow()
+        {
+            if (!_stageSelectView.TryCloseStageSelect()) return;
+            _infoWindow.SetActive(false);
+            ShowTitle(_returnButton);
+        }
+
+        void ShowTitle(Button focus)
+        {
+            _backButton.gameObject.SetActive(false);
+            foreach (var titleObject in _titleObjects)
+                titleObject.SetActive(true);
+            _titleMenu.SetActive(true);
+            focus.Select();
+        }
+
+        static void ClearSelection()
+        {
+            if (EventSystem.current is { } eventSystem)
+                eventSystem.SetSelectedGameObject(null);
         }
     }
 }

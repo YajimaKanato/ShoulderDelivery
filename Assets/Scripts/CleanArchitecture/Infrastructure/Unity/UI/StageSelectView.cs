@@ -31,9 +31,11 @@ namespace ShoulderDelivery.Infrastructure
 
         Button[] _rightButtons;
         Button _firstButton;
+        Button _backButton;
         Button _selectedButton;
         GameObject _focusedButton;
         bool _loading;
+        bool _listRequested;
 
         public event Action<StageId> OnStageSelected;
         public event Action OnStart;
@@ -151,7 +153,7 @@ namespace ShoulderDelivery.Infrastructure
                     mode = Navigation.Mode.Explicit,
                     selectOnLeft = column > 0 ? buttons[i - 1] : null,
                     selectOnRight = right,
-                    selectOnUp = i >= columns ? buttons[i - columns] : _resetButton,
+                    selectOnUp = i >= columns ? buttons[i - columns] : (_resetButton ? _resetButton : _backButton),
                     selectOnDown = i + columns < buttons.Length ? buttons[i + columns] : null
                 };
 
@@ -189,12 +191,31 @@ namespace ShoulderDelivery.Infrastructure
         }
 
         /// <summary>ステージ選択画面に切り替えるメソッド</summary>
-        public void OpenStageSelect()
+        public void OpenStageSelect(Button backButton)
         {
+            _backButton = backButton;
             _selectPanel.gameObject.SetActive(true);
+            if (_listRequested)
+            {
+                if (_firstButton) _firstButton.Select();
+                return;
+            }
+
+            _listRequested = true;
             Canvas.ForceUpdateCanvases();
             _scrollView.verticalNormalizedPosition = 1f;
             OnOpenStageSelect?.Invoke();
+        }
+
+        public bool TryCloseStageSelect()
+        {
+            if (_loading) return false;
+            if (EventSystem.current is { } eventSystem)
+                eventSystem.SetSelectedGameObject(null);
+            _selectPanel.gameObject.SetActive(false);
+            if (_resetConfirmation) _resetConfirmation.SetActive(false);
+            _focusedButton = null;
+            return true;
         }
 
         private void LateUpdate()
@@ -225,10 +246,21 @@ namespace ShoulderDelivery.Infrastructure
 
         void SetResetReturnButton(Button stageButton)
         {
+            if (_backButton)
+            {
+                _backButton.navigation = new Navigation
+                {
+                    mode = Navigation.Mode.Explicit,
+                    selectOnDown = _resetButton ? _resetButton : stageButton,
+                    selectOnRight = _resetButton ? _resetButton : stageButton
+                };
+            }
             if (_resetButton == null) return;
             _resetButton.navigation = new Navigation
             {
                 mode = Navigation.Mode.Explicit,
+                selectOnUp = _backButton,
+                selectOnLeft = _backButton,
                 selectOnDown = stageButton
             };
         }
