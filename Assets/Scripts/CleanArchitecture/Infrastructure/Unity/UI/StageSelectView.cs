@@ -32,7 +32,7 @@ namespace ShoulderDelivery.Infrastructure
         Button[] _rightButtons;
         Button _firstButton;
         Button _backButton;
-        Button _selectedButton;
+        StageButton _selectedButton;
         GameObject _focusedButton;
         bool _loading;
         bool _listRequested;
@@ -111,9 +111,9 @@ namespace ShoulderDelivery.Infrastructure
                 button.onClick.AddListener(() =>
                 {
                     if (_loading) return;
-                    if (_selectedButton) _selectedButton.image.color = Color.white;
-                    _selectedButton = button;
-                    button.image.color = Color.white;
+                    if (_selectedButton) _selectedButton.SetStageSelected(false);
+                    _selectedButton = stageButton;
+                    _selectedButton.SetStageSelected(true);
                     OnStageSelected?.Invoke(stageId);
                 });
 

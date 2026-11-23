@@ -33,8 +33,12 @@ namespace ShoulderDelivery.Infrastructure
 
         void ChangeSelection(bool selected)
         {
-            _isSelected = selected;
             _selectImage.enabled = selected;
+        }
+
+        public void SetStageSelected(bool selected)
+        {
+            _isSelected = selected;
             UpdateSprite();
         }
 

@@ -12,6 +12,7 @@ namespace ShoulderDelivery.Infrastructure
     {
         [SerializeField] TextMeshProUGUI _timerText;
         [SerializeField] Image _timerGaugeFill;
+        [SerializeField] Image _speedGuageFill;
         [SerializeField] RectTransform _timerGaugeMarker;
         [SerializeField] TextMeshProUGUI _scoreText;
         [SerializeField] TextMeshProUGUI _speedText;
@@ -39,6 +40,7 @@ namespace ShoulderDelivery.Infrastructure
             if (_speedText == null || _speedSource == null) return;
 
             _speedText.SetText("移動速度 {0:1} /s", _speedSource.linearVelocity.magnitude);
+            _speedGuageFill.fillAmount = _speedSource.linearVelocity.magnitude / 15f;
         }
 
         const string SCORE = "スコア : ";
