@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49708c180d74ead87924ca987eb4053, type: 3}
   m_Name: ScoreRankRule3
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.ScoreRankRuleAsset
-  _minimumS: 2160
-  _minimumA: 1728
-  _minimumB: 1296
-  _minimumC: 864
+  _minimumS: 2100
+  _minimumA: 1700
+  _minimumB: 1200
+  _minimumC: 800

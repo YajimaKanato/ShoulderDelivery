@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ScoreRankRule11
   m_EditorClassIdentifier: ShoulderDelivery.Infrastructure::ShoulderDelivery.Infrastructure.ScoreRankRuleAsset
   _minimumS: 1800
-  _minimumA: 1440
-  _minimumB: 1080
-  _minimumC: 720
+  _minimumA: 1400
+  _minimumB: 1000
+  _minimumC: 700
