@@ -19,6 +19,10 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] RectTransform _selectPanel;
         [SerializeField] TextMeshProUGUI _stageName;
         [SerializeField] TextMeshProUGUI _stageInfo;
+        [SerializeField] TextMeshProUGUI _rankScoreS;
+        [SerializeField] TextMeshProUGUI _rankScoreA;
+        [SerializeField] TextMeshProUGUI _rankScoreB;
+        [SerializeField] TextMeshProUGUI _rankScoreC;
         [SerializeField] TextMeshProUGUI _stageCount;
         [SerializeField] Button _startButton;
         [SerializeField] Button _resetButton;
@@ -170,6 +174,10 @@ namespace ShoulderDelivery.Infrastructure
                 + $"制限時間  {StageTimeDisplay.Format(viewModel.TimeLimitSeconds)}\n"
                 + $"ノルマ配達数  {viewModel.RequiredDeliveryCount}\n"
                 + $"ベスト  {viewModel.BestScore?.ToString("N0") ?? "--"}  /  {viewModel.BestRank?.ToString() ?? "--"}";
+            if (_rankScoreS != null) _rankScoreS.text = viewModel.MinimumS.ToString("N0");
+            if (_rankScoreA != null) _rankScoreA.text = viewModel.MinimumA.ToString("N0");
+            if (_rankScoreB != null) _rankScoreB.text = viewModel.MinimumB.ToString("N0");
+            if (_rankScoreC != null) _rankScoreC.text = viewModel.MinimumC.ToString("N0");
             _startButton.interactable = true;
 
             // まだ生成中なら、生成完了時に右端の移動先を設定する

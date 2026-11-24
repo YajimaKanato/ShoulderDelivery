@@ -11,6 +11,11 @@ namespace ShoulderDelivery.Entity
         readonly int _minimumB;
         readonly int _minimumC;
 
+        public int MinimumS => _minimumS;
+        public int MinimumA => _minimumA;
+        public int MinimumB => _minimumB;
+        public int MinimumC => _minimumC;
+
         public ScoreRankRule(int minimumS, int minimumA, int minimumB, int minimumC)
         {
             _minimumC = Math.Max(0, minimumC);

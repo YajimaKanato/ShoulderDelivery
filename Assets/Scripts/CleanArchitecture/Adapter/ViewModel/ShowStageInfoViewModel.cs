@@ -13,6 +13,10 @@ namespace ShoulderDelivery.Adapter
         public readonly int TargetCount;
         public readonly int? BestScore;
         public readonly ScoreRank? BestRank;
+        public readonly int MinimumS;
+        public readonly int MinimumA;
+        public readonly int MinimumB;
+        public readonly int MinimumC;
 
         public ShowStageInfoViewModel(string stageName
             , StageHour stageHour
@@ -20,7 +24,11 @@ namespace ShoulderDelivery.Adapter
             , int requiredDeliveryCount
             , int targetCount
             , int? bestScore
-            , ScoreRank? bestRank)
+            , ScoreRank? bestRank
+            , int minimumS
+            , int minimumA
+            , int minimumB
+            , int minimumC)
         {
             StageName = stageName;
             StageHour = stageHour;
@@ -29,6 +37,10 @@ namespace ShoulderDelivery.Adapter
             TargetCount = targetCount;
             BestScore = bestScore;
             BestRank = bestRank;
+            MinimumS = minimumS;
+            MinimumA = minimumA;
+            MinimumB = minimumB;
+            MinimumC = minimumC;
         }
     }
 }

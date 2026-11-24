@@ -38,6 +38,7 @@ namespace ShoulderDelivery.Adapter
 
         public void ShowStageInfo(StageDefinition stage, int? bestScore)
         {
+            var rankRule = stage.ScoreRules.RankRule;
             // ViewModel作成
             var viewModel = new ShowStageInfoViewModel(stage.Id.Id
                 , stage.StageHour
@@ -45,7 +46,11 @@ namespace ShoulderDelivery.Adapter
                 , stage.RequiredDeliveryCount
                 , stage.TargetIds.Count
                 , bestScore
-                , bestScore.HasValue ? stage.ScoreRules.RankRule.Evaluate(bestScore.Value) : (ScoreRank?)null);
+                , bestScore.HasValue ? rankRule.Evaluate(bestScore.Value) : (ScoreRank?)null
+                , rankRule.MinimumS
+                , rankRule.MinimumA
+                , rankRule.MinimumB
+                , rankRule.MinimumC);
 
             _stageSelectView.ShowStageInfo(viewModel);
         }
