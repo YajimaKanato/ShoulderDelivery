@@ -17,6 +17,12 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField] GameObject _titleMenu;
         [SerializeField] GameObject _infoWindow;
         [SerializeField] GameObject _configWindow;
+        [SerializeField] GameObject _configInfoPage;
+        [SerializeField] GameObject _configVolumePage;
+        [SerializeField] Button _configChange;
+        [SerializeField] Slider _configBgm;
+        [SerializeField] Slider _configSe;
+        [SerializeField] Slider _configCamera;
         [SerializeField] Button _stageSelectButton;
         [SerializeField] Button _infoButton;
         [SerializeField] Button _configButton;
@@ -29,12 +35,14 @@ namespace ShoulderDelivery.Infrastructure
 
         Button _returnButton;
         bool _menuReady;
+        bool _configShowsVolume;
 
         void Awake()
         {
             _stageSelectButton.onClick.AddListener(OpenStageSelect);
             _infoButton.onClick.AddListener(OpenInfo);
             _configButton.onClick.AddListener(OpenConfig);
+            _configChange.onClick.AddListener(ToggleConfigPage);
             _backButton.onClick.AddListener(CloseWindow);
         }
 
@@ -89,6 +97,49 @@ namespace ShoulderDelivery.Infrastructure
         {
             OpenWindow(_configButton);
             _configWindow.SetActive(true);
+            ShowConfigPage(false);
+        }
+
+        void ToggleConfigPage()
+        {
+            ShowConfigPage(!_configShowsVolume);
+        }
+
+        void ShowConfigPage(bool showVolume)
+        {
+            _configShowsVolume = showVolume;
+            _configInfoPage.SetActive(!showVolume);
+            _configVolumePage.SetActive(showVolume);
+
+            _configChange.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnLeft = _backButton,
+                selectOnDown = showVolume ? _configBgm : null
+            };
+            _configBgm.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = _configChange,
+                selectOnDown = _configSe
+            };
+            _configSe.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = _configBgm,
+                selectOnDown = _configCamera
+            };
+            _configCamera.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = _configSe,
+                selectOnDown = _configChange
+            };
+            _backButton.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnRight = _configChange
+            };
         }
 
         void OpenWindow(Button from)

@@ -19,6 +19,10 @@ namespace ShoulderDelivery.Infrastructure
 
         [Header("車体に関するデータ")]
         [SerializeField, Tooltip("車体の傾き角度")] float _maxVehicleAngle = 30;
+        [SerializeField, Range(0f, 1f), Tooltip("急にスティックを離したと判定する入力の減少量")]
+        float _quickReleaseDrop = 0.35f;
+        [SerializeField, Range(0f, 1f), Tooltip("急に離したときに無視するスティック入力の上限")]
+        float _quickReleaseThreshold = 0.25f;
         [SerializeField, Tooltip("車体のオブジェクト")] Transform _vehicle;
         [SerializeField, Tooltip("ハンドルの傾き角度")] float _maxHandleAngle = 30;
         [SerializeField, Tooltip("ハンドルオブジェクト")] Transform _handleTransform;
@@ -33,6 +37,11 @@ namespace ShoulderDelivery.Infrastructure
         InputAction _steer;
         float _moveSpeed = 0;
         float _steerParam = 0;
+        float _previousSteerInput;
+        bool _previousSteerWasGamepad;
+        bool _ignoreSteerUntilNeutral;
+        float _steerInput;
+        int _steerInputFrame = -1;
 
         public override void CacheAction(Actions actions = null)
         {
@@ -161,10 +170,31 @@ namespace ShoulderDelivery.Infrastructure
         /// <returns>現在のステアリング値</returns>
         float Steer()
         {
-            var input = _steer.ReadValue<float>();
+            var input = ReadSteerInput();
             var right = _rightSteerCurve.CalculateParam(Time.deltaTime, new CurveParam(input));
             var left = _leftSteerCurve.CalculateParam(Time.deltaTime, new CurveParam(-input));
             return right - left;
+        }
+
+        float ReadSteerInput()
+        {
+            if (_steerInputFrame == Time.frameCount) return _steerInput;
+            _steerInputFrame = Time.frameCount;
+
+            var input = _steer.ReadValue<float>();
+            var isGamepad = _steer.activeControl?.device is Gamepad;
+            var magnitude = Mathf.Abs(input);
+            var sameDirection = input * _previousSteerInput > 0f;
+
+            if (!isGamepad || !sameDirection || magnitude > _quickReleaseThreshold)
+                _ignoreSteerUntilNeutral = false;
+            else if (_previousSteerWasGamepad && Mathf.Abs(_previousSteerInput) - magnitude >= _quickReleaseDrop)
+                _ignoreSteerUntilNeutral = true;
+
+            _previousSteerInput = input;
+            _previousSteerWasGamepad = isGamepad;
+            _steerInput = _ignoreSteerUntilNeutral ? 0f : input;
+            return _steerInput;
         }
         #endregion
 

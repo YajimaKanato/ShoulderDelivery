@@ -227,6 +227,8 @@ MonoBehaviour:
     _maxParamDuration: 1.5
     _damping: 0.7
   _maxVehicleAngle: 15
+  _quickReleaseDrop: 0.3
+  _quickReleaseThreshold: 1
   _vehicle: {fileID: 8665816400354504857}
   _maxHandleAngle: 5
   _handleTransform: {fileID: 2657507810760156391}
@@ -249,7 +251,6 @@ MonoBehaviour:
   _nodMaxRange: 45
   _mouseSensitivity: 0.0005
   _controllerSensitivity: 1
-  _controllerReturnSpeed: 60
   _hitImpulse:
     ImpulseChannel: 1
     ImpulseShape: 4

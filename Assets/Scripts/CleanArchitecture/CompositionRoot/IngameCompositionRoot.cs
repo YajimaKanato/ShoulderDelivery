@@ -131,6 +131,13 @@ namespace ShoulderDelivery.CompositionRoot
         private void Update()
         {
             if (_loadingScene) return;
+            if (_isStarted && _controller != null && _controller.QuitPressed)
+            {
+                _controller.SetControllerEnabled(false);
+                BackStageSelect();
+                return;
+            }
+
             if (_controller != null && _controller.RestartPressed)
             {
                 RetryStage();

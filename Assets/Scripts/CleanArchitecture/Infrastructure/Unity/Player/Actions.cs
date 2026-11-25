@@ -156,6 +156,15 @@ namespace ShoulderDelivery.Infrastructure
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Quit"",
+                    ""type"": ""Button"",
+                    ""id"": ""7ed10b9e-2ab7-4f8c-84a4-5631b40251fb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -433,6 +442,39 @@ namespace ShoulderDelivery.Infrastructure
                     ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""96f45044-6ac0-4907-9cc3-2df724e4341d"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37c7333d-ecd5-4540-af5a-1898bcaa7c09"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7315cb78-6614-4881-b6c7-82eec4108708"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Quit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -448,6 +490,7 @@ namespace ShoulderDelivery.Infrastructure
             m_Ingame_Throw = m_Ingame.FindAction("Throw", throwIfNotFound: true);
             m_Ingame_LockOn = m_Ingame.FindAction("LockOn", throwIfNotFound: true);
             m_Ingame_Restart = m_Ingame.FindAction("Restart", throwIfNotFound: true);
+            m_Ingame_Quit = m_Ingame.FindAction("Quit", throwIfNotFound: true);
         }
 
         ~@Actions()
@@ -535,6 +578,7 @@ namespace ShoulderDelivery.Infrastructure
         private readonly InputAction m_Ingame_Throw;
         private readonly InputAction m_Ingame_LockOn;
         private readonly InputAction m_Ingame_Restart;
+        private readonly InputAction m_Ingame_Quit;
         /// <summary>
         /// Provides access to input actions defined in input action map "Ingame".
         /// </summary>
@@ -574,6 +618,10 @@ namespace ShoulderDelivery.Infrastructure
             /// Provides access to the underlying input action "Ingame/Restart".
             /// </summary>
             public InputAction @Restart => m_Wrapper.m_Ingame_Restart;
+            /// <summary>
+            /// Provides access to the underlying input action "Ingame/Quit".
+            /// </summary>
+            public InputAction @Quit => m_Wrapper.m_Ingame_Quit;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -621,6 +669,9 @@ namespace ShoulderDelivery.Infrastructure
                 @Restart.started += instance.OnRestart;
                 @Restart.performed += instance.OnRestart;
                 @Restart.canceled += instance.OnRestart;
+                @Quit.started += instance.OnQuit;
+                @Quit.performed += instance.OnQuit;
+                @Quit.canceled += instance.OnQuit;
             }
 
             /// <summary>
@@ -653,6 +704,9 @@ namespace ShoulderDelivery.Infrastructure
                 @Restart.started -= instance.OnRestart;
                 @Restart.performed -= instance.OnRestart;
                 @Restart.canceled -= instance.OnRestart;
+                @Quit.started -= instance.OnQuit;
+                @Quit.performed -= instance.OnQuit;
+                @Quit.canceled -= instance.OnQuit;
             }
 
             /// <summary>
@@ -742,6 +796,13 @@ namespace ShoulderDelivery.Infrastructure
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnRestart(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Quit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnQuit(InputAction.CallbackContext context);
         }
     }
 }

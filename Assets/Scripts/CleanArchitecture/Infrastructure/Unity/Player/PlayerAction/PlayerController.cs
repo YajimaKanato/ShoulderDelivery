@@ -13,6 +13,7 @@ namespace ShoulderDelivery.Infrastructure
         Rigidbody _body;
 
         public bool RestartPressed => _restart?.WasPressedThisFrame() == true;
+        public bool QuitPressed => _inputEnabled && _actions.Ingame.Quit.WasPressedThisFrame();
         public float SpeedBeforePhysics { get; private set; }
 
         private void Awake()

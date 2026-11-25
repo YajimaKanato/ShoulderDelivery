@@ -12,10 +12,7 @@ namespace ShoulderDelivery.Infrastructure
         [SerializeField, Tooltip("縦方向の首振り制限")] float _nodMaxRange = 30;
         [SerializeField, Tooltip("マウス感度")] float _mouseSensitivity = 0.01f;
         [SerializeField, Tooltip("コントローラー感度")] float _controllerSensitivity = 1f;
-        [SerializeField, Min(0), Tooltip("右スティックを離した時に正面へ戻る速さ（度/秒）。0なら戻さない")]
-        float _controllerReturnSpeed = 60f;
         InputAction _camera;
-        bool _useGamepad;
         float _yawDelta;
         float _pitchDelta;
         [SerializeField]
@@ -54,13 +51,12 @@ namespace ShoulderDelivery.Infrastructure
         void ShakeAndNod()
         {
             var look = _camera.ReadValue<Vector2>();
+            if (look.sqrMagnitude == 0f) return;
 
-            // スティックを離してもコントローラー操作の状態を保持する
-            if (_camera.activeControl != null)
-                _useGamepad = _camera.activeControl.device is Gamepad;
+            var useGamepad = _camera.activeControl?.device is Gamepad;
 
             // 横方向の首振り角度
-            if (_useGamepad)
+            if (useGamepad)
             {
                 _yawDelta += look.x * Time.deltaTime * _controllerSensitivity * _shakeMaxRange;
             }
@@ -71,7 +67,7 @@ namespace ShoulderDelivery.Infrastructure
             _yawDelta = Mathf.Clamp(_yawDelta, -_shakeMaxRange, _shakeMaxRange);
 
             // 縦方向の首振り角度
-            if (_useGamepad)
+            if (useGamepad)
             {
                 _pitchDelta += look.y * Time.deltaTime * _controllerSensitivity * _nodMaxRange;
             }
@@ -80,15 +76,6 @@ namespace ShoulderDelivery.Infrastructure
                 _pitchDelta += look.y * _nodMaxRange * _mouseSensitivity;
             }
             _pitchDelta = Mathf.Clamp(_pitchDelta, -_nodMaxRange, _nodMaxRange);
-
-            // 入力がなくなったら、指定した速度で正面に戻す
-            if (_useGamepad && look.sqrMagnitude < 0.0001f)
-            {
-                var rotation = Vector2.MoveTowards(new Vector2(_yawDelta, _pitchDelta)
-                    , Vector2.zero, _controllerReturnSpeed * Time.deltaTime);
-                _yawDelta = rotation.x;
-                _pitchDelta = rotation.y;
-            }
 
             _cameraTransform.localRotation = Quaternion.Euler(-_pitchDelta, _yawDelta, 0f);
         }
